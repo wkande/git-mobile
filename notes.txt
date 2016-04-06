@@ -1,0 +1,10 @@
+
+//-------------------------------
+Angualr 2 promise.d.ts ERROR
+
+ERROR in [default] /path/to/project/node_modules/angular2/src/facade/promise.d.ts:1:9
+Cannot re-export name that is not defined in the module.
+
+solve this problem by adding "declare var Promise: PromiseConstructor;"" on the top of promise.d.ts
+
+https://github.com/angular/angular/issues/6468

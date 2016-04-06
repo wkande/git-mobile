@@ -1,0 +1,97 @@
+<ion-navbar *navbar>
+    <button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Repositories</ion-title>
+    <ion-buttons end>
+      <button (click)="presentActionSheet()">
+        <ion-icon name="funnel"></ion-icon>
+      </button>
+    </ion-buttons>
+</ion-navbar>
+
+<ion-content>
+<gm-error [error]="error"></gm-error>
+<gm-spinner [spinner]="spinner"></gm-spinner>
+
+
+<div *ngIf="dataLoaded">
+      <div class="_description">{{description}} <small *ngIf="trigger=='search'">({{data.total_count}})</small></div>
+
+
+      <ion-segment *ngIf="trigger == 'affiliations-me-all'" padding [(ngModel)]="type" (change)="load($event)" style="margin-top:-15px;">
+          <ion-segment-button value="public">
+            Public
+          </ion-segment-button>
+          <ion-segment-button value="private">
+            Private
+          </ion-segment-button>
+          <ion-segment-button value="all">
+            All
+          </ion-segment-button>
+      </ion-segment>
+      <div class="_description" item-wrap *ngIf="data.gm_pagination != null"><small>{{foundExecess}}</small></div>
+
+
+      <!--ion-card class="_card" *ngIf="description">
+        <ion-card-content ion-item>
+          <div class="_gray" item-wrap>{{description}}</div>
+        </ion-card-content>
+      </ion-card-->
+      <ion-list>
+          <button ion-item *ngFor="#item of data.items" (click)="itemTapped($event, item)">
+
+              <div class="_font-medium">{{item.name}}</div>
+              <div class="_font-small _gray">{{item.description}}</div>
+              <div class="_font-small _gray">{{item.owner.login}}</div>
+
+              <ion-avatar item-left>
+                  <img src="{{item.owner.avatar_url}}">
+              </ion-avatar>
+              <div class="_gray _font-x-small" style="float:left;">
+                  <div class="octicon octicon-issue-opened" style="transform: scale(.8);"></div>
+                  <div class="octicon octicon-git-pull-request" style="transform: scale(.8);"></div>
+                  &nbsp;{{item.open_issues_count}}
+
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <div class="octicon octicon-star" style="transform: scale(.8);"></div>
+                  &nbsp;{{item.stargazers_count}}
+
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <div class="octicon octicon-repo-forked" style="transform: scale(.8);"></div>
+                  &nbsp;{{item.forks_count}}
+
+                  <span [hidden]="!item.private" class="octicon octicon-lock _gray item-right" style="margin-left:30px;font-size:medium;" item-right></span>
+              </div>
+          </button>
+      </ion-list>
+</div>
+</ion-content>
+
+<ion-toolbar position="bottom" *ngIf="dataLoaded && data.gm_pagination != null">
+    <ion-buttons start>
+        <button [disabled]="!pagination.first" [class._lightgray]="!pagination.first"
+          (click)="paginationLoad(pagination.first)"
+          style="width:46px;">
+          <ion-icon name="ios-arrow-back-outline" style="font-size:22pt"></ion-icon><ion-icon name="ios-arrow-back-outline" style="font-size:22pt"></ion-icon>
+        </button>
+        <button [disabled]="!pagination.prev" [class._lightgray]="!pagination.prev"
+          (click)="paginationLoad(pagination.prev)"
+          style="width:46px;">
+          <ion-icon name="ios-arrow-back-outline"></ion-icon>
+        </button>
+    </ion-buttons>
+    <ion-title>{{pagination.currPageNumber}} of {{lastPage}}</ion-title>
+    <ion-buttons end>
+        <button [disabled]="!pagination.next" [class._lightgray]="!pagination.next"
+          (click)="paginationLoad(pagination.next)"
+          style="width:46px;">
+          <ion-icon name="ios-arrow-forward-outline"></ion-icon>
+        </button>
+        <button [disabled]="!pagination.last" [class._lightgray]="!pagination.last"
+          (click)="paginationLoad(pagination.last)"
+          style="width:46px;">
+          <ion-icon name="ios-arrow-forward-outline" style="font-size:22pt"></ion-icon><ion-icon name="ios-arrow-forward-outline" style="font-size:22pt"></ion-icon>
+        </button>
+    </ion-buttons>
+</ion-toolbar>

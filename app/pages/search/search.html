@@ -1,0 +1,93 @@
+
+<ion-navbar *navbar>
+  <button menuToggle>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>Search</ion-title>
+</ion-navbar>
+
+
+<ion-content class="getting-started">
+
+
+
+  <form [ngFormModel]="authForm" (ngSubmit)="onSubmit(authForm.value)" novalidate>
+
+              <div padding>
+                  <ion-segment [(ngModel)]="action" (change)="changeAction($event, authForm.value)">
+                      <ion-segment-button value="repos">
+                        Repositories
+                      </ion-segment-button>
+                      <ion-segment-button value="issues">
+                        Issues/Pulls
+                      </ion-segment-button>
+                      <ion-segment-button value="users">
+                        Users/Orgs
+                      </ion-segment-button>
+                  </ion-segment>
+              </div>
+
+              <div *ngIf="searchValue.hasError('required') && searchValue.touched"
+                  class="error-box _buttonContainer">* Search value is required!</div>
+              <div *ngIf="searchValue.hasError('minlength') && searchValue.touched"
+                  class="error-box _buttonContainer">* Minimum search value length is 2!</div>
+
+              <br/>
+
+              <ion-list radio-group style="width:250px;" class="_center-text" [(ngModel)]="searchCollection">
+                <ion-item [class.error]="!searchValue.valid && searchValue.touched">
+                  <ion-label floating>Search criteria</ion-label>
+                  <ion-textarea rows="5" value="" [ngFormControl]="searchValue"></ion-textarea>
+                </ion-item>
+
+              </ion-list>
+
+
+              <br/><br/>
+              <div class="_buttonContainer">
+                  <button style="width:100px;" type="submit" class="custom-button" [disabled]="!authForm.valid">Search</button>
+              </div>
+              <div *ngIf="err"
+                  class="error-box _buttonContainer">{{err}}
+              </div>
+
+
+
+
+
+
+
+
+
+
+              <br/><br/>
+              <div class="_center-text _gray _font-large">
+                Search Qualifiers<br/>
+              </div>
+              <ion-card *ngIf="action =='repos'" class="_card _gray">
+                <ion-card-content>
+                      followers:>[number]]<br/>
+                      stars:>[number]
+                      <hr/>
+                      Example:<br/>
+                      ionic followers:>500 stars:>10000
+                </ion-card-content>
+              </ion-card>
+
+              <ion-card *ngIf="action =='issues'" class="_card _gray">
+                <ion-card-content>
+                      open:>[number]]<br/>
+                      <hr/>
+                      Example:<br/>
+                </ion-card-content>
+              </ion-card>
+
+              <ion-card *ngIf="action =='users'" class="_card _gray">
+                <ion-card-content>
+                      email:>[number]]<br/>
+                      <hr/>
+                      Example:<br/>
+                </ion-card-content>
+              </ion-card>
+      </form>
+</ion-content>

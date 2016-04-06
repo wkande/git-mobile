@@ -1,0 +1,57 @@
+<ion-toolbar class="android-attr" >
+  <ion-title>
+    Search
+  </ion-title>
+  <ion-buttons start>
+    <button (click)="dismiss()">
+      <span primary showWhen="ios">Cancel</span>
+      <ion-icon name='close' showWhen="android"></ion-icon>
+    </button>
+  </ion-buttons>
+  <ion-buttons end>
+    <button (click)="popupSearchText()">
+      <ion-icon name="information-circle"></ion-icon>
+    </button>
+  </ion-buttons>
+</ion-toolbar>
+
+<ion-content class="has-header">
+  <div class="_description" item-wrap>Respositories</div>
+    <br/><br/>
+
+    <form (ngSubmit)="onSubmit()" novalidate>
+
+
+        <br/>
+
+        <ion-list style="width:300px;" class="_center-text">
+
+
+
+          <ion-item>
+            <ion-label floating>Search Text</ion-label>
+            <ion-textarea rows="5" value="" [(ngModel)]="textValue"></ion-textarea>
+          </ion-item>
+
+        </ion-list>
+
+        <ion-item>
+          <ion-label>Restrict to my repo affiliations</ion-label>
+          <ion-checkbox [(ngModel)]="affiliations"></ion-checkbox>
+        </ion-item>
+
+
+
+
+
+        <br/><br/>
+        <gm-error [error]="error"></gm-error>
+        <div class="_buttonContainer">
+            <!--button style="width:100px;" type="submit" class="custom-button" [disabled]="!authForm.valid">Search</button-->
+            <button style="width:100px;" type="submit" class="custom-button">Search</button>
+        </div>
+        <div *ngIf="err"
+            class="error-box _buttonContainer">{{err}}
+        </div>
+    </form>
+</ion-content>

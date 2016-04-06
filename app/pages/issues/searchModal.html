@@ -1,0 +1,77 @@
+<ion-toolbar class="android-attr" >
+  <ion-title>
+    Search
+  </ion-title>
+  <ion-buttons start>
+    <button (click)="dismiss()">
+      <span primary showWhen="ios">Cancel</span>
+      <ion-icon name='close' showWhen="android"></ion-icon>
+    </button>
+  </ion-buttons>
+  <ion-buttons end>
+    <button (click)="popupSearchText()">
+      <ion-icon name="information-circle"></ion-icon>
+    </button>
+  </ion-buttons>
+</ion-toolbar>
+
+<ion-content class="has-header">
+  <div class="_description" item-wrap>Issues</div>
+    <br/><br/>
+
+    <form (ngSubmit)="onSubmit()" novalidate>
+
+        <!--div *ngIf="textValue.hasError('required') && textValue.touched"
+            class="error-box _buttonContainer">* Search value is required!</div>
+        <div *ngIf="textValue.hasError('minlength') && textValue.touched"
+            class="error-box _buttonContainer">* Minimum search value length is 2!</div-->
+
+        <br/>
+
+        <ion-list style="width:300px;" class="_center-text">
+          <!--ion-item [class.error]="!textValue.valid && textValue.touched">
+            <ion-label floating>Search on Keywords</ion-label>
+            <ion-textarea rows="5" value="" [ngFormControl]="textValue"></ion-textarea>
+          </ion-item-->
+
+
+          <ion-item>
+            <ion-label floating>Search Text</ion-label>
+            <ion-textarea rows="5" value="" [(ngModel)]="textValue"></ion-textarea>
+          </ion-item>
+
+        </ion-list>
+
+        <ion-item>
+          <ion-label>Assigned to Me</ion-label>
+          <ion-checkbox [(ngModel)]="assigned"></ion-checkbox>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Created by Me</ion-label>
+          <ion-checkbox [(ngModel)]="created"></ion-checkbox>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Mentions Me</ion-label>
+          <ion-checkbox [(ngModel)]="mentioned"></ion-checkbox>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>I Commented</ion-label>
+          <ion-checkbox [(ngModel)]="commented"></ion-checkbox>
+        </ion-item>
+
+
+
+        <br/><br/>
+        <gm-error [error]="error"></gm-error>
+        <div class="_buttonContainer">
+            <!--button style="width:100px;" type="submit" class="custom-button" [disabled]="!authForm.valid">Search</button-->
+            <button style="width:100px;" type="submit" class="custom-button">Search</button>
+        </div>
+        <div *ngIf="err"
+            class="error-box _buttonContainer">{{err}}
+        </div>
+    </form>
+</ion-content>

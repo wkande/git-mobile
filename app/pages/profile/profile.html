@@ -1,0 +1,105 @@
+<ion-navbar *navbar>
+  <button menuToggle>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>Profile</ion-title>
+</ion-navbar>
+
+<ion-content>
+<gm-error [error]="error"></gm-error>
+<gm-spinner [spinner]="spinner"></gm-spinner>
+<div  *ngIf="dataLoaded">
+
+
+
+          <ion-card>
+                  <ion-item class="_center-text">
+                    <!--ion-avatar item-left>
+                      <img src="{{user.avatar_url}}">
+                    </ion-avatar-->
+                    <h2><i>{{profile.login}}</i> <span><small> ({{profile.type}})</small></span> </h2>
+                    <h3>{{profile.name}}</h3>
+                    <p style="margin-top:5px;">Since: {{user.since}} - {{profile.timeAgo}}</p>
+                    <!--p style="margin-top:5px;">Since: {{ user.since | date:"mediumDate" }}</p-->
+                  </ion-item>
+                  <img src="{{profile.avatar_url}}"  style="width:200px;" class="_center-text">
+
+                  <ion-card-content>
+                    <div class="_gray _font-small _center-text">{{profile.bio}}</div>
+                    <ion-item class="_gray _center-text">
+
+                        <div>{{profile.company}}</div>
+                        <div>{{profile.location}}</div>
+                        <div>{{profile.email}}</div>
+                        <div>{{profile.blog}}</div>
+
+                    </ion-item>
+                  </ion-card-content>
+                  <ion-item style="margin-top:-20px">
+                      <button clear item-left class="_gray" *ngIf="profile.plan">
+                        <div>Plan: {{profile.plan.name}}</div>
+                      </button>
+                      <button clear item-right class="_gray">
+                        <div class="_gray" *ngIf="profile.hireable">
+                            <b>For hire</b>
+                        </div>
+                        <div class="_gray" *ngIf="!profile.hireable">
+                            <b>Not for hire</b>
+                        </div>
+                      </button>
+                  </ion-item>
+
+          </ion-card>
+
+      <br/>
+      <ion-list>
+
+
+          <a ion-item href="#" (click)="itemTapped($event, {clicked:'repos'})">
+              Repositiories
+              <span class="_gray _font-x-small" style="float:right;margin-left:5px;">public
+                  <ion-badge class="_badge_lighter">{{profile.public_repos}}</ion-badge></span>
+                  <!-- for some reason "user.owned_private_repos" will not work in the following-->
+              <span *ngIf="profile.owned_private_repos" class="_gray _font-x-small" style="float:right;">private
+                  <ion-badge class="_badge_lighter">{{profile.owned_private_repos}}</ion-badge></span>
+          </a>
+
+          <a ion-item href="#" (click)="itemTapped($event, {clicked:'gists'})">
+              Gists
+              <span class="_gray _font-x-small" style="float:right;margin-left:5px;">public
+                  <ion-badge class="_badge_lighter">{{profile.public_gists}}</ion-badge></span>
+              <span *ngIf="profile.private_gists" class="_gray _font-x-small" style="float:right;">private
+                  <ion-badge class="_badge_lighter">{{profile.private_gists}}</ion-badge></span>
+          </a>
+
+          <div *ngIf="profile.type =='User'">
+              <a ion-item href="#" (click)="itemTapped($event, {clicked:'following'})">
+                  Following
+                  <ion-badge class="_badge_lighter" style="float:right;">{{profile.following}}</ion-badge>
+              </a>
+              <a ion-item href="#" (click)="itemTapped($event, {clicked:'repos'})">
+                  Starred
+                  <ion-badge class="_badge_lighter" style="float:right;">{{starred_cnt}}</ion-badge>
+              </a>
+              <a ion-item href="#" (click)="itemTapped($event, {clicked:'followers'})">
+                  Followers
+                  <ion-badge class="_badge_lighter" style="float:right;">{{profile.followers}}</ion-badge>
+              </a>
+
+              <a ion-item href="#" (click)="itemTapped($event, {clicked:'orgs'})">
+                  Organizations
+                  <ion-badge class="_badge_lighter" style="float:right;">{{org_cnt}}</ion-badge>
+              </a>
+          </div>
+
+          <div *ngIf="profile.type =='Organization'">
+              <a ion-item href="#" (click)="itemTapped($event, {clicked:'members'})">
+                  Members
+                  <ion-badge class="_badge_lighter" style="float:right;">{{member_cnt}}</ion-badge>
+              </a>
+          </div>
+
+
+      </ion-list>
+</div>
+</ion-content>

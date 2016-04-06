@@ -1,0 +1,50 @@
+<ion-navbar *navbar>
+  <button menuToggle>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>Gist Comments</ion-title>
+</ion-navbar>
+
+<ion-content>
+
+      <gm-error [error]="error"></gm-error>
+      <gm-spinner [spinner]="spinner"></gm-spinner>
+
+<div  *ngIf="dataLoaded && !error.flag">
+
+      <ion-card class="_card">
+        <ion-card-content ion-item>
+          <div class="_font-small _gray wrapping-list" item-wrap>{{gistName}}</div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card *ngFor="#item of items">
+        <ion-item>
+          <ion-avatar item-left>
+            <img src="{{item.user.avatar_url}}">
+          </ion-avatar>
+          <h2>{{item.user.login}}</h2>
+          <p>Created: {{item.created_at}}</p>
+          <p>Last Update: {{item.updated_at}}</p>
+        </ion-item>
+
+        <ion-card-content>
+        <div [innerHTML]="item.body"></div>
+        </ion-card-content>
+
+      </ion-card>
+
+
+
+
+              <!--span class="wrapping-list _font-small _gray" style="margin-left:10px;">{{item.owner.login}}</span-->
+              <!--div class="wrapping-list _font-small _gray" style="margin-left:10px;">{{item.created_at}}</div-->
+              <!--div class="wrapping-list _font-small _gray" style="margin-left:10px;">Updated: {{item.updated_at}}</div-->
+              <!--ion-icon name="ios-eye" item-right style="font-size:22px;" *ngIf="item.public == true"></ion-icon-->
+              <!--ion-icon name="{{item.public}}" class="_gray" item-right></ion-icon-->
+              <!--span [hidden]="item.public" class="octicon octicon-gist-secret _gray" style="font-size:x-large;" item-right></span-->
+
+
+
+</div>
+</ion-content>

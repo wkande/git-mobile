@@ -1,0 +1,110 @@
+// http://ionicframework.com/docs/v2/theming/
+
+
+// App Shared Imports
+// --------------------------------------------------
+// These are the imports which make up the design of this app.
+// By default each design mode includes these shared imports.
+// App Shared Sass variables belong in app.variables.scss.
+
+
+
+//@import "../pages/item-details/item-details";
+
+
+
+//@import "../pages/auth/login";
+//
+//
+._font-xx-small{
+    font-size: xx-small;
+}
+._font-x-small{
+    font-size: x-small;
+}
+._font-small{
+    font-size: small;
+}
+
+._font-medium{
+    font-size: medium;
+}
+
+._font-large{
+    font-size: large;
+}
+._font-x-large{
+    font-size: x-large;
+}
+
+
+._description{
+    padding-top:7px;
+    padding-bottom:7px;
+    font-size:medium;
+    color:gray;
+    text-align: center;margin:0 auto;
+}
+._center-text{
+    text-align: center;margin:0 auto;
+}
+
+._bold{
+    font-weight:bold;
+}
+
+._gray{
+    color:gray;
+}
+._lightgray{
+    color:#d3d3d3;
+}
+._white{
+    color:white;
+}
+._danger{
+    color:#f53d3d;
+}
+
+._badge_lighter {
+  opacity: 0.8;
+
+}
+
+._buttonContainer{
+  width:300px;margin:0px auto;text-align:center;
+}
+
+.wrapping-list {
+    overflow: initial;
+    white-space: initial;
+}
+
+.error-box {
+  text-align:left;
+  width:320px;
+  margin:10px auto;
+	padding: 15px;
+	font-size: small;
+	color: gray;
+	font-style: italic;
+	border:  1px solid red;
+	border-radius: 5px;
+	background: white;
+}
+
+.custom-button {
+	margin-left: auto !important;
+	margin: 0.4rem 0.2rem 0.4rem 0.8rem;
+}
+
+
+
+.error .item-inner {
+    border-bottom: 1px solid red !important;
+}
+
+._card {
+    border: 1px solid gray !important;
+    border-radius: 5px !important;
+}

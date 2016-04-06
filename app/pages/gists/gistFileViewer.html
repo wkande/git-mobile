@@ -1,0 +1,31 @@
+<ion-navbar *navbar>
+  <button menuToggle>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>Gist File</ion-title>
+</ion-navbar>
+
+
+<!--ion-toolbar light class="toolbar _center-text _gray" *ngIf="dataLoaded">
+    <div class="toolbar-background _font-medium" style="margin-top:5px;">{{gistName}}<br/>
+      <span class="_font-medium _black">{{name}}</span>
+    </div>
+</ion-toolbar-->
+
+
+<ion-content>
+    <!--gm-error [error]="error"></gm-error-->
+    <!--gm-spinner [spinner]="spinner"></gm-spinner-->
+<div  *ngIf="dataLoaded">
+    <ion-card class="_card">
+      <ion-card-content ion-item>
+        <div class="_font-small _bold">{{gistName}}</div>
+        <div class="_font-small _gray" item-wrap>File: {{name}}</div>
+      </ion-card-content>
+    </ion-card>
+
+
+<pre class="line-numbers language-javascript" data-line="2"><code class="language-javascript">{{content}}</code></pre>
+
+</div>
+</ion-content>

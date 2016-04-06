@@ -1,0 +1,58 @@
+<ion-toolbar class="android-attr" >
+  <ion-title>
+    Switch Branch/Tag
+  </ion-title>
+  <ion-buttons start>
+    <button (click)="dismiss()">
+      <span primary showWhen="ios">Cancel</span>
+      <ion-icon name='close' showWhen="android"></ion-icon>
+    </button>
+  </ion-buttons>
+</ion-toolbar>
+
+
+<ion-content class="has-header">
+
+  <gm-error [error]="error"></gm-error>
+  <gm-spinner [spinner]="spinner"></gm-spinner>
+
+<div  *ngIf="loadedTags && loadedBranches && !error.flag">
+
+    <ion-toolbar light class="toolbar _center-text _gray"  style="line-height: 44px;vertical-align: middle;">
+        <div class="toolbar-background _font-large">{{repo.name}}</div>
+    </ion-toolbar>
+
+    <div padding *ngIf="loadedTags && loadedBranches">
+      <ion-segment [(ngModel)]="segmentPane">
+        <ion-segment-button value="branches">
+          Branches
+        </ion-segment-button>
+        <ion-segment-button value="tags">
+          Tags
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+
+
+
+    <div [ngSwitch]="segmentPane" *ngIf="loadedTags && loadedBranches">
+        <div *ngSwitchWhen="'branches'">
+          <ion-searchbar [(ngModel)]="searchBranches" (input)="getBranchItems($event)"></ion-searchbar>
+
+            <ion-list >
+                <a ion-item *ngFor="#item of branchItems" href="#" (click)="itemSelected(item)">
+                  {{item.name}}
+                </a>
+            </ion-list>
+        </div>
+
+        <ion-list *ngSwitchWhen="'tags'">
+          <ion-searchbar [(ngModel)]="searchTags" (input)="getTagItems($event)"></ion-searchbar>
+            <a ion-item *ngFor="#item of tagItems" href="#" (click)="itemSelected(item)">
+              {{item.name}}
+            </a>
+        </ion-list>
+    </div>
+
+</div>
+</ion-content>
