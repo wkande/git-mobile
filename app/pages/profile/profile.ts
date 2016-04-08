@@ -27,9 +27,6 @@ export class ProfilePage {
 
   // URLS
   url:string;
-  urlOrgCnt:string;
-  urlStarredCnt:string;
-  urlMemberCnt:string;
 
   // LOADER
   dataLoaded: boolean = false;
@@ -48,23 +45,15 @@ export class ProfilePage {
         console.log('\n\n| >>> +++++++++++++ ProfilePage.constructor +++++++++++++++');
         console.log(navParams);
 
-        if(this.trigger == 'org'){
-            this.url = 'https://api.github.com/users/'+username;
-            this.urlStarredCnt = 'https://api.github.com/users/'+username+'/starred';
-            this.urlMemberCnt = 'https://api.github.com/orgs/'+username+'/members';
-            this.async.cnt = 2;
-            this.loadProfile();
-            //this.loadStarredCnt();
-            this.loadMemberCnt();
+        if(this.trigger == 'me'){
+            this.async.cnt = 1;
+            this.url = 'https://api.github.com/user';
         }
-        else if (this.trigger == 'user'){
+        else if (this.trigger == 'user' || this.trigger == 'org'){
+            this.async.cnt = 1;
             this.url = 'https://api.github.com/users/'+username;
-            this.urlOrgCnt = 'https://api.github.com/users/'+username+'/orgs';
-            this.urlStarredCnt = 'https://api.github.com/users/'+username+'/starred';
-            this.loadProfile();
-            this.loadStarredCnt();
-            this.loadOrgs();
         }
+        this.loadProfile();
   }
 
   loadProfile(){
@@ -81,38 +70,6 @@ export class ProfilePage {
       });
   }
 
-  loadOrgs(){
-      console.log('| >>> ProfilePage.loadOrgs', this.urlOrgCnt)
-      this.httpService.load(this.urlOrgCnt, this.user)
-      .then((data: any) => {
-          this.org_cnt = data.length;
-          this.asyncController(true, null);
-      }).catch(error => {
-          this.asyncController(null, error);
-      });
-  }
-
-  loadStarredCnt(){
-      console.log('| >>> ProfilePage.loadStarredCnt', this.urlStarredCnt)
-      this.httpService.load(this.urlStarredCnt, this.user)
-      .then((data: any) => {
-          this.starred_cnt = data.length;
-          this.asyncController(true, null);
-      }).catch(error => {
-          this.asyncController(null, error);
-      });
-  }
-
-  loadMemberCnt(){
-      console.log('| >>> ProfilePage.loadMemberCnt', this.urlMemberCnt)
-      this.httpService.load(this.urlMemberCnt, this.user)
-      .then((data: any) => {
-          this.member_cnt = data.length;
-          this.asyncController(true, null);
-      }).catch(error => {
-          this.asyncController(null, error);
-      });
-  }
 
   asyncController(success, error){
       if(this.error.flag) return; // Once async call has already failed so ignore the rest
@@ -131,12 +88,20 @@ export class ProfilePage {
 
   itemTapped(event, item) {
       console.log('profilePage.itemTapped +++++++++++', item);
+      console.log(this.user.login, this.profile.login)
 
-      if(item.clicked == 'repos')
-          this.nav.push(ReposPage, {user:this.user, type: item.username});
-      else if(item.clicked == 'gists')
-          this.nav.push(GistsPage, {user:this.user, type: item.username});
-
+      if(item.clicked == 'repos'){
+          var trigger = (this.user.login == this.profile.login) ? 'owned-me' : 'owned-user';
+          this.nav.push(ReposPage, {trigger:trigger, user:this.user, username: this.profile.login});
+      }
+      else if(item.clicked == 'starred'){
+          var trigger = (this.user.login == this.profile.login) ? 'starred-me' : 'starred-user';
+          this.nav.push(ReposPage, {trigger:trigger, user:this.user, username: this.profile.login});
+      }
+      else if(item.clicked == 'gists'){
+          var trigger = (this.user.login == this.profile.login) ? 'mine' : 'user';
+          this.nav.push(GistsPage, {trigger:trigger, user:this.user, username:this.profile.login});
+      }
       else if(item.clicked == 'followers'){
           var trigger = (this.user.login == this.profile.login) ? 'followers-me' : 'followers';
           this.nav.push(UsersPage, {trigger: trigger, user:this.user, username:this.profile.login});

@@ -24,14 +24,14 @@ export class UsersPage {
   data: any;
   pagination:any;
   lastPage = 0;
-  foundExecess:string;
+  foundExcess:string;
 
   // URLS
   url: string;
 
   // LOADER
   dataLoaded: boolean = false;
-  error = {flag:false, message:null};
+  error = {flag:false, status:null, message:null};
   spinner = {flag:true, message:null};
   async = {cnt:1, completed:0}; // Number of async calls to load the view
 
@@ -50,7 +50,7 @@ export class UsersPage {
 
   setUrl(){
       if(this.trigger == 'followers'){
-          this.description = 'Followers of '+ this.username ;
+          this.description = 'Followers of: '+ this.username ;
           this.url = 'https://api.github.com/users/'+this.username+'/followers';
       }
       else if(this.trigger == 'following'){
@@ -92,7 +92,7 @@ export class UsersPage {
       var self = this;
       this.dataLoaded = false;
       this.async = {cnt:1, completed:0};
-      this.error = {flag:false, message:null};
+      this.error = {flag:false, status:null, message:null};
       this.spinner = {flag:true, message:null};
       console.log('| >>> UsersPage.load', this.url)
       this.httpService.load(this.url, this.user)
@@ -100,13 +100,7 @@ export class UsersPage {
           console.log("| >>> UsersPage.load", data);
           this.pagination = this.utils.formatPagination(data.gm_pagination);
           this.lastPage = (this.pagination.lastPageNumber == null) ? this.lastPage : this.pagination.lastPageNumber;
-          /*if(data.gm_pagination != null){
-              this.pagination = this.utils.formatPagination(data.gm_pagination);
-              this.lastPage = (this.pagination.lastPageNumber != null) ? this.pagination.lastPageNumber: this.lastPage;
-          }
-          else {
-              this.pagination = null; this.lastPage = 0;
-          }*/
+
           this.data = {};
           this.data.gm_pagination = data.gm_pagination;
           console.log(this.trigger);
@@ -125,8 +119,10 @@ export class UsersPage {
               }
           }
 
-          this.foundExcess = null;
-          this.foundExecess = 'Found '+this.data.total_count.toLocaleString('en')+'; Viewable '+(30 * this.lastPage).toLocaleString('en')+'; Please narrow the search.';
+          if(this.data.total_count <= (30 * this.lastPage) )
+              this.foundExcess = null;
+          else
+              this.foundExcess = 'Found '+this.data.total_count.toLocaleString('en')+'; Viewable '+(30 * this.lastPage).toLocaleString('en')+'; Please narrow the search.';
           // Must follow above calcs or the math will fail
           this.data.total_count = this.data.total_count.toLocaleString('en');
 
@@ -141,7 +137,7 @@ export class UsersPage {
   asyncController(success, error){
       if(this.error.flag) return; // Onec async call has already failed so ignore the rest
       if(error){
-          this.error = {flag:true, message:error.message};
+          this.error = {flag:true, status:error.status, message:error.message};
           this.spinner.flag = false;
       }
       else{

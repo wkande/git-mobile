@@ -16,7 +16,7 @@
 <div *ngIf="dataLoaded">
 
       <div class="_description">{{description}} <small *ngIf="trigger=='search'">({{data.total_count}})</small></div>
-      <div class="_description" item-wrap *ngIf="data.gm_pagination != null"><small>{{foundExecess}}</small></div>
+      <div class="_description" item-wrap *ngIf="foundExcess != null"><small>{{foundExcess}}</small></div>
       <ion-list>
           <button ion-item *ngFor="#item of data.items" (click)="itemTapped($event, item)">
               {{item.login}}

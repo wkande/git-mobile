@@ -12,7 +12,7 @@
 
 
 
-      <ion-card *ngIf="repo">
+      <ion-card>
           <ion-item>
               <ion-avatar item-left>
                 <span class="octicon octicon-repo item-left" style="font-size:32pt;"></span>
@@ -40,7 +40,7 @@
               </button>
 
 
-              <button ion-item (click)="goTo('readme')" style="background-color:#f1f1f1;">
+              <button ion-item (click)="itemTapped($event, 'readme')" style="background-color:#f1f1f1;">
                   <ion-avatar item-left>
                     <ion-icon name="ios-document-outline" style="font-size:36px;margin-left:10px;"></ion-icon>
                   </ion-avatar>

@@ -13,25 +13,31 @@ import {GmSpinner} from '../../components/gm-spinner';
     directives: [GmError, GmSpinner]
 })
 export class CodeBrowserPage {
-  items: any;
+
+  // PARAMS
+  user:any;
   repo: any;
-  url: string;
-  branchTagName = "default";
   path: string;
+
+
+  // DATA
+  items: any;
+  url: string;
   local: any;
+  branchTagName = "default";
 
   dataLoaded: boolean = false;
-  error = {flag:false, message:null};
+  error = {flag:false, status:null, message:null};
   spinner = {flag:false, message:null};
+  async = {cnt:1, completed:0}; // Number of async calls to load the view
 
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService,
         private utils: Utils) {
-      this.repo = {owner: null, name: null};
-      this.repo.owner = navParams.get('owner');
-      this.repo.name = navParams.get('name');
+      console.log('\n\n| >>> +++++++++++++ CodeBrowserPage.constructor +++++++++++++++');
+      console.log(navParams);
+      this.user = navParams.get('user');
+      this.repo = navParams.get('repo');
       this.path = navParams.get('path');
-      console.log('CodeBrowserPage.constructor.repo', this.repo, this.path, this.branchTagName);
-      console.log('CodeBrowserPage.onPageDidEnter >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
       this.local = new Storage(LocalStorage);
       this.local.get('lastBranchTag')
       .then((data:any) => {
@@ -46,65 +52,69 @@ export class CodeBrowserPage {
           this.branchTagName = ref;
           this.local.set('lastBranchTag', ref);
           if(typeof this.path == 'undefined')
-              this.url = 'https://api.github.com/repos/'+this.repo.owner+'/'+this.repo.name+'/contents/?ref='+ref;
+              this.url = 'https://api.github.com/repos/'+this.repo.owner.login+'/'+this.repo.name+'/contents/?ref='+ref;
           else
-              this.url = 'https://api.github.com/repos/'+this.repo.owner+'/'+this.repo.name+'/contents/'+this.path+'?ref='+ref;
+              this.url = 'https://api.github.com/repos/'+this.repo.owner.login+'/'+this.repo.name+'/contents/'+this.path+'?ref='+ref;
 
-          this.error.flag = false;
-          this.spinner.flag = true;
           var self = this;
-          this.httpService.load(this.url)
+          this.httpService.load(this.url, this.user)
           .then((data:any) => {
-              this.spinner.flag = false;
-              if ('gmErrorCode' in data) {
-                  this.error = {flag:true, message:data.message};
-              }
-              else{
-                  self.items = [];
+              self.items = [];
 
-                  data.forEach(function(item) {
-                      if(item.type == 'dir'){
-                          self.items.push({name:item.name, path:item.path, type:item.type, icon:'ios-folder-outline'});
-                      }
-                  });
-                  data.forEach(function(item) {
-                      if(item.type == 'file'){
-                          self.items.push({name:item.name, path:item.path, type:item.type, icon:'ios-document-outline'});
-                      }
-                  });
-                  data.forEach(function(item, i) {
-                      self.setLastCommit(item, i);
-                  });
-                  this.dataLoaded = true;
-              }
-          }, function(error) {
-              self.error = {flag:true, message:error};
-              self.spinner.flag = false;
+              data.forEach(function(item) {
+                  if(item.type == 'dir'){
+                      self.items.push({name:item.name, path:item.path, type:item.type, icon:'ios-folder-outline'});
+                  }
+              });
+              data.forEach(function(item) {
+                  if(item.type == 'file'){
+                      self.items.push({name:item.name, path:item.path, type:item.type, icon:'ios-document-outline'});
+                  }
+              });
+              data.forEach(function(item, i) {
+                  self.setLastCommit(item, i);
+              });
+              console.log(self.items)
+              this.asyncController(true, null);
+          }).catch(error => {
+              this.asyncController(null, error);
           });
       }
   }
 
 
   setLastCommit(item, rowNumb){
-      var url = 'https://api.github.com/repos/'+this.repo.owner+'/'+this.repo.name+'/commits?sha='+this.branchTagName+'&path='+item.path;
-      this.httpService.load(url)
+      var url = 'https://api.github.com/repos/'+this.repo.owner.login+'/'+this.repo.name+'/commits?sha='+this.branchTagName+'&path='+item.path;
+      this.httpService.load(url, this.user)
       .then((data:any) => {
           console.log(item)
           console.log(data)
-          if ('gmErrorCode' in data) {
-              this.items[rowNumb].lastCommitted = this.items[rowNumb].name+': last commit not found';
+          if(data.length > 0){
+              this.items[rowNumb].lastCommitted = this.utils.timeAgo(data[0].commit.committer.date);
+              this.items[rowNumb].commitMsg = data[0].commit.message;
           }
-          else{
-              if(data.length > 0){
-                  this.items[rowNumb].lastCommitted = this.utils.timeAgo(data[0].commit.committer.date);
-                  this.items[rowNumb].commitMsg = data[0].commit.message;
-              }
-          }
-      }, function(error) {
+      }).catch(error => {
           item.lastCommitted = 'ERROR: last commit not found';
           this.items[rowNumb].lastCommitted = this.items[rowNumb].name+': '+error;
       });
 
+  }
+
+
+  asyncController(success, error){
+      if(this.error.flag) return; // Onec async call has already failed so ignore the rest
+      if(error){
+          this.error = {flag:true, status:error.status, message:error.message};
+          this.spinner.flag = false;
+      }
+      else{
+          this.async.completed++;
+          if(this.async.cnt == this.async.completed){
+              this.spinner.flag = false;
+              this.dataLoaded = true;
+          }
+      }
+      console.log('asyncCnt', this.async.completed)
   }
 
   showModal() {

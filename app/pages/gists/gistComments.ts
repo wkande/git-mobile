@@ -15,7 +15,7 @@ export class GistCommentsPage {
   gistName: string;
 
   dataLoaded: boolean = false;
-  error = {flag:false, message:null};
+  error = {flag:false, status:null, message:null};
   spinner = {flag:false, message:null};
 
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService, private utils: Utils) {

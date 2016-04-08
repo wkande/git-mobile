@@ -23,7 +23,7 @@ export class GistDetailPage {
 
   dataLoaded: boolean = false;
   profileLoaded: boolean = false;
-  error = {flag:false, message:null};
+  error = {flag:false, status:null, message:null};
   spinner = {flag:false, message:null};
 
 

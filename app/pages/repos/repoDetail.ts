@@ -3,6 +3,7 @@ import {HttpService} from '../../providers/httpService.ts';
 import {Utils} from '../../providers/utils.ts';
 import {CodeBrowserPage} from '../../pages/code/codeBrowser';
 import {ProfilePage} from '../profile/profile';
+import {FileViewerPage} from '../../pages/files/fileViewer';
 import {UsersPage} from '../profile/users';
 import {GmError} from '../../components/gm-error';
 import {GmSpinner} from '../../components/gm-spinner';
@@ -27,7 +28,7 @@ export class RepoDetailPage {
 
   // LOADER
   dataLoaded: boolean = false;
-  error = {flag:false, message:null};
+  error = {flag:false, status:null, message:null};
   spinner = {flag:true, message:null};
   async = {cnt:1, completed:0}; // Number of async calls to load the view
 
@@ -47,6 +48,7 @@ export class RepoDetailPage {
       this.items = [];
       //this.items.push({title: 'Branches/Tags', note: null, icon: null});
       this.items.push({title: 'Code', note: null, icon: null});
+      //this.items.push({title: 'Collaborators', note: null, icon: null});
       this.items.push({title: 'Issues', note: null, icon: null, badgeIssues:true});
       this.items.push({title: 'Releases', note: null, icon: null});
       this.items.push({title: 'Stargazers', note: null, icon: null, badgeStargazers:true});
@@ -60,28 +62,24 @@ export class RepoDetailPage {
 
 
   loadProfile(){
-      var self = this;
-      console.log("| >>> RepoDetailPage.loadProfile: ", this.repo.owner.login, ' - ',this.user);
+      console.log("| >>> RepoDetailPage.loadProfile");
       this.httpService.getProfile(this.repo.owner.login, this.user)
       .then((data:any) => {
-          if ('gmErrorCode' in data) {
-              this.error = {flag:true, message:data.message};
-          }
-          else{
-              this.ownerProfile = data;
-              //this.profileLoaded = true;
-              this.asyncController(true, null);
-          }
-      }, function(error) {
-          self.asyncController(null, error);
+        console.log(data)
+          this.ownerProfile = data;
+          this.asyncController(true, null);
+      }).catch(error => {
+        console.log(';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;' ,error)
+          this.asyncController(null, error);
       });
   }
+
 
 
   asyncController(success, error){
       if(this.error.flag) return; // Onec async call has already failed so ignore the rest
       if(error){
-          this.error = {flag:true, message:error.message};
+          this.error = {flag:true, status:error.status, message:error.message};
           this.spinner.flag = false;
       }
       else{
@@ -93,17 +91,22 @@ export class RepoDetailPage {
       }
   }
 
+
+
+
   itemTapped(event, item) {
-    console.log(item)
+    console.log('item', item)
       if(item.title == "Code")
-          this.nav.push(CodeBrowserPage, {owner: this.owner, name:this.name});
+          this.nav.push(CodeBrowserPage, {user: this.user, repo:this.repo});
       else if(item == 'profile'){
-          var profile = {username:this.repo.owner.login, type:this.repo.owner.type};
-          this.nav.push(ProfilePage, {user:this.user, profile:profile}  );
+          this.nav.push(ProfilePage, {trigger:'user', user:this.user, username:this.repo.owner.login}  );
       }
       else if(item.title == 'Stargazers')
           this.nav.push(UsersPage, {trigger:'stargazers', user:this.user, repo: this.repo});
       else if(item.title == 'Watchers')
           this.nav.push(UsersPage, {trigger:'watchers', user:this.user, repo:this.repo});
+      else if(item == 'readme'){
+            this.nav.push(FileViewerPage, {trigger:'readme', user:this.user, repo: this.repo});
+      }
   }
 }

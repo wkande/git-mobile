@@ -56,7 +56,7 @@
 
 
           <a ion-item href="#" (click)="itemTapped($event, {clicked:'repos'})">
-              Repositiories
+              Repositiories (owned)
               <span class="_gray _font-x-small" style="float:right;margin-left:5px;">public
                   <ion-badge class="_badge_lighter">{{profile.public_repos}}</ion-badge></span>
                   <!-- for some reason "user.owned_private_repos" will not work in the following-->
@@ -64,38 +64,37 @@
                   <ion-badge class="_badge_lighter">{{profile.owned_private_repos}}</ion-badge></span>
           </a>
 
-          <a ion-item href="#" (click)="itemTapped($event, {clicked:'gists'})">
-              Gists
-              <span class="_gray _font-x-small" style="float:right;margin-left:5px;">public
-                  <ion-badge class="_badge_lighter">{{profile.public_gists}}</ion-badge></span>
-              <span *ngIf="profile.private_gists" class="_gray _font-x-small" style="float:right;">private
-                  <ion-badge class="_badge_lighter">{{profile.private_gists}}</ion-badge></span>
-          </a>
+
 
           <div *ngIf="profile.type =='User'">
+            <a ion-item href="#" (click)="itemTapped($event, {clicked:'starred'})">
+                Repositories (starred)
+            </a>
               <a ion-item href="#" (click)="itemTapped($event, {clicked:'following'})">
                   Following
                   <ion-badge class="_badge_lighter" style="float:right;">{{profile.following}}</ion-badge>
               </a>
-              <a ion-item href="#" (click)="itemTapped($event, {clicked:'repos'})">
-                  Starred
-                  <ion-badge class="_badge_lighter" style="float:right;">{{starred_cnt}}</ion-badge>
-              </a>
+
               <a ion-item href="#" (click)="itemTapped($event, {clicked:'followers'})">
                   Followers
                   <ion-badge class="_badge_lighter" style="float:right;">{{profile.followers}}</ion-badge>
               </a>
+              <a ion-item href="#" (click)="itemTapped($event, {clicked:'gists'})">
+                  Gists
+                  <span class="_gray _font-x-small" style="float:right;margin-left:5px;">public
+                      <ion-badge class="_badge_lighter">{{profile.public_gists}}</ion-badge></span>
+                  <span *ngIf="profile.private_gists" class="_gray _font-x-small" style="float:right;">private
+                      <ion-badge class="_badge_lighter">{{profile.private_gists}}</ion-badge></span>
+              </a>
 
               <a ion-item href="#" (click)="itemTapped($event, {clicked:'orgs'})">
                   Organizations
-                  <ion-badge class="_badge_lighter" style="float:right;">{{org_cnt}}</ion-badge>
               </a>
           </div>
 
           <div *ngIf="profile.type =='Organization'">
               <a ion-item href="#" (click)="itemTapped($event, {clicked:'members'})">
                   Members
-                  <ion-badge class="_badge_lighter" style="float:right;">{{member_cnt}}</ion-badge>
               </a>
           </div>
 

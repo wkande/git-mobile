@@ -123,7 +123,7 @@ class MyApp {
       // navigate to the new page if it is not the current page
       let nav = this.app.getComponent('nav');
       if(page == 'profile')
-          nav.setRoot(ProfilePage, {trigger:'user', user:this.user, username:this.user.login} );
+          nav.setRoot(ProfilePage, {trigger:'me', user:this.user, username:this.user.login} );
       else if(page == 'repos')
           nav.setRoot(ReposPage, {user:this.user});
       else if(page == 'issues')

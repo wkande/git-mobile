@@ -14,7 +14,8 @@ import {GmSpinner} from '../../components/gm-spinner';
 export class GistsPage {
   // PARAMS
   trigger: string;
-  searchValue: string;
+  user:any;
+  username:string;
 
   // DATA
   data: any;
@@ -26,7 +27,7 @@ export class GistsPage {
 
   // LOADER
   dataLoaded: boolean = false;
-  error = {flag:false, message:null};
+  error = {flag:false, status:null, message:null};
   spinner = {flag:true, message:null};
   async = {cnt:1, completed:0}; // Number of async calls to load the view
 
@@ -37,6 +38,7 @@ export class GistsPage {
       console.log('\n\n| >>> +++++++++++++ GistsPage.constructor +++++++++++++++');
       console.log(navParams)
       this.user = navParams.get('user');
+      this.username = navParams.get('username');
       this.trigger = (navParams.get('trigger') == null) ? 'recent': navParams.get('trigger');
       this.setURL();
       this.load();
@@ -65,6 +67,10 @@ export class GistsPage {
       if (this.trigger == 'mine' ){
           this.description = "Mine";
           this.url = 'https://api.github.com/users/'+this.user.login+'/gists';
+      }
+      else if (this.trigger == 'user' ){
+        this.description = "Gists for: "+this.username;
+        this.url = 'https://api.github.com/users/'+this.username+'/gists';
       }
       else if (this.trigger == 'starred-me' ){
           this.description = "Starred by Me";
@@ -122,7 +128,7 @@ export class GistsPage {
   asyncController(success, error){
       if(this.error.flag) return; // Onec async call has already failed so ignore the rest
       if(error){
-          this.error = {flag:true, message:error.message};
+          this.error = {flag:true, status:error.status, message:error.message};
           this.spinner.flag = false;
       }
       else{

@@ -23,7 +23,7 @@ export class IssuesPage {
   lastPage = 0;
   state = 'open';
   description:string;
-  foundExecess:string;
+  foundExcess:string;
 
   // URLS
   url:string;
@@ -31,7 +31,7 @@ export class IssuesPage {
 
   // LOADER
   dataLoaded: boolean = false;
-  error = {flag:false, message:null};
+  error = {flag:false, status:null, message:null};
   spinner = {flag:true, message:null};
   async = {cnt:1, completed:0};
 
@@ -74,7 +74,7 @@ export class IssuesPage {
       var self = this;
       this.dataLoaded = false;
       this.async = {cnt:1, completed:0};
-      this.error = {flag:false, message:null};
+      this.error = {flag:false, status:null, message:null};
       this.spinner = {flag:true, message:null};
 
       var url = this.url;
@@ -94,8 +94,10 @@ export class IssuesPage {
           this.lastPage = (this.pagination.lastPageNumber == null) ? this.lastPage : this.pagination.lastPageNumber;
           this.data = data;
 
-          this.foundExcess = null;
-          this.foundExecess = 'Found '+this.data.total_count.toLocaleString('en')+'; Viewable '+(30 * this.lastPage).toLocaleString('en')+'; Please narrow the search.';
+          if(this.data.total_count <= (30 * this.lastPage) )
+              this.foundExcess = null;
+          else
+              this.foundExcess = 'Found '+this.data.total_count.toLocaleString('en')+'; Viewable '+(30 * this.lastPage).toLocaleString('en')+'; Please narrow the search.';
           // Must follow above calcs or the math will fail
           this.data.total_count = this.data.total_count.toLocaleString('en');
 
@@ -118,7 +120,7 @@ export class IssuesPage {
   asyncController(success, error){
       if(this.error.flag) return; // Once async call has already failed so ignore the rest
       if(error){
-          this.error = {flag:true, message:error.message};
+          this.error = {flag:true, status:error.status, message:error.message};
           this.spinner.flag = false;
       }
       else{

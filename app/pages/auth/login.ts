@@ -13,7 +13,7 @@ import {GmError} from '../../components/gm-error';
 })
 export class LoginPage {
     profile: any;
-    error = {flag:false, message:null};
+    error = {flag:false, status:null, message:null};
 
     authForm: ControlGroup;
     username: AbstractControl;

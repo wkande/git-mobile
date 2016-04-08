@@ -22,7 +22,7 @@ export default class BranchPickerModal {
     loadedTags: boolean = false;
     loadedBranches: boolean = false;
 
-    error = {flag:false, message:null};
+    error = {flag:false, status:null, message:null};
     spinner = {flag:false, message:null};
 
     constructor(private viewCtrl: ViewController, navParams: NavParams, private httpService: HttpService) {

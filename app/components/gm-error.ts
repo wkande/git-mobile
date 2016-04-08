@@ -11,5 +11,5 @@ import {Component, Input} from 'angular2/core';
 })
 
 export class GmError {
-    public error = {flag:false, message:null};
+    public error = {flag:false, status:null, message:null};
 }

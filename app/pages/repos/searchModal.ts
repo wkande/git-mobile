@@ -9,11 +9,11 @@ import {GmError} from '../../components/gm-error';
 })
 export default class SearchModal {
     user:any;
-    textValue: AbstractControl;
+    textValue:string;
     localStorage: any;
     error = {flag:false, message:null};
 
-    affiliations:false;
+    affiliations = false;
 
     constructor(private nav: NavController, private viewCtrl: ViewController, navParams: NavParams) {
         console.log('\n\n| >>> +++++++++++++ SearchModal.constructor +++++++++++++++');
@@ -62,7 +62,7 @@ export default class SearchModal {
         <b>Mentions me:</b> Issues where you are @mentioned.
         <br/><br/>
         <b>I commented:</b> Issues you commented on.
-        </div>`
+        </div>`,
 
         buttons: ['Ok']
       });

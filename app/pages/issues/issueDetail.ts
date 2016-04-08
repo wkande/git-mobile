@@ -28,7 +28,7 @@ export class IssueDetailPage {
 
   // LOADER
   dataLoaded: boolean = false;
-  error = {flag:false, message:null};
+  error = {flag:false, status:null, message:null};
   spinner = {flag:true, message:null};
   async = {cnt:2, completed:0}; // Number of async calls to load the view
 
@@ -123,7 +123,7 @@ export class IssueDetailPage {
   asyncController(success, error){
       if(this.error.flag) return; // Onec async call has already failed so ignore the rest
       if(error){
-          this.error = {flag:true, message:error.message};
+          this.error = {flag:true, status:error.status, message:error.message};
           this.spinner.flag = false;
       }
       else{

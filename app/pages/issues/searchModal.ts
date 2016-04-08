@@ -9,14 +9,14 @@ import {GmError} from '../../components/gm-error';
 })
 export default class SearchModal {
     user:any;
-    textValue: AbstractControl;
+    textValue:string;
     localStorage: any;
     error = {flag:false, message:null};
 
-    assigned:false;
-    created:false;
-    mentioned:false;
-    commented:false;
+    assigned = false;
+    created = false;
+    mentioned = false;
+    commented = false;
 
     constructor(private nav: NavController, private viewCtrl: ViewController, navParams: NavParams) {
         console.log('\n\n| >>> +++++++++++++ SearchModal.constructor +++++++++++++++');
@@ -45,13 +45,13 @@ export default class SearchModal {
     }
 
     onSubmit(){
-
-            this.localStorage.set('search-issues', JSON.stringify( {text:this.textValue,
-                                                                    assigned:this.assigned,
-                                                                    created:this.created,
-                                                                    mentioned:this.mentioned,
-                                                                    commented:this.commented}) );
-
+            this.localStorage.set('search-issues', JSON.stringify(
+              { text:this.textValue,
+                assigned:this.assigned,
+                created:this.created,
+                mentioned:this.mentioned,
+                commented:this.commented
+              }));
 
             var url = '/search/issues?q='+this.textValue+'+type:issue+state:___';
             if(this.assigned == true) url = url+'+assignee:'+this.user.login;
@@ -77,7 +77,7 @@ export default class SearchModal {
         <b>Mentions me:</b> Issues where you are @mentioned.
         <br/><br/>
         <b>I commented:</b> Issues you commented on.
-        </div>`
+        </div>`,
 
         buttons: ['Ok']
       });

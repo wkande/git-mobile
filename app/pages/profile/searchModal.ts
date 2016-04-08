@@ -8,7 +8,8 @@ import {GmError} from '../../components/gm-error';
     directives: [GmError]
 })
 export default class SearchModal {
-    textValue: AbstractControl;
+    textValue:string;
+    user:any;
     localStorage: any;
     error = {flag:false, message:null};
 
@@ -43,7 +44,7 @@ export default class SearchModal {
         title: 'Usage',
         subTitle: `<div style="text-align:left;">
         <b>Search Text</b>: Used to search the user or
-        organization account data.`
+        organization account data.`,
         buttons: ['Ok']
       });
       this.nav.present(alert);
