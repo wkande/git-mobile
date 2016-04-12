@@ -36,25 +36,23 @@ export class LoginPage {
             this.error.flag = false;
             var self = this;
             var auth = 'Basic '+ btoa(value.username+':'+value.password);
-            this.httpService.load('https://api.github.com/user', {auth:auth})
+            var user = {auth:null};
+            user.auth = auth;
+            this.httpService.load('https://api.github.com/user', user)
             .then((data:any) => {
-                if ('gmErrorCode' in data) {
-                    if(data.gmErrorCode == 401){
-                        this.error = {flag:true, message:"Invalid credentials, please try again."};
-                    }
-                    else{
-                        this.error = {flag:true, message:data.message};
-                    }
-                }
-                else{
-                    var profile = this.profileService.set(value.username, value.password, data.name, data.avatar_url, data.url);
-                    console.log(data)
-                    this.nav.setRoot(ReposPage, {user:profile});
-                    this.events.publish('user:connected', {});
-                }
-            }, function(error) {
-                self.error = {flag:true, message:error};
-            });
+                  var profile = this.profileService.set(value.username, value.password, data.name, data.avatar_url, data.url);
+                  console.log(data)
+                  this.nav.setRoot(ReposPage, {user:profile});
+                  this.events.publish('user:connected', {});
+              }).catch(error => {
+                  console.log(error)
+                  if(error.status == 401){
+                      this.error = {flag:true, status:401, message:"Invalid credentials, please try again."};
+                  }
+                  else{
+                      this.error = {flag:true, status:error.status, message:error.message};
+                  }
+              });
         }
     }
 

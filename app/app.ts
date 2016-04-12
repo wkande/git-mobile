@@ -5,6 +5,7 @@ import {UsersPage} from './pages/profile/users';
 import {IssuesPage} from './pages/issues/issues';
 import {GistsPage} from './pages/gists/gists';
 import {LoginPage} from './pages/auth/login';
+import {RoadmapPage} from './pages/roadmap/roadmap';
 import {ProfilePage} from './pages/profile/profile';
 import {ProfileService} from './providers/profileService.ts';
 // https://angular.io/docs/ts/latest/api/core/Type-interface.html
@@ -132,8 +133,8 @@ class MyApp {
           nav.setRoot(UsersPage, {user:this.user, username:this.user.login});
       else if(page == 'gists')
           nav.setRoot(GistsPage, {user:this.user});
-      else if(page == 'search')
-          nav.setRoot(SearchPage, {user:this.user});
+      else if(page == 'roadmap')
+          nav.setRoot(RoadmapPage);
       //else
           //nav.setRoot(page.component, {title:page.title, action:page.action, user:this.user});
   }

@@ -13,14 +13,13 @@ export class FileViewerPage {
   // PARAMS
   trigger:string;
   path:any;
-  repoOwner: string;
-  repoName: string;
   repo:any;
   branchTagName: string;
   user:any;
 
   // DATA
   file: any;
+  content:any;
   description:string;
 
   // URLS
@@ -34,12 +33,10 @@ export class FileViewerPage {
 
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService) {
       console.log('\n\n| >>> +++++++++++++ FileViewerPage.constructor +++++++++++++++');
-
+      console.log(navParams);
       this.trigger = navParams.get('trigger');
       this.path = navParams.get('path');
       this.repo = navParams.get('repo')
-      this.repoOwner = navParams.get('repoOwner');
-      this.repoName = navParams.get('repoName');
       this.branchTagName = (navParams.get('branchTagName') == null) ? 'origin': navParams.get('branchTagName');
       this.user = navParams.get('user');
 
@@ -54,20 +51,41 @@ export class FileViewerPage {
           this.url = 'https://api.github.com/repos/'+this.repo.owner.login+'/'+this.repo.name+'/contents/'+this.path+'?ref='+this.branchTagName;
           this.load();
       }
-
-
   }
 
-
   load(){
-      //var self = this;
+      var self = this;
       console.log("| >>> FileViewerPage.load: ", this.url);
       this.httpService.load(this.url, this.user)
       .then((data: any) => {
           console.log('loaded file: ', data)
           this.file = data;
           this.description = data.path;
-          this.file.content = new Buffer(this.file.content, 'base64');
+          this.file.content = new Buffer(this.file.content, 'base64').toString();
+          var arr = self.file.content.split('\n');
+          var numb = 1;
+          arr.forEach(function(line){
+              var spaces;
+              if(numb < 10)
+                  spaces = '&nbsp;&nbsp;&nbsp;'+numb+'&nbsp;';
+              else if(numb < 100)
+                  spaces = '&nbsp;&nbsp;'+numb+'&nbsp;';
+              else if(numb < 1000)
+                  spaces = '&nbsp;'+numb+'&nbsp;';
+              spaces = '<span style="border-left: 1px solid #387ef5;border-right: 1px solid gray;">'+spaces+'</span>&nbsp;';
+
+
+
+
+              var newLine = spaces + line.replace(/\t/g, '&nbsp;').replace(/\ /g, '&nbsp;').replace(/\</g, '&lt') +'<br/>';
+              if(numb == 1)
+                self.content = newLine;
+              else
+                self.content = self.content+newLine;
+              numb++;
+          })
+
+
           this.asyncController(true, null);
       }).catch(error => {
           this.asyncController(null, error);
@@ -75,13 +93,12 @@ export class FileViewerPage {
   }
 
   loadMD(){
-      //var self = this;
       console.log("| >>> FileViewerPage.loadMD: ", this.url);
       this.httpService.loadMediaHtml(this.url, this.user)
       .then((data: any) => {
           console.log('loaded file: ', data)
-          this.file = {};
-          this.file.content = data;
+          //this.file = {};
+          this.content = data;
           this.description = 'Default Repo README';
           console.log(this.file)
           this.asyncController(true, null);
@@ -103,8 +120,6 @@ export class FileViewerPage {
               this.dataLoaded = true;
           }
       }
-      console.log('asyncCnt', this.async.completed)
   }
-
 
 }

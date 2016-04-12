@@ -214,6 +214,6 @@ export class ReposPage {
 
 
   itemTapped(event, item) {
-      //this.nav.push(RepoDetailPage, {repo:item, user:this.user});
+      this.nav.push(RepoDetailPage, {repo:item, user:this.user});
   }
 }

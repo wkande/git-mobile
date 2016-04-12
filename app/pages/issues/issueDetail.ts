@@ -37,11 +37,7 @@ export class IssueDetailPage {
       console.log('\n\n| >>> +++++++++++++ IssueDetailPage.constructor +++++++++++++++');
       console.log(navParams)
       this.user = navParams.get('user');
-
-      this.dataLoaded = false;
       this.async = {cnt:1, completed:0};
-      this.error = {flag:false, message:null};
-      this.spinner = {flag:true, message:null};
       this.loadRepo(navParams.get('repoURL'));
       this.loadIssue(navParams.get('issueURL'));
       this.loadComments(navParams.get('commentsURL'));
@@ -52,21 +48,16 @@ export class IssueDetailPage {
       console.log("| >>> IssueDetailPage.loadRepo: ", url);
       this.httpService.load(url, this.user)
       .then((data:any) => {
-          if ('gmErrorCode' in data) {
-              this.error = {flag:true, message:data.message};
-          }
-          else{
-            console.log('REPO', data)
-              this.repo = data;
-              this.repo.created_at = this.utils.formatDate(this.repo.created_at);
-              this.repo.updated_at = this.utils.formatDate(this.repo.updated_at);
-              this.repo.pushed_at = this.utils.timeAgo(this.repo.pushed_at);
-              this.repo.public = ((this.repo.private == false) ?  null : 'md-lock');
-              if(!this.repo.description) this.repo.description = 'No description available.';
-              this.asyncController(true, null);
-          }
-      }, function(error) {
-          self.asyncController(null, error);
+          console.log('loadREPO', data)
+          this.repo = data;
+          this.repo.created_at = this.utils.formatDate(this.repo.created_at);
+          this.repo.updated_at = this.utils.formatDate(this.repo.updated_at);
+          this.repo.pushed_at = this.utils.timeAgo(this.repo.pushed_at);
+          this.repo.public = ((this.repo.private == false) ?  null : 'md-lock');
+          if(!this.repo.description) this.repo.description = 'No description available.';
+          this.asyncController(true, null);
+      }).catch(error => {
+          this.asyncController(null, error);
       });
   }
 
@@ -75,26 +66,21 @@ export class IssueDetailPage {
       console.log("| >>> IssueDetailPage.loadIssue: ", url);
       this.httpService.load(url, this.user)
       .then((data:any) => {
-          if ('gmErrorCode' in data) {
-              this.error = {flag:true, message:data.message};
+          console.log('loadIssue ------------------------', data)
+          this.issue = data;
+          this.issue.created_at = this.utils.formatDate(this.issue.created_at);
+          // WARNING: There is an issue with the url in that it shows everything as open
+          if(this.issue.closed_by != null &&  this.issue.closed_at == null){
+              this.issue.stateIcon = 'octicon-issue-reopened';
+              this.issue.state = 're-opened';
           }
-          else{
-            console.log('loadIssue ------------------------', data)
-              this.issue = data;
-              this.issue.created_at = this.utils.formatDate(this.issue.created_at);
-              // WARNING: There is an issue with the url in that it shows everything as open
-              if(this.issue.closed_by != null &&  this.issue.closed_at == null){
-                  this.issue.stateIcon = 'octicon-issue-reopened';
-                  this.issue.state = 're-opened';
-              }
-              else if(this.issue.state == 'open')
-                  this.issue.stateIcon = 'octicon-issue-opened';
-              else if(this.issue.state == 'closed')
-                  this.issue.stateIcon = 'octicon-issue-closed';
-              //this.issue.closed_at = this.utils.formatDate(this.issue.closed_at);
-          }
-      }, function(error) {
-          self.asyncController(null, error);
+          else if(this.issue.state == 'open')
+              this.issue.stateIcon = 'octicon-issue-opened';
+          else if(this.issue.state == 'closed')
+              this.issue.stateIcon = 'octicon-issue-closed';
+          //this.issue.closed_at = this.utils.formatDate(this.issue.closed_at);
+      }).catch(error => {
+          this.asyncController(null, error);
       });
   }
 
@@ -103,19 +89,14 @@ export class IssueDetailPage {
       console.log("| >>> IssueDetailPage.loadComments: ", url);
       this.httpService.load(url, this.user)
       .then((data:any) => {
-          if ('gmErrorCode' in data) {
-              this.error = {flag:true, message:data.message};
-          }
-          else{
-            console.log('loadComments', data)
-              this.comments = data;
-              this.comments.forEach(function(comment){
-                  comment.created_at = self.utils.formatDate(comment.created_at);
-              });
-              //this.issue.closed_at = this.utils.formatDate(this.issue.closed_at);
-          }
-      }, function(error) {
-          self.asyncController(null, error);
+          console.log('loadComments', data)
+          this.comments = data;
+          this.comments.forEach(function(comment){
+              comment.created_at = self.utils.formatDate(comment.created_at);
+          });
+          //this.issue.closed_at = this.utils.formatDate(this.issue.closed_at);
+      }).catch(error => {
+          this.asyncController(null, error);
       });
   }
 

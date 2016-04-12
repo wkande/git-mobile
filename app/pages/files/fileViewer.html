@@ -19,12 +19,27 @@
 <div  *ngIf="dataLoaded">
   <div class="_description">{{description}}</div>
   <div class="_font-small _bold _center-text">{{repo.name}}</div>
+  <div class="_font-small _bold _center-text">{{branchTagName}}</div>
 
 <hr/>
-<div padding [innerHTML]="file.content" style="transform: scale(0.9);transform-origin: 10% 10%;"></div>
 
+<div *ngIf="trigger == 'readme'" padding [innerHTML]="content">
+</div>
 
-<pre *ngIf="trigger != 'readme'"><code style="overflow-x:scroll" class="language-javascript">{{file.content}}</code></pre>
+<ion-scroll *ngIf="trigger != 'readme'" scrollX="true" style="font-family:monospace;font-size:medium;color:gray;
+    overflow-x: auto;
+    white-space: nowrap;" [innerHTML]="content">
+</ion-scroll>
+
+<hr/>
+<!--div padding [innerHTML]="file.content" *ngIf="trigger == 'readme'" style="transform: scale(0.9);transform-origin: 10% 10%;"></div>
+
+<div style="font-family:monospace;font-size:medium;color:gray;
+    overflow-x: auto;
+    white-space: nowrap;" [innerHTML]="content">
+</div>
+
+<hr/-->
 
 
 

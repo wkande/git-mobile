@@ -2,20 +2,21 @@ import {Page, Modal, NavController, NavParams, ActionSheet} from 'ionic-angular'
 import {OnInit} from 'angular2/core';
 import {HttpService} from '../../providers/httpService.ts';
 import {Utils} from '../../providers/utils.ts';
-import {GistDetailPage} from './gistDetail';
+import {ReleaseDetailPage} from './releaseDetail';
 import {GmError} from '../../components/gm-error';
 import {GmSpinner} from '../../components/gm-spinner';
 
 @Page({
-  templateUrl: 'build/pages/gists/gists.html',
+  templateUrl: 'build/pages/releases/releases.html',
   providers: [HttpService, Utils],
   directives: [GmError, GmSpinner]
 })
-export class GistsPage {
+export class ReleasesPage {
   // PARAMS
   trigger: string;
   user:any;
   username:string;
+  repo:any;
 
   // DATA
   data: any;
@@ -36,80 +37,38 @@ export class GistsPage {
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService,
          private utils: Utils) {
 
-      console.log('\n\n| >>> +++++++++++++ GistsPage.constructor +++++++++++++++');
+      console.log('\n\n| >>> +++++++++++++ ReleaasesPage.constructor +++++++++++++++');
       console.log(navParams)
       this.user = navParams.get('user');
-      this.username = navParams.get('username');
-      this.trigger = (navParams.get('trigger') == null) ? 'recent': navParams.get('trigger');
+      this.repo = navParams.get('repo');
+      this.trigger = (navParams.get('trigger') == null) ? 'repo': navParams.get('trigger');
       this.setURL();
       this.load();
-      /*if(this.type == 'Mine'){
-          this.url = 'https://api.github.com/users/:user/gists'; // Owned
-      }
-      else if(this.type == 'Starred'){ // Current user starred repos
-          this.url = 'https://api.github.com/gists/starred';
-      }
-      else if(this.type == 'Recent'){ //
-          this.url = 'https://api.github.com/gists/public';
-      }*/
-      /*else if(this.type == 'Forked by me'){ // Current user starred repos
-          this.url = 'https://api.github.com/gists/public';
-      }*/
-      /*else if(this.type == 'search'){
-          this.url = 'https://api.github.com/search?q='+this.searchValue+'&ref=gists';
-      }
-      else{
-          this.url = 'https://api.github.com/users/'+this.type+'/gists'; // Some user
-      }*/
+
   }
 
   setURL(){
       console.log('setURL', this.trigger)
-      if (this.trigger == 'mine' ){
-          this.description = "Mine";
-          this.url = 'https://api.github.com/users/'+this.user.login+'/gists';
-      }
-      else if (this.trigger == 'user' ){
-        this.description = "Gists for: "+this.username;
-        this.url = 'https://api.github.com/users/'+this.username+'/gists';
-      }
-      else if (this.trigger == 'starred-me' ){
-          this.description = "Starred by Me";
-          this.url = 'https://api.github.com/gists/starred';
-      }
-      else if (this.trigger == 'recent' ){
-          this.description = "Recent";
-          this.url = 'https://api.github.com/gists/public';
+      if (this.trigger == 'repo' ){
+          this.description = this.repo.name;
+          this.url = 'https://api.github.com/repos/'+this.repo.owner.login+'/'+this.repo.name+'/releases';
       }
   }
 
   load(){
       var self = this;
-      this.dataLoaded = false;
-      this.async = {cnt:1, completed:0};
-      this.error = {flag:false, status:null, message:null};
-      this.spinner = {flag:true, message:null};
       this.data = {}; // Jumps the view to the top
-      console.log("| >>> GistsPage.load: ", this.url);
+      console.log("| >>> ReleasesPage.load: ", this.url);
       this.httpService.load(this.url, this.user)
       .then((data:any) => {
-          console.log('GISTS DATA', data);
+          console.log('RELEASES DATA', data);
           this.pagination = self.utils.formatPagination(data.gm_pagination);
           this.lastPage = (this.pagination.lastPageNumber != null) ? this.pagination.lastPageNumber: this.lastPage;
           this.data.gm_pagination = data.gm_pagination;
 
           this.data.items = data;
           this.data.items.forEach(function(item){
-              item.timeAgo = self.utils.timeAgo(item.created_at);
-              if(!item.owner){ // Some gist do not have owner, /gists/public
-                  item.owner = {};
-                  item.owner.login = 'User unknown';
-                  item.owner.avatar_url = 'img/blank_avatar.png';
-              }
-              if(!item.description){
-                for (var first in item.files) break;
-                item.description = first;
-              }
+            item.published = (item.published_at == null) ? null : self.utils.formatDate(item.published_at);
           })
           console.log(this.data);
           this.asyncController(true, null);
@@ -140,7 +99,7 @@ export class GistsPage {
       }
   }
 
-
+/*
   presentActionSheet() {
       let actionSheet = ActionSheet.create({
         title: 'Filter Gists',
@@ -173,9 +132,10 @@ export class GistsPage {
       this.nav.present(actionSheet);
   }
 
-
+*/
   itemTapped(event, item) {
-    this.nav.push(GistDetailPage, {user:this.user, owner: item.owner.login, id:item.id
+    this.nav.push(ReleaseDetailPage, {user:this.user,
+      repo: this.repo, release:item
     });
   }
 }

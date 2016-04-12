@@ -10,75 +10,61 @@ import {GmSpinner} from '../../components/gm-spinner';
   directives: [GmError, GmSpinner]
 })
 export class GistCommentsPage {
+  user:any;
   items: any;
   url: string;
   gistName: string;
 
+  // LOADER
   dataLoaded: boolean = false;
   error = {flag:false, status:null, message:null};
-  spinner = {flag:false, message:null};
+  spinner = {flag:true, message:null};
+  async = {cnt:2, completed:0}; // Number of async calls to load the view
 
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService, private utils: Utils) {
       console.log('GistCommentsPage.constructor ++++++++++++++++++++++++++++++++++++++++');
+      this.user = navParams.get('user');
       this.url = navParams.get('url');
       this.gistName = navParams.get('gistName');
+      this.load();
   }
 
-  onPageDidEnter() {
+  load() {
       console.log("GistCommentsPage.onPageDidEnter");
-      if (!this.dataLoaded){ // Do not load on Back button since the Page is still in the DOM
-          this.error.flag = false;
-          this.spinner.flag = true;
-          var self = this;
-          this.httpService.load(this.url)
-          .then((data:any) => {
-              this.spinner.flag = false;
-              if ('gmErrorCode' in data) {
-                  this.error = {flag:true, message:data.message};
-              }
-              else{
-                  this.items = data;
-                  this.items.forEach(function(item){
-                      item.created_at = self.utils.formatDate(item.created_at);
-                      item.updated_at = self.utils.formatDate(item.updated_at);
-                      //item.public = ((item.public == true) ?  'md-unlock' : 'md-lock');
-                            self.httpService.mdToHtml(item.body.toString())
-                            .then((data:any) => {
-                                if ('gmErrorCode' in data) {
-                                    ; // do nothing//this.error = {flag:true, message:data.message};
-                                }
-                                else{
-
-                                    item.body = data._body.replace(/<p>/gi,"<br/><p>"); //var res = str.replace("Microsoft", "W3Schools");
-                                    console.log('gistComment', item.body );
-                                }
-                            });
-                  })
-                  console.log('GistCommentsPage.onPageDidEnter.DATA-------------', data);
-                  this.dataLoaded = true;
-              }
-          }, function(error) {
-              self.error = {flag:true, message:error};
-              self.spinner.flag = false;
-          });
-      }
+      var self = this;
+      this.httpService.load(this.url, this.user)
+      .then((data:any) => {
+          this.items = data;
+          this.items.forEach(function(item){
+              item.created_at = self.utils.formatDate(item.created_at);
+              item.updated_at = self.utils.formatDate(item.updated_at);
+              //item.public = ((item.public == true) ?  'md-unlock' : 'md-lock');
+              self.httpService.mdToHtml(item.body.toString(), this.user)
+              .then((data:any) => {
+                  item.body = data._body.replace(/<p>/gi,"<br/><p>"); //var res = str.replace("Microsoft", "W3Schools");
+                  console.log('gistComment', item.body );
+              });
+          })
+          console.log('GistCommentsPage.onPageDidEnter.DATA-------------', data);
+          this.asyncController(true, null);
+      }).catch(error => {
+          this.asyncController(null, error);
+      });
   }
 
-  loadMarkdown(item){
-      this.httpService.mdToHtml(item.body.toString())
-      .then((data:any) => {
+  asyncController(success, error){
+      if(this.error.flag) return; // Onec async call has already failed so ignore the rest
+      if(error){
+          this.error = {flag:true, status:error.status, message:error.message};
           this.spinner.flag = false;
-          if ('gmErrorCode' in data) {
-              ; // do nothing//this.error = {flag:true, message:data.message};
+      }
+      else{
+          this.async.completed++;
+          if(this.async.cnt == this.async.completed){
+              this.spinner.flag = false;
+              this.dataLoaded = true;
           }
-          else{
-              item.body = data;
-          }
-      }, function(error) {
-          //self.error = {flag:true, message:error};
-          //self.spinner.flag = false;
-      });
-
+      }
   }
 
 }

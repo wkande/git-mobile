@@ -16,83 +16,89 @@ export class GistDetailPage {
   ownerProfile:any;
   gist: any;
   url: string;
+  user:any;
 
   owner: string;
   id: string;
   files: Array<any>;
 
+  // LOADER
   dataLoaded: boolean = false;
-  profileLoaded: boolean = false;
   error = {flag:false, status:null, message:null};
-  spinner = {flag:false, message:null};
-
+  spinner = {flag:true, message:null};
+  async = {cnt:2, completed:0}; // Number of async calls to load the view
 
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService,
           private utils: Utils) {
         console.log('GistDetailPage.constructor ++++++++++++++++++++++++++++++++++++++++');
+        this.user = navParams.get('user');
         this.owner = navParams.get('owner');
         this.id = navParams.get('id');
         this.files = [];
         this.url = 'https://api.github.com/gists/'+this.id;
+        this.load();
+        this.loadProfile();
   }
 
-  onPageDidEnter() {
-      if (!this.dataLoaded){ // Do not load on Back button since the Page is still in the DOM
-          this.error.flag = false;
-          this.spinner.flag = true;
-          var self = this;
+  load() {
+      var self = this;
+      this.httpService.load(this.url,this.user)
+      .then((data:any) => {
+          console.log('GistDetailPage.onPageDidEnter.DATA', data)
 
-          if(this.owner != 'User unknown'){
-              this.httpService.getProfile(this.owner)
-              .then((data:any) => {
-                  if ('gmErrorCode' in data) {
-                      this.error = {flag:true, message:data.message};
-                  }
-                  else{
-                      this.ownerProfile = data;
-                      this.profileLoaded = true;
-                  }
-              }, function(error) {
-                  self.error = {flag:true, message:error};
-                  self.spinner.flag = false;
-              });
+          this.gist = data;
+          this.gist.timeAgo = this.utils.timeAgo(this.gist.created_at);
+          this.gist.created_at = this.utils.formatDate(this.gist.created_at);
+
+          if(!this.gist.description){
+              for (var first in this.gist.files) break;
+              this.gist.description = first;
+              //this.gist.description = "No description available";
           }
-          else
-          this.profileLoaded = true;
+          /*if(!this.gist.owner){
+              this.gist.owner.hide = true;
+              this.gist.owner = {};
+              this.gist.owner.login = 'Unknown';
+              this.gist.owner.avatar_url = 'img/blank_avatar.png';
+          }*/
+          //this.gist.public = ((this.gist.public == true) ?  'md-unlock' : 'md-lock');
+          for (var key in this.gist.files) {
+              self.files.push( {name:this.gist.files[key].filename, content:this.gist.files[key].content} );
+          }
+          this.asyncController(true, null);
+      }).catch(error => {
+          this.asyncController(null, error);
+      });
+  }
 
-          this.httpService.load(this.url)
+  loadProfile() {
+      var self = this;
+      if(this.owner != 'User unknown'){
+          this.httpService.getProfile(this.owner, this.user)
           .then((data:any) => {
-              console.log('GistDetailPage.onPageDidEnter.DATA', data)
-              this.spinner.flag = false;
-              if ('gmErrorCode' in data) {
-                  this.error = {flag:true, message:data.message};
-              }
-              else{
-                  this.gist = data;
-                  this.gist.timeAgo = this.utils.timeAgo(this.gist.created_at);
-                  this.gist.created_at = this.utils.formatDate(this.gist.created_at);
-
-                  if(!this.gist.description){
-                      for (var first in this.gist.files) break;
-                      this.gist.description = first;
-                      //this.gist.description = "No description available";
-                  }
-                  /*if(!this.gist.owner){
-                      this.gist.owner.hide = true;
-                      this.gist.owner = {};
-                      this.gist.owner.login = 'Unknown';
-                      this.gist.owner.avatar_url = 'img/blank_avatar.png';
-                  }*/
-                  //this.gist.public = ((this.gist.public == true) ?  'md-unlock' : 'md-lock');
-                  for (var key in this.gist.files) {
-                      self.files.push( {name:this.gist.files[key].filename, content:this.gist.files[key].content} );
-                  }
-                  this.dataLoaded = true;
-              }
-          }, function(error) {
-              self.error = {flag:true, message:error};
-              self.spinner.flag = false;
+              this.ownerProfile = data;
+              this.asyncController(true, null);
+          }).catch(error => {
+              this.asyncController(null, error);
           });
+      }
+      else{
+        this.asyncController(true, null);
+      }
+  }
+
+  asyncController(success, error){
+      if(this.error.flag) return; // Once async call has already failed so ignore the rest
+      if(error){
+          this.error = {flag:true, status:error.status, message:error.message};
+          this.spinner.flag = false;
+      }
+      else{
+          this.async.completed++;
+          if(this.async.cnt == this.async.completed){
+              this.spinner.flag = false;
+              this.dataLoaded = true;
+          }
       }
   }
 
@@ -103,7 +109,7 @@ export class GistDetailPage {
             owner: this.gist.fork_of.owner.login, id:this.gist.fork_of.id, description:this.gist.fork_of.description
           });
       else if(item.view == 'profile')
-          this.nav.push(ProfilePage, {username: item.username});
+          this.nav.push(ProfilePage, {trigger:'user', user:this.user, username: item.username});
       else if(item == 'comments')
           this.nav.push(GistCommentsPage, {gistName:this.gist.description, url: this.gist.comments_url});
       else {

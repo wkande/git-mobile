@@ -9,6 +9,7 @@ import {GmSpinner} from '../../components/gm-spinner';
   directives: [GmError, GmSpinner]
 })
 export default class BranchPickerModal {
+    user:any;
     searchBranches: string;
     searchTags: string;
     branches: any;
@@ -22,59 +23,47 @@ export default class BranchPickerModal {
     loadedTags: boolean = false;
     loadedBranches: boolean = false;
 
+    dataLoaded: boolean = false;
     error = {flag:false, status:null, message:null};
     spinner = {flag:false, message:null};
+    async = {cnt:2, completed:0}; // Number of async calls to load the view
 
     constructor(private viewCtrl: ViewController, navParams: NavParams, private httpService: HttpService) {
+        //console.log('\n\n| >>> +++++++++++++ BranchPickerModal.constructor +++++++++++++++');
         this.searchBranches = '';
         this.searchTags = '';
         this.segmentPane = 'branches';
-        console.log('repo', navParams.get('repo'));
+        //console.log(navParams);
         this.repo = navParams.get('repo');
-        // GET /repos/:owner/:repo/tags
-        // GET /repos/:owner/:repo/branches
-        this.urlTags = 'https://api.github.com/repos/'+this.repo.owner+'/'+this.repo.name+'/tags';
-        this.urlBranches = 'https://api.github.com/repos/'+this.repo.owner+'/'+this.repo.name+'/branches';
+        this.user = navParams.get('user');
+        this.urlTags = 'https://api.github.com/repos/'+this.repo.owner.login+'/'+this.repo.name+'/tags';
+        this.urlBranches = 'https://api.github.com/repos/'+this.repo.owner.login+'/'+this.repo.name+'/branches';
+        this.loadTags();
+        this.loadBranches();
     }
 
-    onPageDidEnter() {
-        console.log("BranchPickerModal.onPageDidEnter");
-        this.error.flag = false;
-        this.spinner.flag = true;
-        var self = this;
-        this.httpService.load(this.urlTags)
+
+    loadTags() {
+        this.httpService.load(this.urlTags, this.user)
         .then((data:any) => {
-            this.spinner.flag = false;
-            //console.log('DATA TAGS >>>',data)
-            if ('gmErrorCode' in data) {
-                this.error = {flag:true, message:data.message};
-            }
-            else{
-                this.tags = data;
-                this.tagItems = data;
-                this.loadedTags = true;
-            }
-        }, function(error) {
-            //console.log('BranchPickerModal.onPageDidEnter.ERROR.tags', error);
-            self.error = {flag:true, message:error};
-            self.spinner.flag = false;
+            this.tags = data;
+            this.tagItems = data;
+            this.loadedTags = true;
+            this.asyncController(true, null);
+        }).catch(error => {
+            this.asyncController(null, error);
         });
-        this.httpService.load(this.urlBranches)
+    }
+
+    loadBranches() {
+        this.httpService.load(this.urlBranches, this.user)
         .then((data:any) => {
-            this.spinner.flag = false;
-            //console.log('DATA BRANCHES >>>',data)
-            if ('gmErrorCode' in data) {
-                this.error = {flag:true, message:data.message};
-            }
-            else{
-                this.branches = data;
-                this.branchItems = data;
-                this.loadedBranches = true;
-            }
-        }, function(error) {
-            //console.log('BranchPickerModal.onPageDidEnter.BRANCHES.tags', error);
-            self.error = {flag:true, message:error};
-            self.spinner.flag = false;
+            this.branches = data;
+            this.branchItems = data;
+            this.loadedBranches = true;
+            this.asyncController(true, null);
+        }).catch(error => {
+            this.asyncController(null, error);
         });
     }
 
@@ -126,5 +115,21 @@ export default class BranchPickerModal {
     dismiss() {
        let data = { 'ref': 'canceled' };
        this.viewCtrl.dismiss(data);
+    }
+
+    asyncController(success, error){
+        if(this.error.flag) return; // Onec async call has already failed so ignore the rest
+        if(error){
+            this.error = {flag:true, status:error.status, message:error.message};
+            this.spinner.flag = false;
+        }
+        else{
+            this.async.completed++;
+            if(this.async.cnt == this.async.completed){
+                this.spinner.flag = false;
+                this.dataLoaded = true;
+            }
+        }
+        console.log('asyncCnt', this.async.completed)
     }
 }

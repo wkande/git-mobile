@@ -19,7 +19,6 @@ export class CodeBrowserPage {
   repo: any;
   path: string;
 
-
   // DATA
   items: any;
   url: string;
@@ -87,8 +86,6 @@ export class CodeBrowserPage {
       var url = 'https://api.github.com/repos/'+this.repo.owner.login+'/'+this.repo.name+'/commits?sha='+this.branchTagName+'&path='+item.path;
       this.httpService.load(url, this.user)
       .then((data:any) => {
-          console.log(item)
-          console.log(data)
           if(data.length > 0){
               this.items[rowNumb].lastCommitted = this.utils.timeAgo(data[0].commit.committer.date);
               this.items[rowNumb].commitMsg = data[0].commit.message;
@@ -114,11 +111,10 @@ export class CodeBrowserPage {
               this.dataLoaded = true;
           }
       }
-      console.log('asyncCnt', this.async.completed)
   }
 
   showModal() {
-      let modal = Modal.create(BranchPickerModal, {repo:this.repo});
+      let modal = Modal.create(BranchPickerModal, {repo:this.repo, user:this.user});
       modal.onDismiss(data => {
          this.load(data.ref);
        });
@@ -126,13 +122,11 @@ export class CodeBrowserPage {
   }
 
   itemTapped(event, item) {
-      console.log(item)
-      console.log(this.repo)
       if(item.type == 'dir'){
-          this.nav.push(CodeBrowserPage, {owner: this.repo.owner, name:this.repo.name, path:item.path});
+          this.nav.push(CodeBrowserPage, {user:this.user, repo: this.repo, path:item.path});
       }
       else{
-          this.nav.push(FileViewerPage, {repoOwner: this.repo.owner, repoName:this.repo.name, path:item.path, branchTagName:this.branchTagName});
+          this.nav.push(FileViewerPage, {user:this.user, repo: this.repo, path:item.path, branchTagName:this.branchTagName});
       }
   }
 

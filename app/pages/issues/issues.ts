@@ -16,6 +16,7 @@ export class IssuesPage {
   // PARAMS > DATA
   user:any;
   trigger:string;
+  repo:any;
 
   // DATA
   data: any;
@@ -41,6 +42,7 @@ export class IssuesPage {
       console.log(navParams)
       this.user = navParams.get('user');
       this.trigger = (navParams.get('trigger') == null) ? 'assigned-me': navParams.get('trigger');
+      this.repo = navParams.get('repo'); // OPTIONAL
       this.setURL();
       this.load();
   }
@@ -64,9 +66,13 @@ export class IssuesPage {
           this.description = "I Commented";
           this.url = '/search/issues?q=+type:issue+state:___+commenter:'+this.user.login;
       }
+      else if (this.trigger == 'repo' ){
+          this.description = this.repo.name;
+          this.url = '/search/issues?q=+type:issue+repo:'+this.repo.owner.login+'/'+this.repo.name+'+state:___';
+      }
       else if(this.trigger == 'search' ){
         // Description already set by search dialog
-        this.url = this.lastSearchUrl;
+          this.url = this.lastSearchUrl;
       }
   }
 
@@ -79,8 +85,7 @@ export class IssuesPage {
 
       var url = this.url;
       if(this.state != 'all'){
-        url = url.replace('+state:___', '+state:'+this.state);
-          //url = url+'+state:'+this.state
+          url = url.replace('+state:___', '+state:'+this.state);
       }
       else{
           url = url.replace('+state:___', '');
@@ -94,7 +99,7 @@ export class IssuesPage {
           this.lastPage = (this.pagination.lastPageNumber == null) ? this.lastPage : this.pagination.lastPageNumber;
           this.data = data;
 
-          if(this.data.total_count <= (30 * this.lastPage) )
+          if(this.data.total_count <= (30 * this.lastPage) || this.lastPage == 0)
               this.foundExcess = null;
           else
               this.foundExcess = 'Found '+this.data.total_count.toLocaleString('en')+'; Viewable '+(30 * this.lastPage).toLocaleString('en')+'; Please narrow the search.';

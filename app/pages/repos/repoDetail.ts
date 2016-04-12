@@ -3,6 +3,8 @@ import {HttpService} from '../../providers/httpService.ts';
 import {Utils} from '../../providers/utils.ts';
 import {CodeBrowserPage} from '../../pages/code/codeBrowser';
 import {ProfilePage} from '../profile/profile';
+import {IssuesPage} from '../issues/issues';
+import {ReleasesPage} from '../releases/releases';
 import {FileViewerPage} from '../../pages/files/fileViewer';
 import {UsersPage} from '../profile/users';
 import {GmError} from '../../components/gm-error';
@@ -69,7 +71,6 @@ export class RepoDetailPage {
           this.ownerProfile = data;
           this.asyncController(true, null);
       }).catch(error => {
-        console.log(';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;' ,error)
           this.asyncController(null, error);
       });
   }
@@ -100,6 +101,12 @@ export class RepoDetailPage {
           this.nav.push(CodeBrowserPage, {user: this.user, repo:this.repo});
       else if(item == 'profile'){
           this.nav.push(ProfilePage, {trigger:'user', user:this.user, username:this.repo.owner.login}  );
+      }
+      else if(item.title == "Issues"){
+          this.nav.push(IssuesPage, {trigger:'repo', user:this.user, repo:this.repo}  );
+      }
+      else if(item.title == "Releases"){
+          this.nav.push(ReleasesPage, {trigger:'repo', user:this.user, repo:this.repo}  );
       }
       else if(item.title == 'Stargazers')
           this.nav.push(UsersPage, {trigger:'stargazers', user:this.user, repo: this.repo});
