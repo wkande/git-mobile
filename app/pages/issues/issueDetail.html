@@ -12,19 +12,19 @@
 <div *ngIf="dataLoaded">
 
 
-    <ion-card *ngIf="issue">
+    <ion-card>
         <ion-item>
             <ion-avatar item-left>
               <span class="octicon {{issue.stateIcon}}" style="font-size:32pt;"></span>
               <!--img src="{{issue.user.avatar_url}}"  style="border-style: solid;border-width:2px;border-color:#387ef5;"-->
             </ion-avatar>
-            <h2 item-wrap>(#{{issue.number}}) {{issue.title}}</h2>
-            <p>Created: {{issue.created_at}}</p>
+            <h2 item-wrap>Issue #{{issue.number}}</h2>
+            <p>Issue created: {{issue.created_at}}</p>
         </ion-item>
 
         <ion-card-content>
 
-        <p item-right>(#{{issue.number}}) {{issue.title}}</p>
+        <span class="_font-medium">{{issue.title}}</span>
         </ion-card-content>
 
         <ion-item style="margin-top:-20px;">
@@ -42,14 +42,14 @@
             <button style="background-color:#f1f1f1;" ion-item (click)="itemTapped($event, 'repo')">
                 <div class="_font-small _gray">Repository</div>
                 <div class="_font-medium">{{repo.name}}</div>
-                <div class="_font-small _gray">Owner: {{repo.owner.login}}</div>
+                <div class="_font-small _gray">Repo owner: {{repo.owner.login}}</div>
                 <ion-avatar item-left>
                     <span class="octicon octicon-repo item-left" style="font-size:32pt;"></span>
                     <!--img src="{{repo.owner.avatar_url}}"-->
                 </ion-avatar>
             </button>
             <button ion-item (click)="itemTapped($event, 'profile')" style="background-color:#f1f1f1;">
-              <div class="_font-small _gray">Creator - ({{issue.user.type}})</div>
+                <div class="_font-small _gray" item-right>Issue creator</div>
                 <ion-avatar item-left>
                   <img src="{{issue.user.avatar_url}}">
                 </ion-avatar>
@@ -62,6 +62,9 @@
 
 
 
+    <hr/>
+      <div padding  [innerHTML]="issue.body" style="margin-top:-16px;">
+      </div>
 
 
 
@@ -69,15 +72,15 @@
 
       <p class="_center-text _gray" style="margin-top:30px;margin-bottom:5px;">Comments</p>
       <ion-list>
-          <button ion-item (click)="itemTapped($event, issue)" *ngIf="issue">
+          <!--button ion-item (click)="itemTapped($event, issue)" >
               <div class="_font-medium">{{issue.body}}</div>
               <ion-avatar item-left>
                   <img src="{{issue.user.avatar_url}}">
               </ion-avatar>
               <div class="_font-small  _gray">{{issue.user.login}}</div>
               <div class="_font-small  _gray">{{issue.created_at}}</div>
-          </button>
-          <button ion-item *ngFor="#comment of comments;" (click)="itemTapped($event, comment)">
+          </button-->
+          <button ion-item *ngFor="#comment of comments;" (click)="itemTapped($event, {clicked:'comment', comment:comment})">
               <div class="_font-medium">{{comment.body}}</div>
               <ion-avatar item-left>
                   <img src="{{comment.user.avatar_url}}">
@@ -108,7 +111,7 @@
           </button>
       </ion-list-->
 
-      <ion-list>
+      <!--ion-list>
           <a ion-item *ngFor="#item of items" (click)="itemTapped($event, item)">
 
             {{item.title}}
@@ -125,7 +128,7 @@
             </ion-badge>
 
           </a>
-      </ion-list>
+      </ion-list-->
 </div>
 
 </ion-content>

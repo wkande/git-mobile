@@ -5,43 +5,39 @@
   <ion-title>File</ion-title>
 </ion-navbar>
 
-
-<!--ion-toolbar light class="toolbar _center-text _gray" *ngIf="dataLoaded">
-    <div class="toolbar-background _font-medium" style="margin-top:5px;">{{gistName}}<br/>
-      <span class="_font-medium _black">{{name}}</span>
-    </div>
-</ion-toolbar-->
-
-
 <ion-content>
-<gm-error [error]="error"></gm-error>
-<gm-spinner [spinner]="spinner"></gm-spinner>
-<div  *ngIf="dataLoaded">
-  <div class="_description">{{description}}</div>
-  <div class="_font-small _bold _center-text">{{repo.name}}</div>
-  <div class="_font-small _bold _center-text">{{branchTagName}}</div>
+    <gm-error [error]="error"></gm-error>
+    <gm-spinner [spinner]="spinner"></gm-spinner>
+    <div  *ngIf="dataLoaded">
+      <div class="_description">{{description}}</div>
 
-<hr/>
+      <div *ngIf="repo != null" class="_font-small _bold _center-text _gray">{{repo.name}}</div>
+      <div *ngIf="repo != null" class="_font-small _bold _center-text _gray">{{branchTagName}}</div>
+      <div *ngIf="gistName != null" class="_font-small _bold _center-text _gray">{{gistName}}</div>
 
-<div *ngIf="trigger == 'readme'" padding [innerHTML]="content">
-</div>
+    <hr/>
 
-<ion-scroll *ngIf="trigger != 'readme'" scrollX="true" style="font-family:monospace;font-size:medium;color:gray;
-    overflow-x: auto;
-    white-space: nowrap;" [innerHTML]="content">
-</ion-scroll>
+    <div *ngIf="trigger == 'readme'" padding [innerHTML]="content">
+    </div>
 
-<hr/>
-<!--div padding [innerHTML]="file.content" *ngIf="trigger == 'readme'" style="transform: scale(0.9);transform-origin: 10% 10%;"></div>
+    <ion-scroll *ngIf="fileType==0" scrollX="true" style="font-family:monospace;font-size:medium;color:gray;
+        overflow-x: auto;
+        white-space: nowrap;" [innerHTML]="content">
+    </ion-scroll>
 
-<div style="font-family:monospace;font-size:medium;color:gray;
-    overflow-x: auto;
-    white-space: nowrap;" [innerHTML]="content">
-</div>
+    <img *ngIf="fileType==1" src="{{file.download_url}}" style="margin-top:50px;display: block;
+    margin-left: auto;
+    margin-right: auto"/>
 
-<hr/-->
+    <div *ngIf="fileType==2" class="_center-text">
+      <br/><br/>
+      <span class="octicon octicon-file-binary item-left" style="font-size:32pt;"></span>
+      <br/>
+      This file is binary and cannot be displayed inline.
+    </div>
+
+    <hr/>
 
 
-
-</div>
+    </div>
 </ion-content>

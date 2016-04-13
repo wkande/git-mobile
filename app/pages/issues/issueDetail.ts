@@ -3,6 +3,7 @@ import {HttpService} from '../../providers/httpService.ts';
 import {Utils} from '../../providers/utils.ts';
 import {RepoDetailPage} from '../../pages/repos/repoDetail';
 import {ProfilePage} from '../profile/profile';
+import {IssueCommentsPage} from '../issues/issueComments';
 import {UsersPage} from '../profile/users';
 import {GmError} from '../../components/gm-error';
 import {GmSpinner} from '../../components/gm-spinner';
@@ -30,14 +31,13 @@ export class IssueDetailPage {
   dataLoaded: boolean = false;
   error = {flag:false, status:null, message:null};
   spinner = {flag:true, message:null};
-  async = {cnt:2, completed:0}; // Number of async calls to load the view
+  async = {cnt:3, completed:0}; // Number of async calls to load the view
 
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService,
         private utils: Utils) {
       console.log('\n\n| >>> +++++++++++++ IssueDetailPage.constructor +++++++++++++++');
       console.log(navParams)
       this.user = navParams.get('user');
-      this.async = {cnt:1, completed:0};
       this.loadRepo(navParams.get('repoURL'));
       this.loadIssue(navParams.get('issueURL'));
       this.loadComments(navParams.get('commentsURL'));
@@ -79,6 +79,12 @@ export class IssueDetailPage {
           else if(this.issue.state == 'closed')
               this.issue.stateIcon = 'octicon-issue-closed';
           //this.issue.closed_at = this.utils.formatDate(this.issue.closed_at);
+          self.httpService.mdToHtml(this.issue.body.toString(), self.user)
+          .then((data:any) => {
+              this.issue.body = data._body.replace(/<p>/gi,"<br/><p>");
+              console.log(this.issue.body);
+          });
+          this.asyncController(true, null);
       }).catch(error => {
           this.asyncController(null, error);
       });
@@ -95,6 +101,7 @@ export class IssueDetailPage {
               comment.created_at = self.utils.formatDate(comment.created_at);
           });
           //this.issue.closed_at = this.utils.formatDate(this.issue.closed_at);
+          this.asyncController(true, null);
       }).catch(error => {
           this.asyncController(null, error);
       });
@@ -102,7 +109,7 @@ export class IssueDetailPage {
 
 
   asyncController(success, error){
-      if(this.error.flag) return; // Onec async call has already failed so ignore the rest
+      if(this.error.flag) return;
       if(error){
           this.error = {flag:true, status:error.status, message:error.message};
           this.spinner.flag = false;
@@ -117,10 +124,13 @@ export class IssueDetailPage {
   }
 
   itemTapped(event, item) {
+    console.log(item)
       if(item == "repo")
           this.nav.push(RepoDetailPage, {repo: this.repo, user:this.user});
       else if(item == "profile")
           this.nav.push(ProfilePage, {trigger:'user', user:this.user, username:this.issue.user.login});
+      else if(item.clicked == 'comment')
+          this.nav.push(IssueCommentsPage, {user:this.user, issueTitle:this.issue.title, comment:item.comment, repo: this.repo});
 
   }
 }

@@ -16,11 +16,13 @@ export class FileViewerPage {
   repo:any;
   branchTagName: string;
   user:any;
+  gistName:string;
 
   // DATA
   file: any;
   content:any;
   description:string;
+  fileType:number;// 0=text, 1=image, 2=binary
 
   // URLS
   url: string;
@@ -46,6 +48,13 @@ export class FileViewerPage {
           this.url = 'https://api.github.com/repos/'+this.repo.owner.login+'/'+this.repo.name+'/readme';
           this.loadMD();
       }
+      else if(this.trigger == 'gist-file'){
+          this.description = navParams.get('gistFileName');
+          this.gistName = navParams.get('gistName');
+          this.content = this.prepContent(navParams.get('content'));
+          this.asyncController(true, null);
+          //{this.trigger:'gist-file', gistName:this.gist.description, gistFileName:item.name, content:item.content}
+      }
       else{
           // GET /repos/:owner/:repo/contents/:path
           this.url = 'https://api.github.com/repos/'+this.repo.owner.login+'/'+this.repo.name+'/contents/'+this.path+'?ref='+this.branchTagName;
@@ -62,35 +71,24 @@ export class FileViewerPage {
           this.file = data;
           this.description = data.path;
           this.file.content = new Buffer(this.file.content, 'base64').toString();
-          var arr = self.file.content.split('\n');
-          var numb = 1;
-          arr.forEach(function(line){
-              var spaces;
-              if(numb < 10)
-                  spaces = '&nbsp;&nbsp;&nbsp;'+numb+'&nbsp;';
-              else if(numb < 100)
-                  spaces = '&nbsp;&nbsp;'+numb+'&nbsp;';
-              else if(numb < 1000)
-                  spaces = '&nbsp;'+numb+'&nbsp;';
-              spaces = '<span style="border-left: 1px solid #387ef5;border-right: 1px solid gray;">'+spaces+'</span>&nbsp;';
 
-
-
-
-              var newLine = spaces + line.replace(/\t/g, '&nbsp;').replace(/\ /g, '&nbsp;').replace(/\</g, '&lt') +'<br/>';
-              if(numb == 1)
-                self.content = newLine;
-              else
-                self.content = self.content+newLine;
-              numb++;
-          })
-
-
+          if(this.isText(this.file.content)){ // IS TEXT
+              this.fileType = 0;
+              self.content = this.prepContent(this.file.content);
+          }
+          else if (this.isImage(this.file.content)){ // IS IMAGE
+              this.fileType = 1;
+          }
+          else{ // IS BINARY
+              this.fileType = 2;
+          }
           this.asyncController(true, null);
       }).catch(error => {
           this.asyncController(null, error);
       });
   }
+
+
 
   loadMD(){
       console.log("| >>> FileViewerPage.loadMD: ", this.url);
@@ -107,8 +105,62 @@ export class FileViewerPage {
       });
   }
 
+  hexToBase64(str) {
+      return btoa(String.fromCharCode.apply(null, str.replace(/\r|\n/g, "").replace(/([\da-fA-F]{2}) ?/g, "0x$1 ").replace(/ +$/, "").split(" ")));
+  }
+
+  isText(content){
+      for (var x = 0; x < content.length; x++)
+      {
+          var c = content.charCodeAt(x);
+          if(c > 127) {
+              return false;
+          }
+      }
+      console.log('IS TEXT');
+      return true;
+  }
+
+  isImage(content){
+    var str = content.substr(0,30).toLowerCase();
+      if( str.indexOf('png') > -1 ||
+          str.indexOf('gif') > -1 ||
+          str.indexOf('jpeg') > -1 ||
+          str.indexOf('jpg') > -1){
+          console.log('IS IMAGE');
+          return true;
+      }
+      return false;
+  }
+
+  prepContent(content){
+    console.log('CONTENT')
+      var c;
+      var arr = content.split('\n');
+      var numb = 1;
+      arr.forEach(function(line){
+        if(numb == 1) console.log(line);
+          var spaces;
+          if(numb < 10)
+              spaces = '&nbsp;&nbsp;&nbsp;'+numb+'&nbsp;';
+          else if(numb < 100)
+              spaces = '&nbsp;&nbsp;'+numb+'&nbsp;';
+          else if(numb < 1000)
+              spaces = '&nbsp;'+numb+'&nbsp;';
+          spaces = '<span style="border-left: 1px solid #387ef5;border-right: 1px solid gray;">'+spaces+'</span>&nbsp;';
+
+          var newLine = spaces + line.replace(/\t/g, '&nbsp;').replace(/\ /g, '&nbsp;').replace(/\</g, '&lt') +'<br/>';
+          if(numb == 1)
+              c = newLine;
+          else
+              c = c+newLine;
+          numb++;
+      })
+      return c;
+  }
+
   asyncController(success, error){
-      if(this.error.flag) return; // Onec async call has already failed so ignore the rest
+      if(this.error.flag) return;
       if(error){
           this.error = {flag:true, status:error.status, message:error.message};
           this.spinner.flag = false;

@@ -33,11 +33,11 @@
 <ion-content>
 <gm-error [error]="error"></gm-error>
 <gm-spinner [spinner]="spinner"></gm-spinner>
-<div  *ngIf="dataLoaded">
+<div *ngIf="dataLoaded">
 
       <div class="_description">/{{path}}</div>
-      <div class="_font-small _bold _center-text">{{repo.name}}</div>
-      <div class="_font-small _bold _center-text" style="margin-bottom:7px;">{{branchTagName}}</div>
+      <div class="_font-small _bold _center-text _gray">{{repo.name}}</div>
+      <div class="_font-small _bold _center-text _gray" style="margin-bottom:7px;">{{branchTagName}}</div>
 
       <!--ion-card class="_card">
         <ion-card-content ion-item>

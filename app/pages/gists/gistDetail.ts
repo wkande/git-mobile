@@ -4,7 +4,7 @@ import {Utils} from '../../providers/utils.ts';
 import {GmError} from '../../components/gm-error';
 import {GmSpinner} from '../../components/gm-spinner';
 import {ProfilePage} from '../profile/profile';
-import {GistFileViewerPage} from '../gists/gistFileViewer';
+import {FileViewerPage} from '../files/fileViewer';
 import {GistCommentsPage} from '../gists/gistComments';
 
 @Page({
@@ -111,10 +111,10 @@ export class GistDetailPage {
       else if(item.view == 'profile')
           this.nav.push(ProfilePage, {trigger:'user', user:this.user, username: item.username});
       else if(item == 'comments')
-          this.nav.push(GistCommentsPage, {gistName:this.gist.description, url: this.gist.comments_url});
+          this.nav.push(GistCommentsPage, {user:this.user, gistName:this.gist.description, url: this.gist.comments_url});
       else {
           console.log('FILE', this.gist); // For the file
-          this.nav.push(GistFileViewerPage, {gistName:this.gist.description, name:item.name, content:item.content});
+          this.nav.push(FileViewerPage, {trigger:'gist-file', user:this.user, gistName:this.gist.description, gistFileName:item.name, content:item.content});
       }
 
   }

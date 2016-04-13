@@ -13,24 +13,25 @@ export class GistCommentsPage {
   user:any;
   items: any;
   url: string;
-  gistName: string;
+  description: string;
 
   // LOADER
   dataLoaded: boolean = false;
   error = {flag:false, status:null, message:null};
   spinner = {flag:true, message:null};
-  async = {cnt:2, completed:0}; // Number of async calls to load the view
+  async = {cnt:1, completed:0}; // Number of async calls to load the view
 
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService, private utils: Utils) {
       console.log('GistCommentsPage.constructor ++++++++++++++++++++++++++++++++++++++++');
+      console.log(navParams);
       this.user = navParams.get('user');
       this.url = navParams.get('url');
-      this.gistName = navParams.get('gistName');
+      this.description = navParams.get('gistName');
       this.load();
   }
 
   load() {
-      console.log("GistCommentsPage.onPageDidEnter");
+      console.log("GistCommentsPage.load");
       var self = this;
       this.httpService.load(this.url, this.user)
       .then((data:any) => {
@@ -39,13 +40,13 @@ export class GistCommentsPage {
               item.created_at = self.utils.formatDate(item.created_at);
               item.updated_at = self.utils.formatDate(item.updated_at);
               //item.public = ((item.public == true) ?  'md-unlock' : 'md-lock');
-              self.httpService.mdToHtml(item.body.toString(), this.user)
+              self.httpService.mdToHtml(item.body.toString(), self.user)
               .then((data:any) => {
                   item.body = data._body.replace(/<p>/gi,"<br/><p>"); //var res = str.replace("Microsoft", "W3Schools");
                   console.log('gistComment', item.body );
               });
           })
-          console.log('GistCommentsPage.onPageDidEnter.DATA-------------', data);
+          console.log('GistCommentsPage.load.DATA-------------', data);
           this.asyncController(true, null);
       }).catch(error => {
           this.asyncController(null, error);

@@ -1,0 +1,63 @@
+<ion-navbar *navbar>
+  <button menuToggle>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>Issue Comment</ion-title>
+</ion-navbar>
+
+<ion-content>
+
+<gm-error [error]="error"></gm-error>
+<gm-spinner [spinner]="spinner"></gm-spinner>
+
+<div  *ngIf="dataLoaded">
+
+
+<!--div class="_gray _font-medium" padding>{{issueTitle}}</div-->
+
+<ion-card>
+
+    <ion-item>
+        <ion-avatar item-left>
+          <span class="octicon octicon-comment" style="font-size:32pt;"></span>
+          <!--img src="{{issue.user.avatar_url}}"  style="border-style: solid;border-width:2px;border-color:#387ef5;"-->
+        </ion-avatar>
+        <div>Comment attached to Issue #1</div>
+    </ion-item>
+    <ion-card-content>
+        <span class="_gray _font-medium">{{issueTitle}}</span>
+    </ion-card-content>
+
+
+    <ion-list>
+
+        <button ion-item (click)="itemTapped($event, 'profile')" style="background-color:#f1f1f1;">
+            <div class="_font-small _gray">Comment creator</div>
+            <h2>{{comment.user.login}}</h2>
+            <ion-avatar item-left>
+              <img src="{{comment.user.avatar_url}}">
+            </ion-avatar>
+
+        </button>
+
+    </ion-list>
+
+</ion-card>
+
+      <hr/>
+      <div padding>
+        <!--ion-item>
+          <ion-avatar item-left>
+            <img src="{{comment.user.avatar_url}}">
+          </ion-avatar>
+          <h2>{{comment.user.login}}</h2>
+          <p>Created: {{comment.created_at}}</p>
+        </ion-item-->
+
+
+        <p>Comment created: {{comment.created_at}}</p>
+        <div [innerHTML]="comment.body"></div>
+      </div>
+
+</div>
+</ion-content>

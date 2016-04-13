@@ -8,14 +8,10 @@
       <ion-icon name='close' showWhen="android"></ion-icon>
     </button>
   </ion-buttons>
-  <ion-buttons end>
-    <button (click)="popupSearchText()">
-      <ion-icon name="information-circle"></ion-icon>
-    </button>
-  </ion-buttons>
+
 </ion-toolbar>
 
-<ion-content class="has-header">
+<ion-content class="has-header" padding>
 
     <div class="_description" item-wrap>Users/Organizations</div>
     <br/><br/>
@@ -42,4 +38,6 @@
             class="error-box _buttonContainer">{{err}}
         </div>
     </form>
+    <br/><br/>
+    <div class="_gray"><b>Search Text</b>: Used to search the email, login (username), and fullname.</div>
 </ion-content>

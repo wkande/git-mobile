@@ -33,18 +33,17 @@ export default class SearchModal {
 
     onSubmit(){
             this.localStorage.set('search-users', JSON.stringify( {text:this.textValue}) );
+            // adding email and login fail, they seem to be included by default
             var url = '/search/users?q='+this.textValue;
             let data = { 'ref': 'ok', url:url};
             this.viewCtrl.dismiss(data);
-
     }
 
     popupSearchText() {
       let alert = Alert.create({
         title: 'Usage',
         subTitle: `<div style="text-align:left;">
-        <b>Search Text</b>: Used to search the user or
-        organization account data.`,
+        <b>Search Text</b>: Used to search the email, login (username), and fullname fields.`,
         buttons: ['Ok']
       });
       this.nav.present(alert);

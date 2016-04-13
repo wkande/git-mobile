@@ -12,63 +12,71 @@
 
 <div  *ngIf="dataLoaded">
 
-    <ion-card class="_card">
-      <ion-card-content ion-item>
-        <div class="_font-small _bold">{{gist.description}}</div>
-        <div class="_font-small _gray" item-wrap>Created: {{gist.created_at}} - {{gist.timeAgo}}</div>
-        <span [hidden]="gist.public" class="octicon octicon-gist-secret _gray" style="font-size:x-large;" item-right></span>
-      </ion-card-content>
+    <ion-card>
+        <ion-item>
+            <ion-avatar item-left>
+              <span class="octicon octicon-gist item-left" style="font-size:32pt;"></span>
+            </ion-avatar>
+            <h2>{{gist.description}}</h2>
+            <p>Created: {{gist.created_at}} - {{gist.timeAgo}}</p>
+        </ion-item>
+
+        <ion-list>
+
+            <button *ngIf="gist.owner" ion-item (click)="itemTapped($event, {view:'profile', username:gist.owner.login})" style="background-color:#f1f1f1;">
+                <ion-avatar item-left>
+                  <img src="{{gist.owner.avatar_url}}">
+                </ion-avatar>
+                <h2>{{ownerProfile.name}}</h2>
+                <p *ngIf="gist.owner">{{gist.owner.login}}</p>
+                <p item-right>Owner</p>
+            </button>
+            <div *ngIf="!gist.owner" ion-item style="background-color:#f1f1f1;">
+                <ion-avatar item-left>
+                  <img src="img/blank_avatar.png">
+                </ion-avatar>
+                Owner Unknown
+            </div>
+
+        </ion-list>
     </ion-card>
 
-    <ion-list>
-        <button *ngIf="gist.owner" ion-item (click)="itemTapped($event, {view:'profile', username:gist.owner.login})" style="background-color:#f1f1f1;">
-            <ion-avatar item-left>
-              <img src="{{gist.owner.avatar_url}}">
-            </ion-avatar>
-            {{ownerProfile.name}}
-            <p *ngIf="gist.owner">{{gist.owner.login}}</p>
-            <p item-right>Owner</p>
-        </button>
-        <div *ngIf="!gist.owner" ion-item style="background-color:#f1f1f1;">
-            <ion-avatar item-left>
-              <img src="img/blank_avatar.png">
-            </ion-avatar>
-            User unknown
-        </div>
 
 
-        <button ion-item (click)="itemTapped($event, 'comments')" style="background-color:#f1f1f1;">
-            <span class="octicon octicon-comment-discussion _gray" item-left style="font-size:26pt;margin-left:1px"></span>
-            Comments
-                <ion-badge class="_badge_lighter" style="float:right;">{{gist.comments}}</ion-badge>
-        </button>
+
         <!--button ion-item (click)="itemTapped($event, 'history')" style="background-color:#f1f1f1;">
             <span class="octicon octicon-history _gray" item-left style="font-size:26pt;margin-left:4px"></span>
             <span style="margin-left:4px;">History</span>
             <ion-badge class="_badge_lighter" style="float:right;">{{gist.history.length}}</ion-badge>
         </button-->
-        <button ion-item (click)="itemTapped($event, 'forkof')" style="background-color:#f1f1f1;" *ngIf="gist.fork_of">
-            <span class="octicon octicon-repo-forked _gray" item-left style="font-size:26pt;margin-left:9px;transform: rotate(180deg);"></span>
-            <span style="margin-left:8px;">Forked from</span>
-            <p style="margin-left:9px">{{gist.fork_of.owner.login}}/{{gist.fork_of.description}}</p>
-            <!--p item-right>Gist</p-->
-        </button>
-        <button ion-item (click)="itemTapped($event, 'forks')" style="background-color:#f1f1f1;">
-            <span class="octicon octicon-repo-forked _gray" item-left style="font-size:26pt;margin-left:9px;transform: rotate(90deg);"></span>
-            <span style="margin-left:8px;">Forks</span>
-                <ion-badge class="_badge_lighter" style="float:right;">{{gist.forks.length}}</ion-badge>
-        </button>
+
+
         <!--button ion-item (click)="itemTapped($event, 'forks')" style="background-color:#f1f1f1;">
             <span class="octicon octicon-star _gray" item-left style="font-size:26pt;margin-left:5px"></span>
             <span style="margin-left:3px;">Stargazers</span>
                 <ion-badge class="_badge_lighter" style="float:right;">?</ion-badge>
         </button-->
-    </ion-list>
+
 
     <ion-list>
-        <ion-list-header>
+      <button ion-item (click)="itemTapped($event, 'comments')">
+          Comments
+              <ion-badge class="_badge_lighter" style="float:right;">{{gist.comments}}</ion-badge>
+      </button>
+      <!--button ion-item (click)="itemTapped($event, 'forkof')" style="background-color:#f1f1f1;" *ngIf="gist.fork_of">
+          <span class="octicon octicon-repo-forked _gray" item-left style="font-size:26pt;margin-left:9px;transform: rotate(180deg);"></span>
+          <span style="margin-left:8px;">Forked from</span>
+          <p style="margin-left:9px">{{gist.fork_of.owner.login}}/{{gist.fork_of.description}}</p>
+      </button-->
+      <!--button ion-item (click)="itemTapped($event, 'forks')" style="background-color:#f1f1f1;">
+          <span class="octicon octicon-repo-forked _gray" item-left style="font-size:26pt;margin-left:9px;transform: rotate(90deg);"></span>
+          <span style="margin-left:8px;">Forks</span>
+              <ion-badge class="_badge_lighter" style="float:right;">{{gist.forks.length}}</ion-badge>
+      </button-->
+
+        <!--ion-list-header>
           Files
-        </ion-list-header>
+        </ion-list-header-->
         <button ion-item hef="#" *ngFor="#item of files" (click)="itemTapped($event, item)">
             {{item.name}}
             <!--pre><code>{{item.content}}</code></pre-->

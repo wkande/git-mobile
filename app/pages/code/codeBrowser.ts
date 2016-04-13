@@ -27,7 +27,7 @@ export class CodeBrowserPage {
 
   dataLoaded: boolean = false;
   error = {flag:false, status:null, message:null};
-  spinner = {flag:false, message:null};
+  spinner = {flag:true, message:null};
   async = {cnt:1, completed:0}; // Number of async calls to load the view
 
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService,

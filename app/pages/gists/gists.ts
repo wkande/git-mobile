@@ -40,7 +40,7 @@ export class GistsPage {
       console.log(navParams)
       this.user = navParams.get('user');
       this.username = navParams.get('username');
-      this.trigger = (navParams.get('trigger') == null) ? 'recent': navParams.get('trigger');
+      this.trigger = (navParams.get('trigger') == null) ? 'mine': navParams.get('trigger');
       this.setURL();
       this.load();
       /*if(this.type == 'Mine'){

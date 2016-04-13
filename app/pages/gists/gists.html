@@ -19,12 +19,13 @@
       <div class="_description">{{description}}</div>
       <ion-list>
           <button ion-item *ngFor="#item of data.items" (click)="itemTapped($event, item)">
+            <h5>{{item.description}}</h5>
               <span class="_font-small _gray">{{item.owner.login}}</span>
               <ion-avatar item-left>
                   <img src="{{item.owner.avatar_url}}">
               </ion-avatar>
-              <h5>{{item.description}}</h5>
-              <div *ngIf="type == 'Recent'" class="_gray _font-small">{{item.timeAgo}}</div>
+
+              <div *ngIf="trigger == 'recent'" class="_gray _font-small">{{item.timeAgo}}</div>
 
               <span [hidden]="item.public" class="octicon octicon-gist-secret _gray" style="font-size:x-large;" item-right></span>
           </button>

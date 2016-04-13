@@ -41,7 +41,7 @@ export default class SearchModal {
                                                                     affiliations:this.affiliations}) );
 
 
-            var url = 'https://api.github.com/search/repositories?q='+this.textValue;
+            var url = 'https://api.github.com/search/repositories?q='+this.textValue+'+in:name,description,readme';
             if(this.affiliations == true) url = url+'+user:'+this.user.login;
             let data = { 'ref': 'ok', url:url};
             this.viewCtrl.dismiss(data);
@@ -52,16 +52,9 @@ export default class SearchModal {
       let alert = Alert.create({
         title: 'Usage',
         subTitle: `<div style="text-align:left;">
-        <b>Search Text</b>: Used to search the issue title, issue body,
-        and comments body.
+        <b>Search Text</b>: Used to search the repo name, description, and readme.
         <br/><br/>
-        <b>Assigned to me:</b> Issues you are responsible for.
-        <br/><br/>
-        <b>Created by me:</b> Issues you created.
-        <br/><br/>
-        <b>Mentions me:</b> Issues where you are @mentioned.
-        <br/><br/>
-        <b>I commented:</b> Issues you commented on.
+        <b>Restrict to repositories I own:</b> Searches only in repos that you own.
         </div>`,
 
         buttons: ['Ok']

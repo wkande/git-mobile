@@ -178,6 +178,13 @@ export class ReposPage {
         title: 'Filter Repositories',
         buttons: [
           {
+            text: 'Owned',
+            handler: () => {
+              this.trigger = 'owned-me';
+              this.setURL();
+              this.load();}
+          },
+          {
             text: 'Affiliations',
             handler: () => {
               this.trigger = 'affiliations-me-all';

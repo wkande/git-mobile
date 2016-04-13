@@ -30,7 +30,6 @@ export class HttpService {
         return new Promise(function(resolve, reject) {
             self.http.get(url, {headers:self.header})
             .subscribe(res => {
-              console.log(res)
                   var data = res.json();
                   data.gm_pagination = res.headers.get('Link');
                   data.gm_contentType = res.headers.get('Content-Type');
@@ -73,11 +72,9 @@ export class HttpService {
         this.header = new Headers();
         this.header.set('Authorization', user.auth);
         this.header.set('Accept', 'application/vnd.github.v3.html+json');
-    console.log(this.header)
         return new Promise(function(resolve, reject) {
             self.http.get(url, {headers:self.header})
             .subscribe(res => {
-              console.log(res)
                   resolve(res._body);
               }, error => {
                 console.log(error)
