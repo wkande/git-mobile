@@ -21,47 +21,42 @@
 
     <form (ngSubmit)="onSubmit()" novalidate>
 
-        <!--div *ngIf="textValue.hasError('required') && textValue.touched"
-            class="error-box _buttonContainer">* Search value is required!</div>
-        <div *ngIf="textValue.hasError('minlength') && textValue.touched"
-            class="error-box _buttonContainer">* Minimum search value length is 2!</div-->
+
 
         <br/>
-
+        <div class="_left-text _font-medium" style="width:300px;">
+          Search Text</div>
         <ion-list style="width:300px;" class="_center-text">
-          <!--ion-item [class.error]="!textValue.valid && textValue.touched">
-            <ion-label floating>Search on Keywords</ion-label>
-            <ion-textarea rows="5" value="" [ngFormControl]="textValue"></ion-textarea>
-          </ion-item-->
-
-
           <ion-item>
-            <ion-label floating>Search Text</ion-label>
-            <ion-textarea rows="5" value="" [(ngModel)]="textValue"></ion-textarea>
+            <ion-textarea rows="3" value="" [(ngModel)]="textValue"></ion-textarea>
           </ion-item>
-
         </ion-list>
+        <div class="_gray _left-text _font-small" style="width:300px;">
+          Text used to search the issue title, body, and comments.</div>
 
-        <ion-item>
-          <ion-label>Assigned to Me</ion-label>
-          <ion-checkbox [(ngModel)]="assigned"></ion-checkbox>
-        </ion-item>
 
-        <ion-item>
-          <ion-label>Created by Me</ion-label>
-          <ion-checkbox [(ngModel)]="created"></ion-checkbox>
-        </ion-item>
+        <br/><br/>
+        <ion-list style="width:300px;" class="_center-text">
+            <ion-item>
+              <ion-label>Assigned to Me<br/><small class="_gray">Issues you are responsible for.</small></ion-label>
+              <ion-checkbox [(ngModel)]="assigned"></ion-checkbox>
+            </ion-item>
 
-        <ion-item>
-          <ion-label>Mentions Me</ion-label>
-          <ion-checkbox [(ngModel)]="mentioned"></ion-checkbox>
-        </ion-item>
+            <ion-item>
+              <ion-label>Created by Me<br/><small class="_gray">Issues you created.</small></ion-label>
+              <ion-checkbox [(ngModel)]="created"></ion-checkbox>
+            </ion-item>
 
-        <ion-item>
-          <ion-label>I Commented</ion-label>
-          <ion-checkbox [(ngModel)]="commented"></ion-checkbox>
-        </ion-item>
+            <ion-item>
+              <ion-label>Mentions Me<br/><small class="_gray">Issues where you are @mentioned.</small></ion-label>
+              <ion-checkbox [(ngModel)]="mentioned"></ion-checkbox>
+            </ion-item>
 
+            <ion-item>
+              <ion-label>I Commented<br/><small class="_gray">Issues you commented on.</small></ion-label>
+              <ion-checkbox [(ngModel)]="commented"></ion-checkbox>
+            </ion-item>
+        </ion-list>
 
 
         <br/><br/>
@@ -74,4 +69,5 @@
             class="error-box _buttonContainer">{{err}}
         </div>
     </form>
+    <br/><br/>
 </ion-content>

@@ -52,6 +52,7 @@ export class FileViewerPage {
           this.description = navParams.get('gistFileName');
           this.gistName = navParams.get('gistName');
           this.content = this.prepContent(navParams.get('content'));
+          this.fileType = 0;
           this.asyncController(true, null);
           //{this.trigger:'gist-file', gistName:this.gist.description, gistFileName:item.name, content:item.content}
       }
@@ -156,6 +157,7 @@ export class FileViewerPage {
               c = c+newLine;
           numb++;
       })
+      console.log(c);
       return c;
   }
 

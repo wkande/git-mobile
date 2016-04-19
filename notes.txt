@@ -8,3 +8,10 @@ Cannot re-export name that is not defined in the module.
 solve this problem by adding "declare var Promise: PromiseConstructor;"" on the top of promise.d.ts
 
 https://github.com/angular/angular/issues/6468
+
+//-------------------------------
+PHONE MOCKUPS
+
+mockuphone.com
+
+//-------------------------------

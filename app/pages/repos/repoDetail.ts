@@ -46,7 +46,6 @@ export class RepoDetailPage {
       this.repo.pushed_at = this.utils.timeAgo(this.repo.pushed_at);
       this.repo.public = ((this.repo.private == false) ?  null : 'md-lock');
       if(!this.repo.description) this.repo.description = 'No description available.';
-      console.log(this.repo)
       this.items = [];
       //this.items.push({title: 'Branches/Tags', note: null, icon: null});
       this.items.push({title: 'Code', note: null, icon: null});
@@ -67,7 +66,7 @@ export class RepoDetailPage {
       console.log("| >>> RepoDetailPage.loadProfile");
       this.httpService.getProfile(this.repo.owner.login, this.user)
       .then((data:any) => {
-        console.log(data)
+          //console.log(data)
           this.ownerProfile = data;
           this.asyncController(true, null);
       }).catch(error => {
@@ -96,7 +95,6 @@ export class RepoDetailPage {
 
 
   itemTapped(event, item) {
-    console.log('item', item)
       if(item.title == "Code")
           this.nav.push(CodeBrowserPage, {user: this.user, repo:this.repo});
       else if(item == 'profile'){

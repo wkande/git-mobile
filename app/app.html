@@ -17,7 +17,7 @@
   <ion-content style="background-color: #666666 !important;"  *ngIf="connected">
 
 
-<!-- ACCOUNTS -->
+
     <ion-list style="background-color: #666666 !important;">
 
           <button ion-item (click)="openPage('profile')"
@@ -29,31 +29,17 @@
                 <h2 style="color: #ffffff;">Profile</h2>
                 <p style="color: #ffffff;">{{user.name}}</p>
           </button>
-          <!--button ion-item (click)="openPage('accounts')"
+          <button ion-item (click)="logOut()"
             style="background-color: #666666 !important;color: #ffffff;">
                 <ion-avatar item-left>
-                  <ion-icon ios="ios-key-outline" md="ios-key-outline" style="font-size:42px;"></ion-icon>
+                  <span class="octicon octicon-sign-out item-left" style="font-size:20pt;margin-right:10px;"></span>
+                  <!--ion-icon ios="ios-log-out" md="ios-log-out" style="font-size:30px;margin-left:3px;"></ion-icon-->
                 </ion-avatar>
-                <h2 style="color: #ffffff;">Accounts</h2>
-          </button-->
-          <!--button ion-item (click)="openPage('search')"
-            style="background-color: #666666 !important;color: #ffffff;">
-                <ion-avatar item-left>
-                  <span class="octicon octicon-search item-left" style="font-size:20pt;margin-right:10px;"></span>
-                </ion-avatar>
-                <h2 style="color: #ffffff;">Search</h2>
-          </button-->
+                <h2 style="color: #ffffff;">Logout</h2>
+          </button>
 
-
-
-          <!--button ion-item (click)="openPage('search')"
-            style="background-color: #666666 !important;color: #ffffff;">
-            <ion-avatar item-left>
-            <span class="octicon octicon-search item-left" style="font-size:20pt;margin-right:10px;"></span>
-            </ion-avatar>
-            Search
-          </button-->
-
+      </ion-list>
+      <ion-list style="background-color: #666666 !important;">
 
           <button ion-item (click)="openPage('repos')"
             style="background-color: #666666 !important;color: #ffffff;">
@@ -87,19 +73,11 @@
             Gists
           </button>
 
-          <button ion-item (click)="logOut()"
-            style="background-color: #666666 !important;color: #ffffff;">
-                <ion-avatar item-left>
-                  <span class="octicon octicon-sign-out item-left" style="font-size:20pt;margin-right:10px;"></span>
-                  <!--ion-icon ios="ios-log-out" md="ios-log-out" style="font-size:30px;margin-left:3px;"></ion-icon-->
-                </ion-avatar>
-                <h2 style="color: #ffffff;">Logout</h2>
-          </button>
 
           <button ion-item (click)="openPage('roadmap')"
             style="background-color: #666666 !important;color: #ffffff;">
                 <ion-avatar item-left>
-                  <span class="octicon octicon-telescope item-left" style="font-size:20pt;margin-right:10px;"></span>
+                  <span class="octicon octicon-versions item-left" style="font-size:20pt;margin-right:10px;"></span>
                   <!--ion-icon ios="ios-log-out" md="ios-log-out" style="font-size:30px;margin-left:3px;"></ion-icon-->
                 </ion-avatar>
                 <h2 style="color: #ffffff;">Roadmap</h2>
@@ -107,64 +85,6 @@
 
 
     </ion-list>
-
-
-
-    <!--div style="padding-left:10px;font-size:large;color:#ffffff;
-    background-color: #666666 !important;font-weight:bold;padding-bottom:10px;">
-    <span class="octicon octicon-repo item-left" style="font-size:20pt;"></span>
-    &nbsp;&nbsp;Respositories</div>
-      <ion-list style="background-color: #666666 !important;">
-        <button ion-item *ngFor="#p of repos" (click)="openPage(p)"
-          style="background-color: #666666 !important;color: #ffffff;">
-          {{p.title}}
-        </button>
-      </ion-list>
-
-
-    <div style="padding-left:10px;font-size:large;color:#ffffff;
-    background-color: #666666 !important;font-weight:bold;padding-bottom:10px;">
-    <span class="octicon octicon-repo item-left" style="font-size:20pt;"></span>
-    &nbsp;&nbsp;Repositories</div>
-
-    <div style="padding-left:10px;font-size:large;color:#ffffff;
-    background-color: #666666 !important;font-weight:bold;padding-bottom:10px;">
-    <span class="octicon octicon-issue-opened item-left" style="font-size:20pt;"></span>
-    &nbsp;&nbsp;Issues</div>
-
-
-
-
-      <ion-list style="background-color: #666666 !important;">
-        <button ion-item *ngFor="#p of issues" (click)="openPage(p)"
-          style="background-color: #666666 !important;color: #ffffff;">
-          {{p.title}}
-        </button>
-      </ion-list>
-
-      <div style="padding-left:10px;font-size:large;color:#ffffff;
-      background-color: #666666 !important;font-weight:bold;padding-bottom:10px;">
-      <span class="octicon octicon-organization item-left" style="font-size:20pt;"></span>
-      &nbsp;&nbsp;Users/Organizations</div>
-        <ion-list style="background-color: #666666 !important;">
-          <button ion-item *ngFor="#p of users" (click)="openPage(p)"
-            style="background-color: #666666 !important;color: #ffffff;">
-            {{p.title}}
-          </button>
-        </ion-list>
-
-
-    <div style="padding-left:10px;font-size:large;color:#ffffff;
-    background-color: #666666 !important;font-weight:bold;padding-bottom:10px;">
-    <span class="octicon octicon-gist item-left" style="font-size:20pt;"></span>
-    &nbsp;&nbsp;Gists</div>
-      <ion-list style="background-color: #666666 !important;">
-        <button ion-item *ngFor="#p of gists" (click)="openPage(p)"
-          style="background-color: #666666 !important;color: #ffffff;">
-          {{p.title}}
-        </button>
-      </ion-list-->
-
 
   </ion-content>
 

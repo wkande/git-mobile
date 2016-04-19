@@ -1,4 +1,4 @@
-import {Page, Modal, ViewController, NavController, NavParams, Storage, LocalStorage, Alert} from 'ionic-angular';
+import {Page, Modal, ViewController, NavController, NavParams, Storage, LocalStorage} from 'ionic-angular';
 import { Component } from 'angular2/core';
 import {GmError} from '../../components/gm-error';
 
@@ -37,16 +37,6 @@ export default class SearchModal {
             var url = '/search/users?q='+this.textValue;
             let data = { 'ref': 'ok', url:url};
             this.viewCtrl.dismiss(data);
-    }
-
-    popupSearchText() {
-      let alert = Alert.create({
-        title: 'Usage',
-        subTitle: `<div style="text-align:left;">
-        <b>Search Text</b>: Used to search the email, login (username), and fullname fields.`,
-        buttons: ['Ok']
-      });
-      this.nav.present(alert);
     }
 
     dismiss() {

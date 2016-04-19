@@ -1,4 +1,4 @@
-import {Page, Modal, ViewController, NavController, NavParams, Storage, LocalStorage, Alert} from 'ionic-angular';
+import {Page, Modal, ViewController, NavController, NavParams, Storage, LocalStorage} from 'ionic-angular';
 import { Component } from 'angular2/core';
 import {GmError} from '../../components/gm-error';
 
@@ -20,7 +20,7 @@ export default class SearchModal {
 
     constructor(private nav: NavController, private viewCtrl: ViewController, navParams: NavParams) {
         console.log('\n\n| >>> +++++++++++++ SearchModal.constructor +++++++++++++++');
-        console.log(navParams)
+        console.log(navParams);
         this.user = navParams.get('user');
         this.localStorage = new Storage(LocalStorage);
         this.localStorage.get('search-issues')
@@ -63,26 +63,6 @@ export default class SearchModal {
 
     }
 
-    popupSearchText() {
-      let alert = Alert.create({
-        title: 'Usage',
-        subTitle: `<div style="text-align:left;">
-        <b>Search Text</b>: Used to search the issue title, issue body,
-        and comments body.
-        <br/><br/>
-        <b>Assigned to me:</b> Issues you are responsible for.
-        <br/><br/>
-        <b>Created by me:</b> Issues you created.
-        <br/><br/>
-        <b>Mentions me:</b> Issues where you are @mentioned.
-        <br/><br/>
-        <b>I commented:</b> Issues you commented on.
-        </div>`,
-
-        buttons: ['Ok']
-      });
-      this.nav.present(alert);
-    }
 
     dismiss() {
         let data = { 'ref': 'canceled' };

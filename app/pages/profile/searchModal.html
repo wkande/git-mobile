@@ -20,13 +20,15 @@
 
         <br/>
 
+        <div class="_left-text _font-medium" style="width:300px;">
+          Search Text</div>
         <ion-list style="width:300px;" class="_center-text">
           <ion-item>
-            <ion-label floating>Search Text</ion-label>
-            <ion-textarea rows="5" value="" [(ngModel)]="textValue"></ion-textarea>
+            <ion-textarea rows="3" value="" [(ngModel)]="textValue"></ion-textarea>
           </ion-item>
-
         </ion-list>
+        <div class="_gray _left-text _font-small" style="width:300px;">
+          Text used to search the user/org email, fullname, and loginID.</div>
 
 
         <br/><br/>
@@ -39,5 +41,5 @@
         </div>
     </form>
     <br/><br/>
-    <div class="_gray"><b>Search Text</b>: Used to search the email, login (username), and fullname.</div>
+
 </ion-content>

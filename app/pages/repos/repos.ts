@@ -54,7 +54,6 @@ export class ReposPage {
 
 
   setURL(){
-      console.log('setURL', this.trigger)
       if(this.trigger == 'owned-me'){
           this.description = "Owned by Me";
           this.url = 'https://api.github.com/user/repos?type=owner';
@@ -104,11 +103,11 @@ export class ReposPage {
           url = url+'&type='+this.type;
       else if(this.trigger == 'affiliations-me-all' && this.type != 'all')
           url = url+'?type='+this.type;
-      console.log("| >>> ReposPage.load: ", url);
+      //console.log("| >>> ReposPage.load: ", url);
 
       this.httpService.load(url, this.user)
       .then((data:any) => {
-        console.log('REPO DATA', data)
+          //console.log('REPO DATA', data)
           this.pagination = this.utils.formatPagination(data.gm_pagination);
           this.lastPage = (this.pagination.lastPageNumber == null) ? this.lastPage : this.pagination.lastPageNumber;
           this.data.gm_pagination = data.gm_pagination;
@@ -128,10 +127,10 @@ export class ReposPage {
           // Must follow above calcs or the math will fail
           this.data.total_count = this.data.total_count.toLocaleString('en');
 
-          console.log(this.data)
+          //console.log(this.data)
           this.asyncController(true, null);
       }).catch(error => {
-        console.log('+++++++++++++++++++++++++++++++++', error)
+          console.log('+++++++++++++++++++++++++++++++++', error)
           this.asyncController(null, error);
       });
   }
@@ -216,7 +215,6 @@ export class ReposPage {
       });
       this.nav.present(actionSheet);
   }
-
 
 
 

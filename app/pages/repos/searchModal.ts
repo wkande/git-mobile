@@ -1,4 +1,4 @@
-import {Page, Modal, ViewController, NavController, NavParams, Storage, LocalStorage, Alert} from 'ionic-angular';
+import {Page, Modal, ViewController, NavController, NavParams, Storage, LocalStorage} from 'ionic-angular';
 import { Component } from 'angular2/core';
 import {GmError} from '../../components/gm-error';
 
@@ -48,19 +48,6 @@ export default class SearchModal {
 
     }
 
-    popupSearchText() {
-      let alert = Alert.create({
-        title: 'Usage',
-        subTitle: `<div style="text-align:left;">
-        <b>Search Text</b>: Used to search the repo name, description, and readme.
-        <br/><br/>
-        <b>Restrict to repositories I own:</b> Searches only in repos that you own.
-        </div>`,
-
-        buttons: ['Ok']
-      });
-      this.nav.present(alert);
-    }
 
     dismiss() {
         let data = { 'ref': 'canceled' };

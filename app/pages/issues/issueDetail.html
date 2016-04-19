@@ -8,26 +8,22 @@
 <ion-content>
 <gm-error [error]="error"></gm-error>
 <gm-spinner [spinner]="spinner"></gm-spinner>
-
 <div *ngIf="dataLoaded">
-
 
     <ion-card>
         <ion-item>
             <ion-avatar item-left>
-              <span class="octicon {{issue.stateIcon}}" style="font-size:32pt;"></span>
-              <!--img src="{{issue.user.avatar_url}}"  style="border-style: solid;border-width:2px;border-color:#387ef5;"-->
+                <span class="octicon {{issue.stateIcon}}" style="font-size:32pt;"></span>
             </ion-avatar>
             <h2 item-wrap>Issue #{{issue.number}}</h2>
-            <p>Issue created: {{issue.created_at}}</p>
+            <p>Created: {{issue.created_at}}</p>
         </ion-item>
 
         <ion-card-content>
-
-        <span class="_font-medium">{{issue.title}}</span>
+          <span class="_font-medium">{{issue.title}}</span>
         </ion-card-content>
 
-        <ion-item style="margin-top:-20px;">
+        <ion-item style="margin-top:-15px;">
             <button clear item-left class="_gray">
               <span class="octicon octicon-comment-discussion item-left" style="font-size:12pt;margin-right:10px;"></span>
               <div>Comments: {{issue.comments+1}}</div>
@@ -48,87 +44,94 @@
                     <!--img src="{{repo.owner.avatar_url}}"-->
                 </ion-avatar>
             </button>
-            <button ion-item (click)="itemTapped($event, 'profile')" style="background-color:#f1f1f1;">
-                <div class="_font-small _gray" item-right>Issue creator</div>
+            <!--button ion-item (click)="itemTapped($event, 'profile')" style="background-color:#f1f1f1;">
+                <div class="_font-small _gray" item-right>Creator</div>
                 <ion-avatar item-left>
                   <img src="{{issue.user.avatar_url}}">
                 </ion-avatar>
                 <h2>{{issue.user.login}}</h2>
+            </button-->
+            <button *ngIf="issue.assignee" ion-item (click)="itemTapped($event, 'profile-assignee')" style="background-color:#f1f1f1;">
+                <div class="_font-small _gray" item-right>Assignee</div>
+                <ion-avatar item-left>
+                  <img src="{{issue.assignee.avatar_url}}">
+                </ion-avatar>
+                <h2>{{issue.assignee.login}}</h2>
             </button>
-
         </ion-list>
 
     </ion-card>
 
 
+    <!--hr/>
+    <div padding [innerHTML]="issue.body" style="margin-top:-16px;">
+    </div-->
+
+    <!-- COMMENTS -->
+    <!--p class="_center-text _gray" style="margin-top:30px;margin-bottom:5px;">Comments</p>
+    <ion-list>
+        <button ion-item *ngFor="#comment of comments;" (click)="itemTapped($event, {clicked:'comment', comment:comment})">
+            <div class="_font-medium">{{comment.body}}</div>
+            <ion-avatar item-left>
+                <img src="{{comment.user.avatar_url}}">
+            </ion-avatar>
+            <div class="_font-small  _gray">{{comment.user.login}}</div>
+            <div class="_font-small  _gray">{{comment.created_at}}</div>
+        </button>
+    </ion-list-->
 
     <hr/>
-      <div padding  [innerHTML]="issue.body" style="margin-top:-16px;">
-      </div>
-
-
-
-
-
-      <p class="_center-text _gray" style="margin-top:30px;margin-bottom:5px;">Comments</p>
-      <ion-list>
-          <!--button ion-item (click)="itemTapped($event, issue)" >
-              <div class="_font-medium">{{issue.body}}</div>
-              <ion-avatar item-left>
+    <ion-list>
+        <ion-card>
+            <button ion-item (click)="itemTapped($event, 'profile')" style="background-color:#f1f1f1;">
+                <div class="_font-small _gray" item-right>Creator</div>
+                <ion-avatar item-left>
                   <img src="{{issue.user.avatar_url}}">
-              </ion-avatar>
-              <div class="_font-small  _gray">{{issue.user.login}}</div>
-              <div class="_font-small  _gray">{{issue.created_at}}</div>
-          </button-->
-          <button ion-item *ngFor="#comment of comments;" (click)="itemTapped($event, {clicked:'comment', comment:comment})">
-              <div class="_font-medium">{{comment.body}}</div>
-              <ion-avatar item-left>
-                  <img src="{{comment.user.avatar_url}}">
-              </ion-avatar>
-              <div class="_font-small  _gray">{{comment.user.login}}</div>
-              <div class="_font-small  _gray">{{comment.created_at}}</div>
-          </button>
-      </ion-list>
-
-      <!--ion-list>
-
-          <button ion-item (click)="itemTapped($event, {view:'profile', username:repo.owner.login, userType:repo.owner.type})" style="background-color:#f1f1f1;">
-              <ion-avatar item-left>
-                <img src="{{repo.owner.avatar_url}}">
-              </ion-avatar>
-              <h2>{{ownerProfile.name}}</h2>
-              <p *ngIf="repo.owner">{{repo.owner.login}}</p>
-              <p item-right>Owner</p>
-          </button>
+                </ion-avatar>
+                <h2>{{issue.user.login}}</h2>
+                <div class="_font-small _gray">Time ago here</div>
+            </button>
+            <ion-card-content>
+                <span class="_font-small" [innerHTML]="issue.body"></span>
+            </ion-card-content>
+        </ion-card>
 
 
-          <button ion-item (click)="goTo('readme')" style="background-color:#f1f1f1;">
-              <ion-avatar item-left>
-                <ion-icon name="ios-document-outline" style="font-size:36px;margin-left:10px;"></ion-icon>
-              </ion-avatar>
-              <h2>README.md</h2>
 
-          </button>
-      </ion-list-->
+        <div *ngFor="#item of items;">
 
-      <!--ion-list>
-          <a ion-item *ngFor="#item of items" (click)="itemTapped($event, item)">
+            <!-- EVENT -->
+            <ion-item *ngIf="item.type=='event'" class="_font-small _gray" style="margin-left:20px;margin-right:20px;">
+                <span item-left class="octicon {{item.icon}}" style="font-size:12pt;width:4px;"></span>
+                {{item.event}}
+                <span *ngIf="item.event=='labeled' || item.event=='unlabeled'"
+                    [ngStyle]="{'background-color':item.label.color, 'color':item.label.textColor,
+                    'padding-left':'7px', 'padding-right':'7px',
+                    'font-weight':'bold'}">
+                    <{{item.label.name}}>
+                </span>
+                <div> by: {{item.creator}} - {{item.timeAgo}}</div>
+            </ion-item>
 
-            {{item.title}}
-            <span *ngIf="item.badgeIssues" class="_gray"style="float:right;font-size:small;">open
-              <ion-badge class="_badge_lighter">
-                  {{repo.open_issues_count}}
-              </ion-badge>
-            </span>
-            <ion-badge *ngIf="item.badgeWatchers" class="_badge_lighter" style="float:right;">
-                  {{repo.watchers_count}}
-            </ion-badge>
-            <ion-badge *ngIf="item.badgeStargazers" class="_badge_lighter"style="float:right;">
-                  {{repo.stargazers_count}}
-            </ion-badge>
 
-          </a>
-      </ion-list-->
+
+            <!-- COMMENTOR CARD -->
+            <ion-card *ngIf="item.type=='comment'">
+                <button ion-item (click)="itemTapped($event, 'profile-commentor', item.creator)" style="background-color:#f1f1f1;">
+                    <div class="_font-small _gray" item-right>Commentor</div>
+                    <ion-avatar item-left>
+                      <img src="{{item.avatar}}">
+                    </ion-avatar>
+                    <h2>{{item.creator}}</h2>
+                    <div class="_font-small _gray">Time ago here</div>
+                </button>
+                <ion-card-content>
+                  <br/>
+                    <div class="_font-small" [innerHTML]="item.body"></div>
+                </ion-card-content>
+            </ion-card>
+        </div>
+    </ion-list>
+
 </div>
-
 </ion-content>

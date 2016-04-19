@@ -39,7 +39,7 @@ export class IssuesPage {
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService,
           private utils: Utils) {
       console.log('\n\n| >>> +++++++++++++ IssuesPage.constructor +++++++++++++++');
-      console.log(navParams)
+      console.log(navParams);
       this.user = navParams.get('user');
       this.trigger = (navParams.get('trigger') == null) ? 'assigned-me': navParams.get('trigger');
       this.repo = navParams.get('repo'); // OPTIONAL
@@ -90,11 +90,11 @@ export class IssuesPage {
       else{
           url = url.replace('+state:___', '');
       }
-      console.log("| >>> IssuesPage.load: ", url);
+      //console.log("| >>> IssuesPage.load: ", url);
 
       this.httpService.load('https://api.github.com'+url, this.user)
       .then((data:any) => {
-          console.log(data)
+          //console.log(data)
           this.pagination = this.utils.formatPagination(data.gm_pagination);
           this.lastPage = (this.pagination.lastPageNumber == null) ? this.lastPage : this.pagination.lastPageNumber;
           this.data = data;
@@ -114,7 +114,7 @@ export class IssuesPage {
               item.created_at = self.utils.formatDate(item.created_at);
               item.updated_at = self.utils.formatDate(item.updated_at);
           });
-          console.log(this.pagination)
+          //console.log(this.pagination)
           this.asyncController(true, null);
       }).catch(error => {
           this.asyncController(null, error);
@@ -210,7 +210,8 @@ export class IssuesPage {
 
   itemTapped(event, item) {
     this.nav.push(IssueDetailPage, {
-        user: this.user, issueURL:item.url, repoURL:item.repository_url, commentsURL:item.comments_url
+        user: this.user, issueURL:item.url, repoURL:item.repository_url,
+        commentsURL:item.comments_url, eventsURL:item.events_url
     });
   }
 }

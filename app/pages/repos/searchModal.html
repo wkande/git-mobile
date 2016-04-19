@@ -8,11 +8,6 @@
       <ion-icon name='close' showWhen="android"></ion-icon>
     </button>
   </ion-buttons>
-  <ion-buttons end>
-    <button (click)="popupSearchText()">
-      <ion-icon name="information-circle"></ion-icon>
-    </button>
-  </ion-buttons>
 </ion-toolbar>
 
 <ion-content class="has-header">
@@ -23,23 +18,23 @@
 
 
         <br/>
-
+        <div class="_left-text _font-medium" style="width:300px;">
+          Search Text</div>
         <ion-list style="width:300px;" class="_center-text">
-
-
-
-          <ion-item>
-            <ion-label floating>Search Text</ion-label>
-            <ion-textarea rows="5" value="" [(ngModel)]="textValue"></ion-textarea>
-          </ion-item>
-
+            <ion-item>
+              <ion-textarea rows="3" value="" [(ngModel)]="textValue"></ion-textarea>
+            </ion-item>
         </ion-list>
+        <div class="_gray _left-text _font-small" style="width:300px;">
+          Text used to search the repo name, description, and readme.</div>
 
-        <ion-item>
-          <ion-label>Restrict to repositories I own</ion-label>
-          <ion-checkbox [(ngModel)]="affiliations"></ion-checkbox>
-        </ion-item>
-
+        <br/><br/>
+        <ion-list style="width:300px;" class="_center-text">
+            <ion-item>
+              <ion-label>Restrict to repositories I own<br/><small class="_gray">Searches only in repos that you own.</small></ion-label>
+              <ion-checkbox [(ngModel)]="affiliations"></ion-checkbox>
+            </ion-item>
+        </ion-list>
 
 
 
@@ -54,4 +49,6 @@
             class="error-box _buttonContainer">{{err}}
         </div>
     </form>
+    <br/><br/>
+
 </ion-content>

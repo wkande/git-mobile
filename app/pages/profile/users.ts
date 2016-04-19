@@ -94,19 +94,17 @@ export class UsersPage {
       this.async = {cnt:1, completed:0};
       this.error = {flag:false, status:null, message:null};
       this.spinner = {flag:true, message:null};
-      console.log('| >>> UsersPage.load', this.url)
+      //console.log('| >>> UsersPage.load', this.url)
       this.httpService.load(this.url, this.user)
       .then((data:any) => {
-          console.log("| >>> UsersPage.load", data);
+          //console.log("| >>> UsersPage.load", data);
           this.pagination = this.utils.formatPagination(data.gm_pagination);
           this.lastPage = (this.pagination.lastPageNumber == null) ? this.lastPage : this.pagination.lastPageNumber;
 
           this.data = {};
           this.data.gm_pagination = data.gm_pagination;
-          console.log(this.trigger);
           if(this.trigger == 'search') {
               this.data.items = data.items;
-              console.log(data.total_count)
               this.data.total_count = data.total_count;
           }
           else {
@@ -119,14 +117,14 @@ export class UsersPage {
               }
           }
 
-          if(this.data.total_count <= (30 * this.lastPage) )
+          if(this.data.total_count <= (30 * this.lastPage)  || this.lastPage == 0)
               this.foundExcess = null;
           else
               this.foundExcess = 'Found '+this.data.total_count.toLocaleString('en')+'; Viewable '+(30 * this.lastPage).toLocaleString('en')+'; Please narrow the search.';
           // Must follow above calcs or the math will fail
           this.data.total_count = this.data.total_count.toLocaleString('en');
 
-          console.log(this.data);
+          //console.log(this.data);
           this.asyncController(true, null);
       }).catch(error => {
           this.asyncController(null, error);
