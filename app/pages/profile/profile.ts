@@ -57,10 +57,10 @@ export class ProfilePage {
   }
 
   loadProfile(){
-      console.log('| >>> ProfilePage.loadProfile', this.url)
+      //console.log('| >>> ProfilePage.loadProfile', this.url)
       this.httpService.load(this.url, this.user)
       .then((data: any) => {
-        console.log(data)
+          //console.log(data)
           this.profile = data;
           this.profile.timeAgo = this.utils.timeAgo(this.profile.created_at);
           this.profile.since = this.utils.formatDate(this.profile.created_at);
@@ -87,8 +87,8 @@ export class ProfilePage {
   }
 
   itemTapped(event, item) {
-      console.log('profilePage.itemTapped +++++++++++', item);
-      console.log(this.user.login, this.profile.login)
+      //console.log('profilePage.itemTapped +++++++++++', item);
+      //console.log(this.user.login, this.profile.login)
 
       if(item.clicked == 'repos'){
           var trigger = (this.user.login == this.profile.login) ? 'owned-me' : 'owned-user';

@@ -1,33 +1,14 @@
-<ion-navbar *navbar>
+<ion-navbar *navbar primary>
     <button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Code</ion-title>
     <ion-buttons end>
       <button *ngIf="!path" class="disable-hover bar-button bar-button-default bar-button-icon-only" (click)="showModal($event)">
-        <a href="#" class="octicon octicon-git-branch" style="font-size:20pt;"></a>
+        <a href="#" class="octicon octicon-git-branch" style="font-size:20pt;color:white"></a>
       </button>
     </ion-buttons>
 </ion-navbar>
-
-
-<!--ion-toolbar light class="toolbar _center-text _gray" *ngIf="dataLoaded">
-    <div class="toolbar-background"  style="margin-top:14px">
-      <span class="_font-medium">{{branchTagName}}</span>
-    </div>
-
-    <ion-buttons end="">
-        <button class="disable-hover bar-button bar-button-default bar-button-icon-only" (click)="showModal($event)">
-            <span class="button-inner">
-                <a href="#" class="octicon octicon-git-branch item-right" style="font-size:26pt;"></a>
-            </span>
-            <ion-button-effect>
-            </ion-button-effect>
-        </button>
-    </ion-buttons>
-</ion-toolbar-->
-
-  <!--a href="#" class="octicon octicon-git-branch item-right" style="font-size:26pt;" (click)="showModal($event)"  *ngIf="loaded"></a-->
 
 
 <ion-content>
@@ -35,21 +16,10 @@
 <gm-spinner [spinner]="spinner"></gm-spinner>
 <div *ngIf="dataLoaded">
 
-      <div class="_description">/{{path}}</div>
-      <div class="_font-small _bold _center-text _gray">{{repo.name}}</div>
-      <div class="_font-small _bold _center-text _gray" style="margin-bottom:7px;">{{branchTagName}}</div>
+      <div class="_font-medium _center-text _gray">{{repo.name}}</div>
+      <div class="_font-medium _center-text _gray">/{{path}}</div>
+      <div class="_font-medium _center-text _gray" style="margin-bottom:7px;">{{branchTagName}}</div>
 
-      <!--ion-card class="_card">
-        <ion-card-content ion-item>
-          <button *ngIf="!path" class="disable-hover bar-button bar-button-default bar-button-icon-only item-right" style="float:right;" (click)="showModal($event)">
-            <a href="#" class="octicon octicon-git-branch" style="font-size:20pt;"></a>
-          </button>
-          <div class="_font-small _bold">{{repo.name}}</div>
-          <div class="_font-small _gray">{{branchTagName}}</div>
-        </ion-card-content>
-      </ion-card>
-
-      <div class="_font-medium _center-text" style="margin-bottom:5px;">/{{path}}</div-->
 
       <ion-list>
           <button ion-item *ngFor="#item of items" (click)="itemTapped($event, item)">

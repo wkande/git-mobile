@@ -41,11 +41,11 @@ export class LoginPage {
             this.httpService.load('https://api.github.com/user', user)
             .then((data:any) => {
                   var profile = this.profileService.set(value.username, value.password, data.name, data.avatar_url, data.url);
-                  console.log(data)
+                  //console.log(data)
                   this.nav.setRoot(ReposPage, {user:profile});
                   this.events.publish('user:connected', {});
               }).catch(error => {
-                  console.log(error)
+                  //console.log(error)
                   if(error.status == 401){
                       this.error = {flag:true, status:401, message:"Invalid credentials, please try again."};
                   }

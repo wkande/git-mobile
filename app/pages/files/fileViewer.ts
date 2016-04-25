@@ -31,7 +31,7 @@ export class FileViewerPage {
   dataLoaded: boolean = false;
   error = {flag:false, status:null, message:null};
   spinner = {flag:true, message:null};
-  async = {cnt:1, completed:0}; // Number of async calls to load the view
+  async = {cnt:1, completed:0};
 
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService) {
       console.log('\n\n| >>> +++++++++++++ FileViewerPage.constructor +++++++++++++++');
@@ -43,7 +43,6 @@ export class FileViewerPage {
       this.user = navParams.get('user');
 
       if(this.trigger == 'readme'){
-          // GET /repos/:owner/:repo/readme
           this.description = '';
           this.url = 'https://api.github.com/repos/'+this.repo.owner.login+'/'+this.repo.name+'/readme';
           this.loadMD();
@@ -54,10 +53,8 @@ export class FileViewerPage {
           this.content = this.prepContent(navParams.get('content'));
           this.fileType = 0;
           this.asyncController(true, null);
-          //{this.trigger:'gist-file', gistName:this.gist.description, gistFileName:item.name, content:item.content}
       }
       else{
-          // GET /repos/:owner/:repo/contents/:path
           this.url = 'https://api.github.com/repos/'+this.repo.owner.login+'/'+this.repo.name+'/contents/'+this.path+'?ref='+this.branchTagName;
           this.load();
       }
@@ -68,9 +65,9 @@ export class FileViewerPage {
       console.log("| >>> FileViewerPage.load: ", this.url);
       this.httpService.load(this.url, this.user)
       .then((data: any) => {
-          console.log('loaded file: ', data)
+          //console.log('loaded file: ', data)
           this.file = data;
-          this.description = data.path;
+          this.description = '/'+data.path;
           this.file.content = new Buffer(this.file.content, 'base64').toString();
 
           if(this.isText(this.file.content)){ // IS TEXT
@@ -92,11 +89,10 @@ export class FileViewerPage {
 
 
   loadMD(){
-      console.log("| >>> FileViewerPage.loadMD: ", this.url);
+      //console.log("| >>> FileViewerPage.loadMD: ", this.url);
       this.httpService.loadMediaHtml(this.url, this.user)
       .then((data: any) => {
-          console.log('loaded file: ', data)
-          //this.file = {};
+          //console.log('loaded file: ', data)
           this.content = data;
           this.description = 'Default Repo README';
           console.log(this.file)
@@ -118,7 +114,6 @@ export class FileViewerPage {
               return false;
           }
       }
-      console.log('IS TEXT');
       return true;
   }
 
@@ -128,14 +123,12 @@ export class FileViewerPage {
           str.indexOf('gif') > -1 ||
           str.indexOf('jpeg') > -1 ||
           str.indexOf('jpg') > -1){
-          console.log('IS IMAGE');
           return true;
       }
       return false;
   }
 
   prepContent(content){
-    console.log('CONTENT')
       var c;
       var arr = content.split('\n');
       var numb = 1;
@@ -157,7 +150,6 @@ export class FileViewerPage {
               c = c+newLine;
           numb++;
       })
-      console.log(c);
       return c;
   }
 

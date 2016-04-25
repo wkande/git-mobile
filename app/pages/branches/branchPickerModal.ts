@@ -69,7 +69,7 @@ export default class BranchPickerModal {
 
 
     getBranchItems(searchbar) {
-        console.log(searchbar)
+        //console.log(searchbar)
         // Reset items back to all of the items
         this.branchItems = this.branches;
 
@@ -82,7 +82,7 @@ export default class BranchPickerModal {
         }
 
         this.branchItems = this.branchItems.filter((v) => {
-          console.log(v.name);
+          //console.log(v.name);
           if (v.name.toLowerCase().indexOf(q.toLowerCase()) > -1) {
             return true;
           }
@@ -130,6 +130,5 @@ export default class BranchPickerModal {
                 this.dataLoaded = true;
             }
         }
-        console.log('asyncCnt', this.async.completed)
     }
 }

@@ -48,7 +48,7 @@ export class ReleasesPage {
   }
 
   setURL(){
-      console.log('setURL', this.trigger)
+      //console.log('setURL', this.trigger)
       if (this.trigger == 'repo' ){
           this.description = this.repo.name;
           this.url = 'https://api.github.com/repos/'+this.repo.owner.login+'/'+this.repo.name+'/releases';
@@ -58,10 +58,10 @@ export class ReleasesPage {
   load(){
       var self = this;
       this.data = {}; // Jumps the view to the top
-      console.log("| >>> ReleasesPage.load: ", this.url);
+      //console.log("| >>> ReleasesPage.load: ", this.url);
       this.httpService.load(this.url, this.user)
       .then((data:any) => {
-          console.log('RELEASES DATA', data);
+          //console.log('RELEASES DATA', data);
           this.pagination = self.utils.formatPagination(data.gm_pagination);
           this.lastPage = (this.pagination.lastPageNumber != null) ? this.pagination.lastPageNumber: this.lastPage;
           this.data.gm_pagination = data.gm_pagination;
@@ -70,7 +70,7 @@ export class ReleasesPage {
           this.data.items.forEach(function(item){
             item.published = (item.published_at == null) ? null : self.utils.formatDate(item.published_at);
           })
-          console.log(this.data);
+          //console.log(this.data);
           this.asyncController(true, null);
       }).catch(error => {
           this.asyncController(null, error);
@@ -79,7 +79,7 @@ export class ReleasesPage {
 
   // Load for pagination
   paginationLoad(url){
-      console.log(url)
+      //console.log(url)
       this.url = url;//.split('github.com')[1];
       this.load();
   }
@@ -99,40 +99,7 @@ export class ReleasesPage {
       }
   }
 
-/*
-  presentActionSheet() {
-      let actionSheet = ActionSheet.create({
-        title: 'Filter Gists',
-        buttons: [
-          {
-            text: 'Mine',
-            handler: () => {
-              this.trigger = 'mine';
-              this.setURL();
-              this.load();}
-          },{
-            text: 'Starred',
-            handler: () => {
-              this.trigger = 'starred-me';
-              this.setURL();
-              this.load();}
-          },{
-            text: 'Recent',
-            handler: () => {
-              this.trigger = 'recent';
-              this.setURL();
-              this.load();}
-          },{
-            text: 'Cancel',
-            style: 'cancel',
-            handler: () => {;}
-          }
-        ]
-      });
-      this.nav.present(actionSheet);
-  }
 
-*/
   itemTapped(event, item) {
     this.nav.push(ReleaseDetailPage, {user:this.user,
       repo: this.repo, release:item

@@ -22,7 +22,7 @@ export class GistFileViewerPage {
       this.content = navParams.get('content');
       this.gistName = navParams.get('gistName');
       this.dataLoaded = true;
-      console.log('GistFileViewerPage.constructor', this.gistName);
+      //console.log('GistFileViewerPage.constructor', this.gistName);
   }
 
 }

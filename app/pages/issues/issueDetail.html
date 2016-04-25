@@ -1,4 +1,4 @@
-<ion-navbar *navbar>
+<ion-navbar *navbar primary>
   <button menuToggle>
     <ion-icon name="menu"></ion-icon>
   </button>
@@ -15,42 +15,46 @@
             <ion-avatar item-left>
                 <span class="octicon {{issue.stateIcon}}" style="font-size:32pt;"></span>
             </ion-avatar>
-            <h2 item-wrap>Issue #{{issue.number}}</h2>
-            <p>Created: {{issue.created_at}}</p>
+            <h3 class="_font-medium" style="overflow: initial;white-space: initial;">
+                {{issue.title}} - (#{{issue.number}}) </h3>
+            <p>Created: {{issue.created_at}} - {{issue.timeAgo}}</p>
+            <p>Status: {{issue.state}}</p>
         </ion-item>
 
         <ion-card-content>
-          <span class="_font-medium">{{issue.title}}</span>
+            <ion-list style="">
+                <ion-item class="_font-small _gray" *ngIf="issue.labels.length > 0">
+                    <span item-left class="octicon octicon-tag" style="font-size:12pt;width:7px;"></span>
+                    <div style="margin-bottom:4px;">Labels: {{issue.labels.length}}</div>
+                    <div *ngFor="#label of issue.labels;" style="margin-left:10px;">
+                      <span
+                          [ngStyle]="{'background-color':label.color, 'color':label.textColor,
+                          'padding-left':'7px', 'padding-right':'7px',
+                          'font-weight':'bold'}">
+                          <{{label.name}}>
+                      </span>
+                    </div>
+                </ion-item>
+                <ion-item class="_font-small _gray" *ngIf="issue.milestone">
+                    <span item-left class="octicon octicon-milestone" style="font-size:12pt;width:7px;"></span>
+                    <div>Milestone: {{issue.milestone.title}}</div>
+                </ion-item>
+            </ion-list>
         </ion-card-content>
-
-        <ion-item style="margin-top:-15px;">
-            <button clear item-left class="_gray">
-              <span class="octicon octicon-comment-discussion item-left" style="font-size:12pt;margin-right:10px;"></span>
-              <div>Comments: {{issue.comments+1}}</div>
-            </button>
-            <button clear item-right class="_gray">
-              <span class="octicon {{issue.stateIcon}} item-left" style="font-size:12pt;margin-right:10px;"></span>
-              State: {{issue.state}}
-            </button>
-        </ion-item>
 
         <ion-list>
             <button style="background-color:#f1f1f1;" ion-item (click)="itemTapped($event, 'repo')">
-                <div class="_font-small _gray">Repository</div>
-                <div class="_font-medium">{{repo.name}}</div>
-                <div class="_font-small _gray">Repo owner: {{repo.owner.login}}</div>
+                <!--div class="_font-small _gray">Repository</div-->
                 <ion-avatar item-left>
                     <span class="octicon octicon-repo item-left" style="font-size:32pt;"></span>
-                    <!--img src="{{repo.owner.avatar_url}}"-->
                 </ion-avatar>
+                <h2>{{repo.name}}</h2>
+                <div class="_font-small _gray">Owner: {{repo.owner.login}}</div>
+
             </button>
-            <!--button ion-item (click)="itemTapped($event, 'profile')" style="background-color:#f1f1f1;">
-                <div class="_font-small _gray" item-right>Creator</div>
-                <ion-avatar item-left>
-                  <img src="{{issue.user.avatar_url}}">
-                </ion-avatar>
-                <h2>{{issue.user.login}}</h2>
-            </button-->
+
+
+
             <button *ngIf="issue.assignee" ion-item (click)="itemTapped($event, 'profile-assignee')" style="background-color:#f1f1f1;">
                 <div class="_font-small _gray" item-right>Assignee</div>
                 <ion-avatar item-left>
@@ -58,80 +62,41 @@
                 </ion-avatar>
                 <h2>{{issue.assignee.login}}</h2>
             </button>
-        </ion-list>
-
-    </ion-card>
-
-
-    <!--hr/>
-    <div padding [innerHTML]="issue.body" style="margin-top:-16px;">
-    </div-->
-
-    <!-- COMMENTS -->
-    <!--p class="_center-text _gray" style="margin-top:30px;margin-bottom:5px;">Comments</p>
-    <ion-list>
-        <button ion-item *ngFor="#comment of comments;" (click)="itemTapped($event, {clicked:'comment', comment:comment})">
-            <div class="_font-medium">{{comment.body}}</div>
-            <ion-avatar item-left>
-                <img src="{{comment.user.avatar_url}}">
-            </ion-avatar>
-            <div class="_font-small  _gray">{{comment.user.login}}</div>
-            <div class="_font-small  _gray">{{comment.created_at}}</div>
-        </button>
-    </ion-list-->
-
-    <hr/>
-    <ion-list>
-        <ion-card>
-            <button ion-item (click)="itemTapped($event, 'profile')" style="background-color:#f1f1f1;">
+            <button ion-item (click)="itemTapped($event, 'profile-creator')" style="background-color:#f1f1f1;">
                 <div class="_font-small _gray" item-right>Creator</div>
                 <ion-avatar item-left>
                   <img src="{{issue.user.avatar_url}}">
                 </ion-avatar>
                 <h2>{{issue.user.login}}</h2>
-                <div class="_font-small _gray">Time ago here</div>
             </button>
-            <ion-card-content>
-                <span class="_font-small" [innerHTML]="issue.body"></span>
-            </ion-card-content>
-        </ion-card>
+        </ion-list>
+    </ion-card>
 
-
-
-        <div *ngFor="#item of items;">
-
-            <!-- EVENT -->
-            <ion-item *ngIf="item.type=='event'" class="_font-small _gray" style="margin-left:20px;margin-right:20px;">
-                <span item-left class="octicon {{item.icon}}" style="font-size:12pt;width:4px;"></span>
-                {{item.event}}
-                <span *ngIf="item.event=='labeled' || item.event=='unlabeled'"
-                    [ngStyle]="{'background-color':item.label.color, 'color':item.label.textColor,
-                    'padding-left':'7px', 'padding-right':'7px',
-                    'font-weight':'bold'}">
-                    <{{item.label.name}}>
-                </span>
-                <div> by: {{item.creator}} - {{item.timeAgo}}</div>
-            </ion-item>
-
-
-
-            <!-- COMMENTOR CARD -->
-            <ion-card *ngIf="item.type=='comment'">
-                <button ion-item (click)="itemTapped($event, 'profile-commentor', item.creator)" style="background-color:#f1f1f1;">
-                    <div class="_font-small _gray" item-right>Commentor</div>
-                    <ion-avatar item-left>
-                      <img src="{{item.avatar}}">
-                    </ion-avatar>
-                    <h2>{{item.creator}}</h2>
-                    <div class="_font-small _gray">Time ago here</div>
-                </button>
-                <ion-card-content>
-                  <br/>
-                    <div class="_font-small" [innerHTML]="item.body"></div>
-                </ion-card-content>
-            </ion-card>
-        </div>
+    <br/>
+    <ion-list>
+        <button ion-item (click)="itemTapped($event, 'comments')">
+          Comments/Events
+        </button>
     </ion-list>
+
+
+
+    <div style="width: 100%; height: 9px; border-bottom: 1px solid gray; text-align: center">
+      <span style="font-size: 12px;background-color: white;padding: 0 10px;">
+        Issue
+      </span>
+    </div>
+
+    <ion-card>
+        <ion-card-header style="overflow: initial;white-space: initial;">
+          {{issue.title}} - (#{{issue.number}})
+        </ion-card-header>
+        <ion-card-content>
+          <br/>
+            <div [innerHTML]="issue.body"></div>
+        </ion-card-content>
+    </ion-card>
+
 
 </div>
 </ion-content>

@@ -1,8 +1,8 @@
-<ion-navbar *navbar>
+<ion-navbar *navbar primary>
   <button menuToggle>
     <ion-icon name="menu"></ion-icon>
   </button>
-  <ion-title>Issue Comment</ion-title>
+  <ion-title>Issue Comments/Events</ion-title>
 </ion-navbar>
 
 <ion-content>
@@ -11,53 +11,43 @@
 <gm-spinner [spinner]="spinner"></gm-spinner>
 
 <div  *ngIf="dataLoaded">
-
-
-<!--div class="_gray _font-medium" padding>{{issueTitle}}</div-->
-
-<ion-card>
-
-    <ion-item>
-        <ion-avatar item-left>
-          <span class="octicon octicon-comment" style="font-size:32pt;"></span>
-          <!--img src="{{issue.user.avatar_url}}"  style="border-style: solid;border-width:2px;border-color:#387ef5;"-->
-        </ion-avatar>
-        <div>Comment attached to Issue #1</div>
-    </ion-item>
-    <ion-card-content>
-        <span class="_gray _font-medium">{{issueTitle}}</span>
-    </ion-card-content>
-
-
+    <div class="_description" padding>{{issue.title}} - (#{{issue.number}})</div>
     <ion-list>
+      <div *ngFor="#item of items;">
 
-        <button ion-item (click)="itemTapped($event, 'profile')" style="background-color:#f1f1f1;">
-            <div class="_font-small _gray">Comment creator</div>
-            <h2>{{comment.user.login}}</h2>
-            <ion-avatar item-left>
-              <img src="{{comment.user.avatar_url}}">
-            </ion-avatar>
-
-        </button>
-
-    </ion-list>
-
-</ion-card>
-
-      <hr/>
-      <div padding>
-        <!--ion-item>
-          <ion-avatar item-left>
-            <img src="{{comment.user.avatar_url}}">
-          </ion-avatar>
-          <h2>{{comment.user.login}}</h2>
-          <p>Created: {{comment.created_at}}</p>
-        </ion-item-->
+          <!-- EVENT -->
+          <ion-item *ngIf="item.type=='event'" class="_font-small _gray"
+                  style="margin-left:30px;max-width:350px;">
+              <span item-left class="octicon {{item.icon}}" style="font-size:12pt;width:7px;"></span>
+              {{item.event}}
+              <span *ngIf="item.event=='labeledzzz' || item.event=='unlabeledzz'"
+                  [ngStyle]="{'background-color':item.label.color, 'color':item.label.textColor,
+                  'padding-left':'7px', 'padding-right':'4px',
+                  'font-weight':'bold'}">
+                  <{{item.label.name}}>
+              </span>
+              <span *ngIf="item.event=='labeled'">&nbsp;</span> - {{item.timeAgo}}
+              <div> by: {{item.creator}}</div>
+          </ion-item>
 
 
-        <p>Comment created: {{comment.created_at}}</p>
-        <div [innerHTML]="comment.body"></div>
+
+          <!-- COMMENTOR CARD -->
+          <ion-card *ngIf="item.type=='comment'">
+              <button ion-item (click)="itemTapped($event, 'profile-commentor', item.creator)" style="background-color:#f1f1f1;">
+                  <div class="_font-small _gray" item-right>Commentor</div>
+                  <ion-avatar item-left>
+                    <img src="{{item.avatar}}">
+                  </ion-avatar>
+                  <h2>{{item.creator}}</h2>
+                  <div class="_font-small _gray">{{item.timeAgo}}</div>
+              </button>
+              <ion-card-content>
+                  <div [innerHTML]="item.body"></div>
+              </ion-card-content>
+          </ion-card>
       </div>
+    </ion-list>
 
 </div>
 </ion-content>

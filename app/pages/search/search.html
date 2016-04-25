@@ -1,5 +1,5 @@
 
-<ion-navbar *navbar>
+<ion-navbar *navbar primary>
   <button menuToggle>
     <ion-icon name="menu"></ion-icon>
   </button>
@@ -16,30 +16,34 @@
               <div padding>
                   <ion-segment [(ngModel)]="action" (change)="changeAction($event, authForm.value)">
                       <ion-segment-button value="repos">
-                        Repositories
+                        <span class="octicon octicon-repo"></span> Repos
                       </ion-segment-button>
                       <ion-segment-button value="issues">
-                        Issues/Pulls
+                        <span class="octicon octicon-issue-opened"></span> Issues
                       </ion-segment-button>
+                      <!--ion-segment-button value="pulls">
+                        <span class="octicon octicon-git-pull-request"></span>
+                      </ion-segment-button-->
                       <ion-segment-button value="users">
-                        Users/Orgs
+                        <span class="octicon octicon-organization"></span> Users/Orgs
                       </ion-segment-button>
                   </ion-segment>
               </div>
+              <div class="_description _font-medium">{{description}}</div>
 
               <div *ngIf="searchValue.hasError('required') && searchValue.touched"
                   class="error-box _buttonContainer">* Search value is required!</div>
               <div *ngIf="searchValue.hasError('minlength') && searchValue.touched"
                   class="error-box _buttonContainer">* Minimum search value length is 2!</div>
 
-              <br/>
 
-              <ion-list radio-group style="width:250px;" class="_center-text" [(ngModel)]="searchCollection">
+
+              <br/>
+              <ion-list radio-group style="width:300px;" class="_center-text" [(ngModel)]="searchCollection">
                 <ion-item [class.error]="!searchValue.valid && searchValue.touched">
-                  <ion-label floating>Search criteria</ion-label>
+                  <ion-label floating>Criteria</ion-label>
                   <ion-textarea rows="5" value="" [ngFormControl]="searchValue"></ion-textarea>
                 </ion-item>
-
               </ion-list>
 
 
@@ -51,43 +55,156 @@
                   class="error-box _buttonContainer">{{err}}
               </div>
 
-
-
-
-
-
-
-
-
+<!-- -QUALIFIERS -->
 
               <br/><br/>
               <div class="_center-text _gray _font-large">
-                Search Qualifiers<br/>
+                Qualifiers<br/>
               </div>
-              <ion-card *ngIf="action =='repos'" class="_card _gray">
+              <!-- REPOS -->
+              <ion-card *ngIf="action =='repos'" class="_card">
                 <ion-card-content>
-                      followers:>[number]]<br/>
-                      stars:>[number]
+                      <div><b>forks:</b> [text] forks:[number]</div>
+                      <div class="searchDesc">Filters repositories based on the number of forks.</div>
+                      <div class="_font-small _gray">Example: agent forks:>844</div>
+                      <div class="searchDesc">Repos with the word "agent" and with over "844" forks.</div>
                       <hr/>
-                      Example:<br/>
-                      ionic followers:>500 stars:>10000
+
+                      <div><b>fork:</b> [text] fork:[true,only]</div>
+                      <div class="searchDesc">Filters whether forked repositories should be included (true)
+                        or only forked repositories should be returned (only).</div>
+                      <div class="_font-small _gray">Example: agent fork:true</div>
+                      <div class="searchDesc">Matches all repositories containing the word "agent," including forked ones.</div>
+                      <div class="_font-small _gray">Example: agent fork:only</div>
+                      <div class="searchDesc">Matches all repositories that are forked containing the word "agent".</div>
+                      <div class="_font-small _gray">Example: agent</div>
+                      <div class="searchDesc">Matches all repositories that contain the word "agent," that are not forks.</div>
+                      <hr/>
+
+                      <div><b>stars:</b> [text] stars:[number]</div>
+                      <div class="searchDesc">Filters repositories based on the number of stargazers.</div>
+                      <div class="_font-small _gray">Example: agent stargazer:>8000</div>
+                      <div class="searchDesc">Repos with the word "agent" and with over "8000" stargazers.</div>
+                      <hr/>
+
+                      <div><b>user:</b> [text] repo:[owner]</div>
+                      <div class="searchDesc">Limits search to a specific owner.</div>
+                      <div class="_font-small _gray">Example: git user:wyomingsoftware</div>
+                      <div class="searchDesc">Repos with the word "get" owned by "wyomingsoftware".</div>
+                      <hr/>
+
+                      <div><b>repo:</b> [text] repo:[owner/name]</div>
+                      <div class="searchDesc">Limits search to a specific owner/repository.</div>
+                      <div class="_font-small _gray">Example: git repo:wyomingsoftware/git-mobile-for-github</div>
+                      <div class="searchDesc">Repos with the word "get" owned by "wyomingsoftware" and named "git-mobile-for-github".</div>
+                      <hr/>
+
+                      <div><b>language:</b> [text] language:[string]</div>
+                      <div class="searchDesc">Searches repositories based on the language they're written in.</div>
+                      <div class="_font-small _gray">Example: agent language:javascript</div>
+                      <div class="searchDesc">Repos with the word "agent" using the language "javascript".</div>
+                      <hr/>
                 </ion-card-content>
               </ion-card>
 
-              <ion-card *ngIf="action =='issues'" class="_card _gray">
+              <!-- ISSUES -->
+              <ion-card *ngIf="action =='issues'" class="_card">
                 <ion-card-content>
-                      open:>[number]]<br/>
+                      <div><b>state:</b> [text] state:[open,closed]</div>
+                      <div class="searchDesc">Filter issues based on whether they're open or closed.</div>
+                      <div class="_font-small _gray">Example: build error state:open</div>
+                      <div class="searchDesc">Issues with the words "build error" and the issue is "open".</div>
+                      <div class="_font-small _gray">Example: indexer state:open state:closed</div>
+                      <div class="searchDesc">Issues with the words "indexer" and the issue is "open" or "closed".</div>
                       <hr/>
-                      Example:<br/>
+
+                      <div><b>user:</b> [text] user:[username,orgname]</div>
+                      <div class="searchDesc">Find issues from all repositories owned by a certain user or organization.</div>
+                      <div class="_font-small _gray">Example: api user:git</div>
+                      <div class="searchDesc">Issues with the word "api" related to repos owned by "git", a user.</div>
+                      <div class="_font-small _gray">Example: ionic user:driftyco state:open</div>
+                      <div class="searchDesc">Issues with the word "ionic" that are "open" and related to repos owned by driftyco", an org .</div>
+                      <hr/>
+
+                      <div><b>involves:</b> [text] involves:[username]</div>
+                      <div class="searchDesc">Finds issues that were either created by, assigned
+                        to, mentions, or were commented on by a particular user.</div>
+                      <div class="_font-small _gray">Example: build error involves:wkande</div>
+                      <div class="searchDesc">Issues with the words "build error" that involve the user "wkande".</div>
+                      <hr/>
+
+                      <div><b>author:</b> [text] author:[username]</div>
+                      <div class="searchDesc">Finds issues created by a certain user.</div>
+                      <div class="_font-small _gray">Example: build error author:wkande</div>
+                      <div class="searchDesc">Issues with the words "build error" created by user "wkande".</div>
+                      <hr/>
+
+                      <div><b>assignee:</b> [text] assignee:[username]</div>
+                      <div class="searchDesc">Finds issues that are assigned to a certain user.</div>
+                      <div class="_font-small _gray">Example: build error assignee:wkande</div>
+                      <div class="searchDesc">Issues with the words "build error" assigned to user "wkande".</div>
+                      <hr/>
+
+                      <div><b>mentions:</b> [text] mentions:[username]</div>
+                      <div class="searchDesc">Finds issues that mention a certain user.</div>
+                      <div class="_font-small _gray">Example: build error mentions:wkande</div>
+                      <div class="searchDesc">Issues with the words "build error" mentioning user "wkande".</div>
+                      <hr/>
+
+                      <div><b>commentor:</b> [text] commentor:[username]</div>
+                      <div class="searchDesc">Finds issues that a certain user commented on.</div>
+                      <div class="_font-small _gray">Example: error commentor:wkande</div>
+                      <div class="searchDesc">Issues with the word "error" commented on by user "wkande".</div>
+                      <hr/>
+
+                      <div><b>labels:</b> [text] label:[labelname]</div>
+                      <div class="searchDesc">Filters issues based on their labels.</div>
+                      <div class="_font-small _gray">Example: api author:wkande label:bug</div>
+                      <div class="searchDesc">Issues with the word "api" created by user "wkande" with the label "question".</div>
+                      <div class="_font-small _gray">Example: api author:wkande label:bug label:</div>
+                      <div class="searchDesc">Issues with the word "api" created by user "wkande" with the label "question".</div>
+                      <div class="_font-small _gray">Example: api author:wkande -label:bug</div>
+                      <div class="searchDesc">Issues with the word "api" created by user "wkande" without the label "bug".</div>
+                      <div class="_font-small _gray">Example: indexer author:wkande label:enahancement label:question</div>
+                      <div class="searchDesc">Issues with the word "indexer" created by user "wkande" with the labels "enhancement" and "question".</div>
+                      <hr/>
                 </ion-card-content>
               </ion-card>
 
-              <ion-card *ngIf="action =='users'" class="_card _gray">
+              <!-- USERS/ORGS -->
+              <ion-card *ngIf="action =='users'" class="_card">
+                <div class="_gray" padding>Text is limited to the email, loginID, and fullname fields of the user or organization.</div>
                 <ion-card-content>
-                      email:>[number]]<br/>
+                      <div><b>type:</b> [text] type:[user,org]</div>
+                      <div class="searchDesc"> restrict the search to just personal accounts (user) or just organization accounts (org).</div>
+                      <div class="_font-small _gray">Example: wyoming type:org</div>
+                      <div class="searchDesc">Orgs with the word "wyoming".</div>
+                      <div class="_font-small _gray">Example: wyoming type:user</div>
+                      <div class="searchDesc">Users with the word "wyoming".</div>
                       <hr/>
-                      Example:<br/>
+
+                      <div><b>repos:</b> [text] repos:[number]</div>
+                      <div class="searchDesc">Filters users/orgs based on the number of repositories they have.</div>
+                      <div class="_font-small _gray">Example: wyoming repos:>0</div>
+                      <div class="searchDesc">Finds users/orgs with the word "wyoming" with at least one repo.</div>
+                      <div class="_font-small _gray">Example: wyoming repos:2</div>
+                      <div class="searchDesc">Finds users/orgs with the word "wyoming" and two repos.</div>
+                      <hr/>
+
+                      <div><b>location:</b> [text] location:[string]</div>
+                      <div class="searchDesc">Filter users by the location indicated in their profile.</div>
+                      <div class="_font-small _gray">Example: wyoming lcoation:cheyenne</div>
+                      <div class="searchDesc">Finds users/orgs with the word "wyoming" with the word "cheyenne" in their location field.</div>
+                      <hr/>
+
+                      <div><b>followers:</b> [text] followers:[number]</div>
+                      <div class="searchDesc">Filters users.orgs based on the number of followers.</div>
+                      <div class="_font-small _gray">Example: agent followers:>10</div>
+                      <div class="searchDesc">User/Orgs with the word "agent" and with over "10" followers.</div>
+                      <hr/>
                 </ion-card-content>
               </ion-card>
+
+
       </form>
 </ion-content>

@@ -1,4 +1,4 @@
-<ion-navbar *navbar>
+<ion-navbar *navbar primary>
   <button menuToggle>
     <ion-icon name="menu"></ion-icon>
   </button>
@@ -43,44 +43,15 @@
 
 
 
-
-        <!--button ion-item (click)="itemTapped($event, 'history')" style="background-color:#f1f1f1;">
-            <span class="octicon octicon-history _gray" item-left style="font-size:26pt;margin-left:4px"></span>
-            <span style="margin-left:4px;">History</span>
-            <ion-badge class="_badge_lighter" style="float:right;">{{gist.history.length}}</ion-badge>
-        </button-->
-
-
-        <!--button ion-item (click)="itemTapped($event, 'forks')" style="background-color:#f1f1f1;">
-            <span class="octicon octicon-star _gray" item-left style="font-size:26pt;margin-left:5px"></span>
-            <span style="margin-left:3px;">Stargazers</span>
-                <ion-badge class="_badge_lighter" style="float:right;">?</ion-badge>
-        </button-->
-
-
     <ion-list>
       <button ion-item (click)="itemTapped($event, 'comments')">
           Comments
               <ion-badge class="_badge_lighter" style="float:right;">{{gist.comments}}</ion-badge>
       </button>
-      <!--button ion-item (click)="itemTapped($event, 'forkof')" style="background-color:#f1f1f1;" *ngIf="gist.fork_of">
-          <span class="octicon octicon-repo-forked _gray" item-left style="font-size:26pt;margin-left:9px;transform: rotate(180deg);"></span>
-          <span style="margin-left:8px;">Forked from</span>
-          <p style="margin-left:9px">{{gist.fork_of.owner.login}}/{{gist.fork_of.description}}</p>
-      </button-->
-      <!--button ion-item (click)="itemTapped($event, 'forks')" style="background-color:#f1f1f1;">
-          <span class="octicon octicon-repo-forked _gray" item-left style="font-size:26pt;margin-left:9px;transform: rotate(90deg);"></span>
-          <span style="margin-left:8px;">Forks</span>
-              <ion-badge class="_badge_lighter" style="float:right;">{{gist.forks.length}}</ion-badge>
-      </button-->
 
-        <!--ion-list-header>
-          Files
-        </ion-list-header-->
+
         <button ion-item hef="#" *ngFor="#item of files" (click)="itemTapped($event, item)">
             {{item.name}}
-            <!--pre><code>{{item.content}}</code></pre-->
-
         </button>
     </ion-list>
 </div>

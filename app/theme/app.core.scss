@@ -59,6 +59,9 @@
 ._gray{
     color:gray;
 }
+._black{
+    color:black;
+}
 ._lightgray{
     color:#d3d3d3;
 }
@@ -94,6 +97,11 @@
 	border:  1px solid red;
 	border-radius: 5px;
 	background: white;
+}
+.searchDesc {
+    margin-left:15px;
+    color:gray;
+    font-size:x-small;
 }
 
 .custom-button {

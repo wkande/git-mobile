@@ -1,4 +1,4 @@
-<ion-navbar *navbar>
+<ion-navbar *navbar primary>
     <button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
@@ -15,18 +15,18 @@
 <gm-spinner [spinner]="spinner"></gm-spinner>
 <div *ngIf="dataLoaded">
 
-      <div class="_description">{{description}} <small>({{data.total_count}})</small></div>
+      <div class="_description" padding>{{description}} <small>({{data.total_count}})</small></div>
 
-      <ion-segment padding [(ngModel)]="state" (change)="tabLoad($event)" style="margin-top:-15px;">
+      <ion-segment *ngIf="trigger != 'search'" padding [(ngModel)]="state" (change)="tabLoad($event)" style="margin-top:-15px;">
           <ion-segment-button value="open">
             Open
           </ion-segment-button>
           <ion-segment-button value="closed">
             Closed
           </ion-segment-button>
-          <ion-segment-button value="all">
+          <!--ion-segment-button value="all">
             All
-          </ion-segment-button>
+          </ion-segment-button-->
       </ion-segment>
       <div class="_description" item-wrap *ngIf="foundExcess != null"><small>{{foundExcess}}</small></div>
 
@@ -37,7 +37,7 @@
               <div class="_font-medium">{{item.title}}</div>
               <div class="_font-small _gray" *ngIf="item.repository">{{item.repository.name}}</div>
               <div class="_font-small _gray">#{{item.number}}</div>
-              <span class="_gray"style="float:right;font-size:small;">{{item.state}}</span>
+              <span class="_gray" style="float:right;font-size:small;">{{item.state}}</span>
 
               <ion-avatar item-left>
                   <img src="{{item.user.avatar_url}}">

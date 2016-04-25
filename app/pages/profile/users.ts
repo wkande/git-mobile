@@ -1,7 +1,6 @@
 import {Page, Modal, NavController, NavParams, ActionSheet} from 'ionic-angular';
 import {HttpService} from '../../providers/httpService.ts';
 import {ProfilePage} from './profile';
-import SearchModal from './searchModal';
 import {Utils} from '../../providers/utils.ts';
 import {GmError} from '../../components/gm-error';
 import {GmSpinner} from '../../components/gm-spinner';
@@ -25,6 +24,7 @@ export class UsersPage {
   pagination:any;
   lastPage = 0;
   foundExcess:string;
+  searchValue:string;
 
   // URLS
   url: string;
@@ -44,6 +44,7 @@ export class UsersPage {
       this.user = navParams.get('user');
       this.username = navParams.get('username');
       this.repo = navParams.get('repo');
+      this.searchValue = navParams.get('searchValue');
       this.setUrl();
       this.load();
   }
@@ -84,6 +85,17 @@ export class UsersPage {
       else if(this.trigger == 'members'){
           this.description = 'Members of: '+this.username;
           this.url = 'https://api.github.com/orgs/'+this.username+'/members';
+      }
+      else if(this.trigger == 'search'){
+          this.description = 'Search: '+this.searchValue;
+          // ISSUE
+          // Adding the fields for email,fullname,login seems to limit the search,
+          // fullname is not alsway serached
+          //
+          // +" in:email,fullname,login"
+          // adam location:cheyenne
+          //
+          this.url = 'https://api.github.com/search/users?q='+this.searchValue;
       }
   }
 
@@ -153,18 +165,6 @@ export class UsersPage {
       this.load();
   }
 
-  showSearchModal() {
-      let modal = Modal.create(SearchModal, {user:this.user});
-      modal.onDismiss(data => {
-           if(data.ref != 'canceled'){
-              this.trigger = 'search';
-              this.description = 'Search'
-              this.url = 'https://api.github.com'+data.url;
-              this.load();
-           }
-       });
-      this.nav.present(modal);
-  }
 
   presentActionSheet() {
       let actionSheet = ActionSheet.create({
@@ -189,11 +189,6 @@ export class UsersPage {
                 this.username = this.user.login;
                 this.setUrl();
                 this.load();}
-            },{
-              text: 'Search',
-              handler: () => {
-                  this.showSearchModal()
-              }
             },{
               text: 'Cancel',
               style: 'cancel',

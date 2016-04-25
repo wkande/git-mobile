@@ -31,7 +31,7 @@ export class GistCommentsPage {
   }
 
   load() {
-      console.log("GistCommentsPage.load");
+      //console.log("GistCommentsPage.load");
       var self = this;
       this.httpService.load(this.url, this.user)
       .then((data:any) => {
@@ -46,7 +46,7 @@ export class GistCommentsPage {
                   console.log('gistComment', item.body );
               });
           })
-          console.log('GistCommentsPage.load.DATA-------------', data);
+          //console.log('GistCommentsPage.load.DATA-------------', data);
           this.asyncController(true, null);
       }).catch(error => {
           this.asyncController(null, error);

@@ -1,7 +1,6 @@
 import {Page, Modal, NavController, NavParams, ActionSheet} from 'ionic-angular';
 import {HttpService} from '../../providers/httpService.ts';
 import {Utils} from '../../providers/utils.ts';
-import SearchModal from './searchModal';
 import {GmError} from '../../components/gm-error';
 import {GmSpinner} from '../../components/gm-spinner';
 import {IssueDetailPage} from './issueDetail';
@@ -25,6 +24,7 @@ export class IssuesPage {
   state = 'open';
   description:string;
   foundExcess:string;
+  searchValue:string;
 
   // URLS
   url:string;
@@ -42,14 +42,15 @@ export class IssuesPage {
       console.log(navParams);
       this.user = navParams.get('user');
       this.trigger = (navParams.get('trigger') == null) ? 'assigned-me': navParams.get('trigger');
-      this.repo = navParams.get('repo'); // OPTIONAL
+      this.repo = navParams.get('repo');
+      this.searchValue = navParams.get('searchValue');
       this.setURL();
       this.load();
   }
 
 
   setURL(){
-      console.log('setURL', this.trigger)
+      //console.log('setURL', this.trigger)
       if (this.trigger == 'created-me' ){
           this.description = "Created by Me";
           this.url = '/search/issues?q=+type:issue+state:___+author:'+this.user.login;
@@ -67,12 +68,15 @@ export class IssuesPage {
           this.url = '/search/issues?q=+type:issue+state:___+commenter:'+this.user.login;
       }
       else if (this.trigger == 'repo' ){
-          this.description = this.repo.name;
+          this.description = this.repo.owner.login+'/'+this.repo.name;
           this.url = '/search/issues?q=+type:issue+repo:'+this.repo.owner.login+'/'+this.repo.name+'+state:___';
       }
       else if(this.trigger == 'search' ){
-        // Description already set by search dialog
-          this.url = this.lastSearchUrl;
+          // Description already set by search dialog
+          this.description = 'Search: '+this.searchValue;
+          // NOTICE, in "in" quaifier does not see to work right, omit it and the seach still
+          // looks in all three stated fields.
+          this.url = '/search/issues?q='+this.searchValue+" type:issue";
       }
   }
 
@@ -145,25 +149,11 @@ export class IssuesPage {
 
   // Load for pagination
   paginationLoad(url){
-      console.log(url)
+      //console.log(url)
       this.url = url.split('github.com')[1];
       this.load();
   }
 
-  showSearchModal() {
-      let modal = Modal.create(SearchModal, {user:this.user});
-      modal.onDismiss(data => {
-           if(data.ref != 'canceled'){
-              this.trigger = 'search';
-              this.description = 'Search'
-              this.url = data.url;
-              this.lastSearchUrl = data.url;
-              console.log(this.url)
-              this.load();
-           }
-       });
-      this.nav.present(modal);
-  }
 
   presentActionSheet() {
       let actionSheet = ActionSheet.create({
@@ -173,31 +163,22 @@ export class IssuesPage {
             text: 'Assigned',
             handler: () => {
               this.trigger = 'assigned-me';
-              this.setURL();
-              this.load();}
+              this.setURL(); this.load();}
           },{
             text: 'Created',
             handler: () => {
               this.trigger = 'created-me';
-              this.setURL();
-              this.load();}
+              this.setURL(); this.load();}
           },{
             text: 'Mentioned',
             handler: () => {
               this.trigger = 'mentioned-me';
-              this.setURL();
-              this.load();}
+              this.setURL(); this.load();}
           },{
             text: 'Commented',
             handler: () => {
               this.trigger = 'commented-me';
-              this.setURL();
-              this.load();}
-          },{
-            text: 'Search',
-            handler: () => {
-                this.showSearchModal()
-            }
+              this.setURL(); this.load();}
           },{
             text: 'Cancel',
             style: 'cancel',

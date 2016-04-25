@@ -17,6 +17,7 @@ export class SearchPage {
   local: any;
   action = 'repos';
   user:any;
+  description:string;
 
   constructor(private fb: FormBuilder, private nav: NavController, navParams: NavParams) {
       console.log('SearchPage.constructor');
@@ -38,6 +39,7 @@ export class SearchPage {
               'searchValue': [data[this.action], Validators.compose([Validators.required, Validators.minLength(2)])]
           });
           this.searchValue = this.authForm.controls['searchValue'];
+          this.setDescription();
 
       });
   }
@@ -52,6 +54,18 @@ export class SearchPage {
       this.searchStorage[this.searchStorage.action] = form.searchValue;
       this.searchStorage.action = this.action;
       this.local.set('search', JSON.stringify(this.searchStorage) );
+      this.setDescription();
+  }
+
+  setDescription(){
+      if(this.action == 'repos')
+          this.description = "Repositories";
+      else if(this.action == 'issues')
+          this.description = "Issues";
+      else if(this.action == 'pulls')
+          this.description = "Pull Requests";
+      else if(this.action == 'users')
+          this.description = "Users/Organizations";
   }
 
   onSubmit(value: any): void {
@@ -62,10 +76,10 @@ export class SearchPage {
 
 
       if(this.action == 'users')
-          this.nav.push(UsersPage, {action:'search', searchValue: value.searchValue, user:this.user});
+          this.nav.push(UsersPage, {trigger:'search', searchValue: value.searchValue, user:this.user});
       else if(this.action == 'repos')
-          this.nav.push(ReposPage, {action:'search', searchValue: value.searchValue, user:this.user});
+          this.nav.push(ReposPage, {trigger:'search', searchValue: value.searchValue, user:this.user});
       else if(this.action == 'issues')
-          this.nav.push(IssuesPage, {action:'search', searchValue: value.searchValue, user:this.user});
+          this.nav.push(IssuesPage, {trigger:'search', searchValue: value.searchValue, user:this.user});
   }
 }

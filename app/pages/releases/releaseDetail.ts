@@ -49,10 +49,10 @@ export class ReleaseDetailPage {
 
 
   load(){
-      console.log("| >>> ReleasePage.load: ", this.url);
+      //console.log("| >>> ReleasePage.load: ", this.url);
       this.httpService.load(this.url, this.user)
       .then((data:any) => {
-        console.log(data)
+          //console.log(data)
           this.release = data;
           this.release.created_at = this.utils.formatDate(this.release.created_at);
           this.release.published_at = (this.release.published_at == null) ? 'Draft' : this.utils.formatDate(this.release.published_at);
@@ -66,10 +66,10 @@ export class ReleaseDetailPage {
   }
 
   loadMD(){
-      console.log("| >>> ReleasePage.loadMD: ", this.url);
+      //console.log("| >>> ReleasePage.loadMD: ", this.url);
       this.httpService.mdToHtml(this.releaseBody, this.user)
       .then((data:any) => {
-        console.log(data)
+          //console.log(data)
           this.releaseBody = data._body;
           this.asyncController(true, null);
       }).catch(error => {
@@ -97,7 +97,7 @@ export class ReleaseDetailPage {
 
 
   itemTapped(event, item) {
-    console.log('item', item)
+      //console.log('item', item)
       if(item == 'profile'){
           this.nav.push(ProfilePage, {trigger:'user', user:this.user, username:this.release.author.login}  );
       }

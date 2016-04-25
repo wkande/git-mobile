@@ -43,28 +43,10 @@ export class GistsPage {
       this.trigger = (navParams.get('trigger') == null) ? 'mine': navParams.get('trigger');
       this.setURL();
       this.load();
-      /*if(this.type == 'Mine'){
-          this.url = 'https://api.github.com/users/:user/gists'; // Owned
-      }
-      else if(this.type == 'Starred'){ // Current user starred repos
-          this.url = 'https://api.github.com/gists/starred';
-      }
-      else if(this.type == 'Recent'){ //
-          this.url = 'https://api.github.com/gists/public';
-      }*/
-      /*else if(this.type == 'Forked by me'){ // Current user starred repos
-          this.url = 'https://api.github.com/gists/public';
-      }*/
-      /*else if(this.type == 'search'){
-          this.url = 'https://api.github.com/search?q='+this.searchValue+'&ref=gists';
-      }
-      else{
-          this.url = 'https://api.github.com/users/'+this.type+'/gists'; // Some user
-      }*/
   }
 
   setURL(){
-      console.log('setURL', this.trigger)
+      //console.log('setURL', this.trigger)
       if (this.trigger == 'mine' ){
           this.description = "Mine";
           this.url = 'https://api.github.com/users/'+this.user.login+'/gists';
@@ -90,10 +72,10 @@ export class GistsPage {
       this.error = {flag:false, status:null, message:null};
       this.spinner = {flag:true, message:null};
       this.data = {}; // Jumps the view to the top
-      console.log("| >>> GistsPage.load: ", this.url);
+      //console.log("| >>> GistsPage.load: ", this.url);
       this.httpService.load(this.url, this.user)
       .then((data:any) => {
-          console.log('GISTS DATA', data);
+          //console.log('GISTS DATA', data);
           this.pagination = self.utils.formatPagination(data.gm_pagination);
           this.lastPage = (this.pagination.lastPageNumber != null) ? this.pagination.lastPageNumber: this.lastPage;
           this.data.gm_pagination = data.gm_pagination;
@@ -111,7 +93,7 @@ export class GistsPage {
                 item.description = first;
               }
           })
-          console.log(this.data);
+          //console.log(this.data);
           this.asyncController(true, null);
       }).catch(error => {
           this.asyncController(null, error);
@@ -120,7 +102,7 @@ export class GistsPage {
 
   // Load for pagination
   paginationLoad(url){
-      console.log(url)
+      //console.log(url)
       this.url = url;//.split('github.com')[1];
       this.load();
   }

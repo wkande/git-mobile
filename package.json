@@ -20,8 +20,8 @@
     "typescript": "1.8.7",
     "webpack": "1.12.14"
   },
-  "name": "mobile2",
-  "description": "mobile2: An Ionic project",
+  "name": "Git-Mobile",
+  "description": "A mobile GitHub client.",
   "cordovaPlugins": [
     "cordova-plugin-device",
     "cordova-plugin-console",

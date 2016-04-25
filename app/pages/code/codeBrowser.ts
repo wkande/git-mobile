@@ -45,7 +45,7 @@ export class CodeBrowserPage {
   }
 
   load(ref){
-      console.log("CodeBrowserPage.load", this.path, ref);
+      //console.log("CodeBrowserPage.load", this.path, ref);
 
       if (ref != 'canceled'){ // Modal may send canceled
           this.branchTagName = ref;
@@ -73,7 +73,7 @@ export class CodeBrowserPage {
               data.forEach(function(item, i) {
                   self.setLastCommit(item, i);
               });
-              console.log(self.items)
+              //console.log(self.items)
               this.asyncController(true, null);
           }).catch(error => {
               this.asyncController(null, error);
@@ -122,8 +122,10 @@ export class CodeBrowserPage {
   }
 
   itemTapped(event, item) {
+    console.log(item)
       if(item.type == 'dir'){
-          this.nav.push(CodeBrowserPage, {user:this.user, repo: this.repo, path:item.path});
+        console.log('DIR')
+          this.nav.push(CodeBrowserPage, {user:this.user, repo:this.repo, path:item.path});
       }
       else{
           this.nav.push(FileViewerPage, {user:this.user, repo: this.repo, path:item.path, branchTagName:this.branchTagName});
