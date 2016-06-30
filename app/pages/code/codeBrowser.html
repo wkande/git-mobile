@@ -1,14 +1,21 @@
-<ion-navbar *navbar primary>
-    <button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>Code</ion-title>
-    <ion-buttons end>
-      <button *ngIf="!path" class="disable-hover bar-button bar-button-default bar-button-icon-only" (click)="showModal($event)">
-        <a href="#" class="octicon octicon-git-branch" style="font-size:20pt;color:white"></a>
+<ion-header>
+  <ion-navbar primary>
+      <button menuToggle>
+        <ion-icon name="menu"></ion-icon>
       </button>
-    </ion-buttons>
-</ion-navbar>
+      <ion-title>Code</ion-title>
+      <!--ion-buttons start>
+        <button (click)="goBack($event)">
+          <ion-icon name="arrow-back" style="font-size:26pt;margin-left:-2px;"></ion-icon><span style="margin-left:-5px;">Back</span>
+        </button>
+      </ion-buttons-->
+      <ion-buttons end>
+        <button class="disable-hover bar-button bar-button-default bar-button-icon-only" (click)="showModal($event)">
+          <a href="#" class="octicon octicon-git-branch" style="font-size:20pt;color:white"></a>
+        </button>
+      </ion-buttons>
+  </ion-navbar>
+</ion-header>
 
 
 <ion-content>
@@ -17,14 +24,21 @@
 <div *ngIf="dataLoaded">
 
       <div class="_font-medium _center-text _gray">{{repo.name}}</div>
-      <div class="_font-medium _center-text _gray">/{{path}}</div>
+
       <div class="_font-medium _center-text _gray" style="margin-bottom:7px;">{{branchTagName}}</div>
+
+      <div class="_font-medium _center-text _gray" >
+        <button small *ngIf="history.length > 1" (click)="goBack($event)" style="margin-top:-7px;">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+      /{{path}}</div>
 
 
       <ion-list>
-          <button ion-item *ngFor="#item of items" (click)="itemTapped($event, item)">
+          <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
                 <ion-avatar item-left>
-                  <ion-icon name="{{item.icon}}" style="font-size:xx-large"></ion-icon>
+                  <span *ngIf="item.type=='symlink' || item.type=='submodule'" class="octicon {{item.icon}}" style="font-size:32pt;"></span>
+                  <ion-icon *ngIf="item.type=='file' || item.type=='dir'" name="{{item.icon}}" style="font-size:xx-large;"></ion-icon>
                 </ion-avatar>
                 {{item.name}}
                 <p *ngIf="item.commitMsg" style="margin-top:10px;">{{item.commitMsg}}</p>
@@ -34,3 +48,6 @@
       </ion-list>
 </div>
 </ion-content>
+
+<ion-footer>
+</ion-footer>

@@ -1,16 +1,20 @@
-<ion-navbar *navbar primary>
+<ion-header>
+  <ion-navbar primary>
     <button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Repositories</ion-title>
     <ion-buttons end>
       <button (click)="presentActionSheet()">
-        <ion-icon name="funnel"></ion-icon>
+        <ion-icon name="more"></ion-icon>
       </button>
     </ion-buttons>
-</ion-navbar>
+  </ion-navbar>
+</ion-header>
+
 
 <ion-content>
+
 <gm-error [error]="error"></gm-error>
 <gm-spinner [spinner]="spinner"></gm-spinner>
 
@@ -19,7 +23,7 @@
       <div class="_description">{{description}} <small *ngIf="trigger=='search'">({{data.total_count}})</small></div>
 
 
-      <ion-segment *ngIf="trigger == 'affiliations-me-all'" padding [(ngModel)]="type" (change)="load($event)" style="margin-top:-15px;">
+      <ion-segment *ngIf="trigger == 'affiliations-me-all'" padding [(ngModel)]="type" (ionChange)="load($event)" style="margin-top:-15px;">
           <ion-segment-button value="public">
             Public
           </ion-segment-button>
@@ -33,13 +37,8 @@
       <div class="_description" item-wrap *ngIf="foundExcess != null"><small>{{foundExcess}}</small></div>
 
 
-      <!--ion-card class="_card" *ngIf="description">
-        <ion-card-content ion-item>
-          <div class="_gray" item-wrap>{{description}}</div>
-        </ion-card-content>
-      </ion-card-->
       <ion-list>
-          <button ion-item *ngFor="#item of data.items" (click)="itemTapped($event, item)">
+          <button ion-item *ngFor="let item of data.items" (click)="itemTapped($event, item)">
 
               <div class="_font-medium">{{item.name}}</div>
               <div class="_font-small _gray">{{item.description}}</div>
@@ -68,6 +67,7 @@
 </div>
 </ion-content>
 
+<ion-footer>
 <ion-toolbar position="bottom" *ngIf="dataLoaded && data.gm_pagination != null">
     <ion-buttons start>
         <button [disabled]="!pagination.first" [class._lightgray]="!pagination.first"
@@ -95,3 +95,4 @@
         </button>
     </ion-buttons>
 </ion-toolbar>
+</ion-footer>

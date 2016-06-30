@@ -1,3 +1,4 @@
+
 <ion-menu id="leftMenu" [content]="content">
 
   <ion-toolbar>
@@ -20,7 +21,6 @@
             style="background-color: #666666 !important;color: #ffffff;">
                 <ion-avatar item-left>
                   <span class="octicon octicon-sign-out item-left" style="font-size:20pt;margin-right:10px;"></span>
-                  <!--ion-icon ios="ios-log-out" md="ios-log-out" style="font-size:30px;margin-left:3px;"></ion-icon-->
                 </ion-avatar>
                 <h2 style="color: #ffffff;">Logout</h2>
           </button>
@@ -31,7 +31,7 @@
           <button ion-item (click)="openPage('search')"
             style="background-color: #666666 !important;color: #ffffff;">
             <ion-avatar item-left>
-            <span class="octicon octicon-repo item-left" style="font-size:20pt;margin-right:10px;"></span>
+            <span class="octicon octicon-search item-left" style="font-size:20pt;margin-right:10px;"></span>
             </ion-avatar>
             Search
           </button>
@@ -60,14 +60,6 @@
             Users/Organizations
           </button>
 
-          <button ion-item (click)="openPage('events')"
-            style="background-color: #666666 !important;color: #ffffff;">
-            <ion-avatar item-left>
-            <span class="octicon octicon-broadcast item-left" style="font-size:20pt;margin-right:10px;"></span>
-            </ion-avatar>
-            Events
-          </button>
-
           <button ion-item (click)="openPage('gists')"
             style="background-color: #666666 !important;color: #ffffff;">
             <ion-avatar item-left>
@@ -84,12 +76,10 @@
                 </ion-avatar>
                 <h2 style="color: #ffffff;">Roadmap</h2>
           </button>
-
-
     </ion-list>
 
   </ion-content>
 
 </ion-menu>
 
-<ion-nav id="nav" [root]="rootPage" #content swipe-back-enabled="false"></ion-nav>
+<ion-nav [root]="rootPage" #content></ion-nav>

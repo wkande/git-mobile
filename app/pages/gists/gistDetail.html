@@ -1,9 +1,11 @@
-<ion-navbar *navbar primary>
-  <button menuToggle>
-    <ion-icon name="menu"></ion-icon>
-  </button>
-  <ion-title>Gist</ion-title>
-</ion-navbar>
+<ion-header>
+  <ion-navbar primary>
+    <button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Gist</ion-title>
+  </ion-navbar>
+</ion-header>
 
 <ion-content>
 
@@ -50,10 +52,13 @@
       </button>
 
 
-        <button ion-item hef="#" *ngFor="#item of files" (click)="itemTapped($event, item)">
+        <button ion-item hef="#" *ngFor="let item of files" (click)="itemTapped($event, item)">
             {{item.name}}
         </button>
     </ion-list>
 </div>
 
 </ion-content>
+
+<ion-footer>
+</ion-footer>

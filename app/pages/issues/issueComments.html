@@ -1,9 +1,11 @@
-<ion-navbar *navbar primary>
-  <button menuToggle>
-    <ion-icon name="menu"></ion-icon>
-  </button>
-  <ion-title>Issue Comments/Events</ion-title>
-</ion-navbar>
+<ion-header>
+  <ion-navbar primary>
+    <button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Issue Comments/Events</ion-title>
+  </ion-navbar>
+</ion-header>
 
 <ion-content>
 
@@ -13,7 +15,7 @@
 <div  *ngIf="dataLoaded">
     <div class="_description" padding>{{issue.title}} - (#{{issue.number}})</div>
     <ion-list>
-      <div *ngFor="#item of items;">
+      <div *ngFor="let item of items;">
 
           <!-- EVENT -->
           <ion-item *ngIf="item.type=='event'" class="_font-small _gray"
@@ -51,3 +53,6 @@
 
 </div>
 </ion-content>
+
+<ion-footer>
+</ion-footer>

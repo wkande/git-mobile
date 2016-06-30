@@ -1,16 +1,19 @@
-import {Page, Modal, NavController, NavParams, ActionSheet} from 'ionic-angular';
+import {Modal, NavController, NavParams, ActionSheet} from 'ionic-angular';
+import {Component} from '@angular/core';
 import {HttpService} from '../../providers/httpService.ts';
 import {ProfilePage} from './profile';
 import {Utils} from '../../providers/utils.ts';
 import {GmError} from '../../components/gm-error';
 import {GmSpinner} from '../../components/gm-spinner';
+import {PageClass} from '../../extendables/page';
+import {SearchPage} from '../search/search';
 
-@Page({
+@Component({
   templateUrl: 'build/pages/profile/users.html',
   providers: [HttpService, Utils],
   directives: [GmError, GmSpinner]
 })
-export class UsersPage {
+export class UsersPage extends PageClass{
 
   // PARAMS > DATA
   trigger: string;
@@ -29,15 +32,10 @@ export class UsersPage {
   // URLS
   url: string;
 
-  // LOADER
-  dataLoaded: boolean = false;
-  error = {flag:false, status:null, message:null};
-  spinner = {flag:true, message:null};
-  async = {cnt:1, completed:0}; // Number of async calls to load the view
 
   constructor(private nav: NavController, navParams: NavParams,
               private httpService: HttpService, private utils: Utils) {
-
+      super();
       console.log('\n\n| >>> +++++++++++++ UsersPage.constructor +++++++++++++++');
       console.log(navParams)
       this.trigger = (navParams.get('trigger') == null) ? 'followers-me': navParams.get('trigger');
@@ -102,14 +100,9 @@ export class UsersPage {
 
   load(){
       var self = this;
-      this.dataLoaded = false;
-      this.async = {cnt:1, completed:0};
-      this.error = {flag:false, status:null, message:null};
-      this.spinner = {flag:true, message:null};
-      //console.log('| >>> UsersPage.load', this.url)
+      this.startAsyncController(1, null);
       this.httpService.load(this.url, this.user)
       .then((data:any) => {
-          //console.log("| >>> UsersPage.load", data);
           this.pagination = this.utils.formatPagination(data.gm_pagination);
           this.lastPage = (this.pagination.lastPageNumber == null) ? this.lastPage : this.pagination.lastPageNumber;
 
@@ -136,28 +129,12 @@ export class UsersPage {
           // Must follow above calcs or the math will fail
           this.data.total_count = this.data.total_count.toLocaleString('en');
 
-          //console.log(this.data);
           this.asyncController(true, null);
       }).catch(error => {
           this.asyncController(null, error);
       });
   }
 
-
-  asyncController(success, error){
-      if(this.error.flag) return; // Onec async call has already failed so ignore the rest
-      if(error){
-          this.error = {flag:true, status:error.status, message:error.message};
-          this.spinner.flag = false;
-      }
-      else{
-          this.async.completed++;
-          if(this.async.cnt == this.async.completed){
-              this.spinner.flag = false;
-              this.dataLoaded = true;
-          }
-      }
-  }
 
   // Load for pagination
   paginationLoad(url){
@@ -168,7 +145,7 @@ export class UsersPage {
 
   presentActionSheet() {
       let actionSheet = ActionSheet.create({
-        title: 'Filters',
+        title: 'Users/Orgs',
         buttons: [
             {
               text: "Following",
@@ -189,6 +166,11 @@ export class UsersPage {
                 this.username = this.user.login;
                 this.setUrl();
                 this.load();}
+            },{
+              text: 'Search',
+              handler: () => {
+                this.nav.push(SearchPage, {triggered_for:'users2', user:this.user});
+              }
             },{
               text: 'Cancel',
               style: 'cancel',

@@ -1,23 +1,28 @@
-<ion-navbar *navbar primary>
-  <button menuToggle>
-    <ion-icon name="menu"></ion-icon>
-  </button>
-  <ion-title>Roadmap</ion-title>
-</ion-navbar>
+<ion-header>
+  <ion-navbar primary>
+    <button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Roadmap</ion-title>
+  </ion-navbar>
+</ion-header>
 
 <ion-content padding>
 
       <div class="octicon octicon-versions _center-text" style="font-size:64pt;margin:auto;width:100%;"></div>
 
+          <h3 class="_center-text">{{version}}</h3>
+          <br/>
           <p class="_gray _font-small _left-text">
             We have a long list
             of functionality to roll into our release schedule. If you would like to comment or make a suggestion
-            head over to GitHub wyomingsoftware/git-mobile-for-github.
+            head over to GitHub <a href="https://github.com/WyomingSoftware/git-mobile-for-github">
+              wyomingsoftware/git-mobile-for-github</a> where you can submit a GitHub Issue.
           </p>
           <hr/>
-          <h2 class="_gray">Functionality</h2>
+          <h3 class="_gray">Functionality</h3>
           <ul>
-              <li class="_font-small _left-text">v1.0.0-alpha.1 - 4/27/2016 (current)</li>
+              <li class="_font-small _left-text">Implemented</li>
               <ul>
                   <li class="_gray _font-small _left-text">Profiles (view, search, followers, following,
                         starred repos, owned repos gists-mine, orgs, members)</li>
@@ -26,27 +31,29 @@
                   <li class="_gray _font-small _left-text">Code (view)</li>
                   <li class="_gray _font-small _left-text">Gists (view, recent)</li>
               </ul>
-              <li class="_gray _font-small _left-text">v1.0.0-alpha.x - 5/15/2016</li>
+              <br/>
+              <li class="_font-small _left-text">In Development</li>
               <ul>
+                  <li class="_gray _font-small _left-text">Issues (create, edit)</li>
                   <li class="_gray _font-small _left-text">Events (view)</li>
-                  <li class="_gray _font-small _left-text">Notifications (view)</li>
+                  <li class="_gray _font-small _left-text">Notifications (commit_comment, create, delete, deployment,
+                    deployment_status, fork, gollum, issue_comment, issues, member, membership, page_build, public,
+                     pull_request_review_comment, pull_request, push, repository, release, status, team_add, watch)</li>
                   <li class="_gray _font-small _left-text">Pull Requests (view)</li>
                   <li class="_gray _font-small _left-text">Repos (collaborators, forks, forked from)</li>
                   <li class="_gray _font-small _left-text">Code (search)</li>
                   <li class="_gray _font-small _left-text">Gists (forks, forked from)</li>
-              </ul>
-              <li class="_gray _font-small _left-text">v1.0.0-beta.x - 6/29/2016</li>
-              <li class="_gray _font-small _left-text">v1.0.0 - 7/29/2016</li>
-              <hr/>
-              <li class="_gray _font-small _left-text">v2.0.0 (drafting)</li>
-              <ul>
                   <li class="_gray _font-small _left-text">Commits (triage)</li>
+                  <li class="_gray _font-small _left-text">Support for Windows Phone</li>
               </ul>
-              <li class="_gray _font-small _left-text">v3.0.0 (drafting)</li>
+
           </ul>
           <hr/>
-          <p class="_gray _font-small _left-text">Everything in version 1 is read only. Look to version 2 to begin
-            with items such as "create issues" and other write capabilities.</p>
+          <p class="_gray _font-small _left-text">Everything in version 1x is read only. Look to version 2x to implement
+            write capabilities such as "create issues" and more.</p>
           <br/>
 
 </ion-content>
+
+<ion-footer>
+</ion-footer>

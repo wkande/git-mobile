@@ -1,60 +1,55 @@
-
-<ion-navbar *navbar primary>
-  <button menuToggle>
-    <ion-icon name="menu"></ion-icon>
-  </button>
-  <ion-title>Search</ion-title>
-</ion-navbar>
-
-
-<ion-content class="getting-started">
+<ion-header>
+  <ion-navbar primary>
+    <button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Search</ion-title>
+  </ion-navbar>
+</ion-header>
 
 
+<ion-content class="search">
 
-  <form [ngFormModel]="authForm" (ngSubmit)="onSubmit(authForm.value)" novalidate>
+
+  <!--form *ngIf="loaded" [ngFormModel]="authForm" (ngSubmit)="onSubmit(authForm.value)" novalidate-->
+  <form *ngIf="loaded" (ngSubmit)="onSubmit($event)" novalidate>
 
               <div padding>
-                  <ion-segment [(ngModel)]="action" (change)="changeAction($event, authForm.value)">
+                  <ion-segment *ngIf="triggered_for == null" [(ngModel)]="action" (ionChange)="changeAction($event)">
                       <ion-segment-button value="repos">
                         <span class="octicon octicon-repo"></span> Repos
                       </ion-segment-button>
                       <ion-segment-button value="issues">
                         <span class="octicon octicon-issue-opened"></span> Issues
                       </ion-segment-button>
-                      <!--ion-segment-button value="pulls">
-                        <span class="octicon octicon-git-pull-request"></span>
-                      </ion-segment-button-->
                       <ion-segment-button value="users">
                         <span class="octicon octicon-organization"></span> Users/Orgs
                       </ion-segment-button>
                   </ion-segment>
               </div>
               <div class="_description _font-medium">{{description}}</div>
-
-              <div *ngIf="searchValue.hasError('required') && searchValue.touched"
-                  class="error-box _buttonContainer">* Search value is required!</div>
-              <div *ngIf="searchValue.hasError('minlength') && searchValue.touched"
-                  class="error-box _buttonContainer">* Minimum search value length is 2!</div>
-
-
-
               <br/>
+
               <ion-list radio-group style="width:300px;" class="_center-text" [(ngModel)]="searchCollection">
-                <ion-item [class.error]="!searchValue.valid && searchValue.touched">
+                <ion-item>
                   <ion-label floating>Criteria</ion-label>
-                  <ion-textarea rows="5" value="" [ngFormControl]="searchValue"></ion-textarea>
+                  <ion-textarea rows="5" [(ngModel)]="searchText"></ion-textarea>
                 </ion-item>
               </ion-list>
 
 
-              <br/><br/>
+              <br/>
+              <div *ngIf="!validated"class="error-box">
+                  Please enter at least two characters.
+              </div>
+              <br/>
               <div class="_buttonContainer">
-                  <button style="width:100px;" type="submit" class="custom-button" [disabled]="!authForm.valid">Search</button>
+                  <button style="width:100px;" type="submit" class="custom-button">Search</button>
               </div>
               <div *ngIf="err"
                   class="error-box _buttonContainer">{{err}}
               </div>
-
+      </form>
 <!-- -QUALIFIERS -->
 
               <br/><br/>
@@ -204,7 +199,7 @@
                       <hr/>
                 </ion-card-content>
               </ion-card>
-
-
-      </form>
 </ion-content>
+
+<ion-footer>
+</ion-footer>

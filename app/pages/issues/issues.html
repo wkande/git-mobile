@@ -1,14 +1,16 @@
-<ion-navbar *navbar primary>
-    <button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>Issues</ion-title>
-    <ion-buttons end>
-      <button (click)="presentActionSheet()">
-        <ion-icon name="funnel"></ion-icon>
+<ion-header>
+  <ion-navbar primary>
+      <button menuToggle>
+        <ion-icon name="menu"></ion-icon>
       </button>
-    </ion-buttons>
-</ion-navbar>
+      <ion-title>Issues</ion-title>
+      <ion-buttons end>
+        <button (click)="presentActionSheet()">
+          <ion-icon name="more"></ion-icon>
+        </button>
+      </ion-buttons>
+  </ion-navbar>
+</ion-header>
 
 <ion-content>
 <gm-error [error]="error"></gm-error>
@@ -17,7 +19,7 @@
 
       <div class="_description" padding>{{description}} <small>({{data.total_count}})</small></div>
 
-      <ion-segment *ngIf="trigger != 'search'" padding [(ngModel)]="state" (change)="tabLoad($event)" style="margin-top:-15px;">
+      <ion-segment *ngIf="trigger != 'search'" padding [(ngModel)]="state" (ionChange)="tabLoad($event)" style="margin-top:-15px;">
           <ion-segment-button value="open">
             Open
           </ion-segment-button>
@@ -32,7 +34,7 @@
 
 
       <ion-list>
-          <button ion-item *ngFor="#item of data.items;" (click)="itemTapped($event, item)">
+          <button ion-item *ngFor="let item of data.items;" (click)="itemTapped($event, item)">
 
               <div class="_font-medium">{{item.title}}</div>
               <div class="_font-small _gray" *ngIf="item.repository">{{item.repository.name}}</div>
@@ -52,31 +54,32 @@
 </div>
 </ion-content>
 
-
-<ion-toolbar position="bottom" *ngIf="dataLoaded && data.gm_pagination != null">
-    <ion-buttons start>
-        <button [disabled]="!pagination.first" [class._lightgray]="!pagination.first"
-          (click)="paginationLoad(pagination.first)"
-          style="width:46px;">
-          <ion-icon name="ios-arrow-back-outline" style="font-size:22pt"></ion-icon><ion-icon name="ios-arrow-back-outline" style="font-size:22pt"></ion-icon>
-        </button>
-        <button [disabled]="!pagination.prev" [class._lightgray]="!pagination.prev"
-          (click)="paginationLoad(pagination.prev)"
-          style="width:46px;">
-          <ion-icon name="ios-arrow-back-outline"></ion-icon>
-        </button>
-    </ion-buttons>
-    <ion-title>{{pagination.currPageNumber}} of {{lastPage}}</ion-title>
-    <ion-buttons end>
-        <button [disabled]="!pagination.next" [class._lightgray]="!pagination.next"
-          (click)="paginationLoad(pagination.next)"
-          style="width:46px;">
-          <ion-icon name="ios-arrow-forward-outline"></ion-icon>
-        </button>
-        <button [disabled]="!pagination.last" [class._lightgray]="!pagination.last"
-          (click)="paginationLoad(pagination.last)"
-          style="width:46px;">
-          <ion-icon name="ios-arrow-forward-outline" style="font-size:22pt"></ion-icon><ion-icon name="ios-arrow-forward-outline" style="font-size:22pt"></ion-icon>
-        </button>
-    </ion-buttons>
-</ion-toolbar>
+<ion-footer>
+  <ion-toolbar position="bottom" *ngIf="dataLoaded && data.gm_pagination != null">
+      <ion-buttons start>
+          <button [disabled]="!pagination.first" [class._lightgray]="!pagination.first"
+            (click)="paginationLoad(pagination.first)"
+            style="width:46px;">
+            <ion-icon name="ios-arrow-back-outline" style="font-size:22pt"></ion-icon><ion-icon name="ios-arrow-back-outline" style="font-size:22pt"></ion-icon>
+          </button>
+          <button [disabled]="!pagination.prev" [class._lightgray]="!pagination.prev"
+            (click)="paginationLoad(pagination.prev)"
+            style="width:46px;">
+            <ion-icon name="ios-arrow-back-outline"></ion-icon>
+          </button>
+      </ion-buttons>
+      <ion-title>{{pagination.currPageNumber}} of {{lastPage}}</ion-title>
+      <ion-buttons end>
+          <button [disabled]="!pagination.next" [class._lightgray]="!pagination.next"
+            (click)="paginationLoad(pagination.next)"
+            style="width:46px;">
+            <ion-icon name="ios-arrow-forward-outline"></ion-icon>
+          </button>
+          <button [disabled]="!pagination.last" [class._lightgray]="!pagination.last"
+            (click)="paginationLoad(pagination.last)"
+            style="width:46px;">
+            <ion-icon name="ios-arrow-forward-outline" style="font-size:22pt"></ion-icon><ion-icon name="ios-arrow-forward-outline" style="font-size:22pt"></ion-icon>
+          </button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

@@ -1,16 +1,18 @@
-import {Page, NavController, NavParams} from 'ionic-angular';
+import {NavController, NavParams} from 'ionic-angular';
+import {Component} from '@angular/core';
 import {HttpService} from '../../providers/httpService.ts';
 import {Utils} from '../../providers/utils.ts';
 import {ProfilePage} from '../profile/profile';
 import {GmError} from '../../components/gm-error';
 import {GmSpinner} from '../../components/gm-spinner';
+import {PageClass} from '../../extendables/page';
 
-@Page({
+@Component({
   templateUrl: 'build/pages/issues/issueComments.html',
   providers: [HttpService, Utils],
   directives: [GmError, GmSpinner]
 })
-export class IssueCommentsPage {
+export class IssueCommentsPage extends PageClass{
 
   description:string;
   user:any;
@@ -18,19 +20,16 @@ export class IssueCommentsPage {
   comments:any;
   events:any;
   issue:any;
-
-  // LOADER
-  dataLoaded: boolean = false;
-  error = {flag:false, status:null, message:null};
-  spinner = {flag:true, message:null};
-  async = {cnt:2, completed:0};
+  
 
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService, private utils: Utils) {
+      super();
       console.log('IssueCommentsPage.constructor ++++++++++++++++++++++++++++++++++++++++');
       console.log(navParams);
       this.user = navParams.get('user');
       this.issue = navParams.get('issue');
       this.description = this.issue.title;
+      this.startAsyncController(2, null);
       this.loadComments();
       this.loadEvents();
   }
@@ -63,8 +62,6 @@ export class IssueCommentsPage {
       var self = this;
       this.httpService.mdToHtml(txt, this.user)
       .then((data:any) => {
-        console.log(data)
-
           self.items[row].body = data._body.replace(/<p>/gi,"<br/><p class='_black'>");
       }).catch(error => {
           console.log(error);
@@ -170,7 +167,6 @@ export class IssueCommentsPage {
   }
 
   itemTapped(event, item, creatorUsername) {
-    console.log(item, creatorUsername)
       if(item == "profile")
           this.nav.push(ProfilePage, {trigger:'user', user:this.user, username:null});
       else if(item == "profile-commentor")

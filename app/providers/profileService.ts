@@ -1,5 +1,5 @@
 import {Storage, LocalStorage} from 'ionic-angular';
-import {Injectable} from 'angular2/core';
+import {Injectable} from '@angular/core';
 
 
 @Injectable()
@@ -19,9 +19,9 @@ export class ProfileService {
 
     set = function(username, pswd, name, avatar_url, url){
         var b = 'Basic '+ btoa(username+':'+pswd);
-        var profile = {"login":username, "auth":b, "name":name, "avatar_url":avatar_url, "url":url};
-        this.local.set('profile', JSON.stringify(profile));
-        return profile;
+        this.profile = {"login":username, "auth":b, "name":name, "avatar_url":avatar_url, "url":url};
+        this.local.set('profile', JSON.stringify(this.profile));
+        return this.profile;
     }
 
     get = function(){

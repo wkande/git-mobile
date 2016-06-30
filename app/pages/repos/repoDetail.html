@@ -1,9 +1,11 @@
-<ion-navbar *navbar primary>
-  <button menuToggle>
-    <ion-icon name="menu"></ion-icon>
-  </button>
-  <ion-title>Repository</ion-title>
-</ion-navbar>
+<ion-header>
+  <ion-navbar primary>
+    <button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Repository</ion-title>
+  </ion-navbar>
+</ion-header>
 
 <ion-content>
   <gm-error [error]="error"></gm-error>
@@ -41,7 +43,7 @@
 
       <!-- LIST MENU FOR REPO DETAIL ACCESS -->
       <ion-list>
-          <a ion-item *ngFor="#item of items" (click)="itemTapped($event, item)">
+          <a ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
             {{item.title}}
             <span *ngIf="item.badgeIssues" class="_gray"style="float:right;font-size:small;">open
               <ion-badge class="_badge_lighter">
@@ -64,3 +66,6 @@
   </div>
 
 </ion-content>
+
+<ion-footer>
+</ion-footer>

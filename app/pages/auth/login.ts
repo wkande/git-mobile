@@ -1,19 +1,21 @@
-import {Page, NavController, NavParams, Events} from 'ionic-angular';
+import {NavController, NavParams, Events} from 'ionic-angular';
 import {HttpService} from '../../providers/httpService.ts';
 import {ProfileService} from '../../providers/profileService.ts';
 import {ReposPage} from '../repos/repos';
-import {Component} from 'angular2/core';
-import {FORM_DIRECTIVES, FormBuilder,  ControlGroup, Validators, AbstractControl} from 'angular2/common';
+import {Component} from '@angular/core';
+import {FORM_DIRECTIVES, FormBuilder,  ControlGroup, Validators, AbstractControl} from '@angular/common';
 import {GmError} from '../../components/gm-error';
+import {GmSpinner} from '../../components/gm-spinner';
+import {PageClass} from '../../extendables/page';
 
-@Page({
+@Component({
   templateUrl: 'build/pages/auth/login.html',
   providers: [HttpService, ProfileService],
-  directives: [FORM_DIRECTIVES, GmError]
+  directives: [FORM_DIRECTIVES, GmError, GmSpinner]
 })
-export class LoginPage {
+export class LoginPage extends PageClass{
     profile: any;
-    error = {flag:false, status:null, message:null};
+    //error = {flag:false, status:null, message:null};
 
     authForm: ControlGroup;
     username: AbstractControl;
@@ -21,7 +23,8 @@ export class LoginPage {
 
     constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService,
         private profileService: ProfileService, private events: Events, fb: FormBuilder) {
-
+        super();
+        console.log('LoginPage.constructor ++++++++++++++++++')
         this.authForm = fb.group({
             'username': ['', Validators.compose([Validators.required, Validators.minLength(1)])],
             'password': ['', Validators.compose([Validators.required, Validators.minLength(1)])]
@@ -33,7 +36,8 @@ export class LoginPage {
 
     onSubmit(value: any): void {
         if(this.authForm.valid) {
-            this.error.flag = false;
+            //this.error.flag = false;
+            this.startAsyncController(1, null);
             var self = this;
             var auth = 'Basic '+ btoa(value.username+':'+value.password);
             var user = {auth:null};
@@ -41,17 +45,17 @@ export class LoginPage {
             this.httpService.load('https://api.github.com/user', user)
             .then((data:any) => {
                   var profile = this.profileService.set(value.username, value.password, data.name, data.avatar_url, data.url);
-                  //console.log(data)
+                  console.log('DATA', data)
                   this.nav.setRoot(ReposPage, {user:profile});
                   this.events.publish('user:connected', {});
               }).catch(error => {
-                  //console.log(error)
                   if(error.status == 401){
-                      this.error = {flag:true, status:401, message:"Invalid credentials, please try again."};
+                      var err:any = {flag:true, status:401, message:"Invalid credentials, please try again."};
                   }
                   else{
-                      this.error = {flag:true, status:error.status, message:error.message};
+                      var err:any = {flag:true, status:error.status, message:error.message};
                   }
+                  this.asyncController(null, err);
               });
         }
     }

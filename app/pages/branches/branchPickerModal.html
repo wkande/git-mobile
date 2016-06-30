@@ -1,3 +1,4 @@
+
 <ion-toolbar class="android-attr">
   <ion-title>
     Switch Branch/Tag
@@ -16,7 +17,7 @@
   <gm-error [error]="error"></gm-error>
   <gm-spinner [spinner]="spinner"></gm-spinner>
 
-<div  *ngIf="loadedTags && loadedBranches && !error.flag">
+<div *ngIf="loadedTags && loadedBranches && !error.flag">
 
     <ion-toolbar light class="toolbar _center-text _gray"  style="line-height: 44px;vertical-align: middle;">
         <div class="toolbar-background _font-large">{{repo.name}}</div>
@@ -40,7 +41,7 @@
           <ion-searchbar [(ngModel)]="searchBranches" (input)="getBranchItems($event)"></ion-searchbar>
 
             <ion-list >
-                <a ion-item *ngFor="#item of branchItems" href="#" (click)="itemSelected(item)">
+                <a ion-item *ngFor="let item of branchItems" href="#" (click)="itemSelected(item)">
                   {{item.name}}
                 </a>
             </ion-list>
@@ -48,7 +49,7 @@
 
         <ion-list *ngSwitchWhen="'tags'">
           <ion-searchbar [(ngModel)]="searchTags" (input)="getTagItems($event)"></ion-searchbar>
-            <a ion-item *ngFor="#item of tagItems" href="#" (click)="itemSelected(item)">
+            <a ion-item *ngFor="let item of tagItems" href="#" (click)="itemSelected(item)">
               {{item.name}}
             </a>
         </ion-list>

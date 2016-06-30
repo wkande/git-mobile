@@ -1,6 +1,7 @@
-import {Injectable} from 'angular2/core';
-import {Http, Headers} from 'angular2/http';
+import {Injectable} from '@angular/core';
+import {Http, Headers} from '@angular/http';
 import {Utils} from './utils.ts';
+import 'rxjs/add/operator/timeout';
 
 /**
  * Injectable to fire GitHub APIs
@@ -27,8 +28,10 @@ export class HttpService {
         this.header = new Headers();
         this.header.set('Authorization', user.auth);
         this.header.set('Content-Type', 'application/json'); // Used by POSTS
+        this.header.set('Accept', 'application/vnd.github.v3+json');
         return new Promise(function(resolve, reject) {
             self.http.get(url, {headers:self.header})
+            .timeout(5000, new Error('The server did not respond in a timely manner.'))
             .subscribe(res => {
                   var data = res.json();
                   data.gm_pagination = res.headers.get('Link');

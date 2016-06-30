@@ -1,14 +1,16 @@
-import {Page, NavController, NavParams} from 'ionic-angular';
+import {NavController, NavParams} from 'ionic-angular';
+import {Component} from '@angular/core';
 import {HttpService} from '../../providers/httpService.ts';
 import {GmError} from '../../components/gm-error';
 import {GmSpinner} from '../../components/gm-spinner';
+import {PageClass} from '../../extendables/page';
 
-@Page({
+@Component({
   templateUrl: 'build/pages/files/fileViewer.html',
   providers: [HttpService],
   directives: [GmError, GmSpinner]
 })
-export class FileViewerPage {
+export class FileViewerPage extends PageClass{
 
   // PARAMS
   trigger:string;
@@ -27,13 +29,9 @@ export class FileViewerPage {
   // URLS
   url: string;
 
-  // LOADER
-  dataLoaded: boolean = false;
-  error = {flag:false, status:null, message:null};
-  spinner = {flag:true, message:null};
-  async = {cnt:1, completed:0};
 
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService) {
+      super();
       console.log('\n\n| >>> +++++++++++++ FileViewerPage.constructor +++++++++++++++');
       console.log(navParams);
       this.trigger = navParams.get('trigger');
@@ -60,15 +58,18 @@ export class FileViewerPage {
       }
   }
 
+
+
   load(){
       var self = this;
-      console.log("| >>> FileViewerPage.load: ", this.url);
+      this.startAsyncController(1, null);
       this.httpService.load(this.url, this.user)
       .then((data: any) => {
-          //console.log('loaded file: ', data)
+
           this.file = data;
           this.description = '/'+data.path;
-          this.file.content = new Buffer(this.file.content, 'base64').toString();
+          //this.file.content = new Buffer(this.file.content, 'base64').toString();
+          this.file.content = atob(this.file.content);
 
           if(this.isText(this.file.content)){ // IS TEXT
               this.fileType = 0;
@@ -89,13 +90,11 @@ export class FileViewerPage {
 
 
   loadMD(){
-      //console.log("| >>> FileViewerPage.loadMD: ", this.url);
+      this.startAsyncController(1, null);
       this.httpService.loadMediaHtml(this.url, this.user)
       .then((data: any) => {
-          //console.log('loaded file: ', data)
           this.content = data;
           this.description = 'Default Repo README';
-          console.log(this.file)
           this.asyncController(true, null);
       }).catch(error => {
           this.asyncController(null, error);
@@ -153,19 +152,5 @@ export class FileViewerPage {
       return c;
   }
 
-  asyncController(success, error){
-      if(this.error.flag) return;
-      if(error){
-          this.error = {flag:true, status:error.status, message:error.message};
-          this.spinner.flag = false;
-      }
-      else{
-          this.async.completed++;
-          if(this.async.cnt == this.async.completed){
-              this.spinner.flag = false;
-              this.dataLoaded = true;
-          }
-      }
-  }
 
 }

@@ -1,14 +1,16 @@
-import {Page, Modal, NavParams, ViewController} from 'ionic-angular';
+import {Modal, NavController, NavParams, ViewController, Alert} from 'ionic-angular';
+import {Component} from '@angular/core';
 import {HttpService} from '../../providers/httpService.ts';
 import {GmError} from '../../components/gm-error';
 import {GmSpinner} from '../../components/gm-spinner';
+import {PageClass} from '../../extendables/page';
 
-@Page({
+@Component({
   templateUrl: 'build/pages/branches/branchPickerModal.html',
   providers: [HttpService],
   directives: [GmError, GmSpinner]
 })
-export default class BranchPickerModal {
+export default class BranchPickerModal extends PageClass{
     user:any;
     searchBranches: string;
     searchTags: string;
@@ -23,13 +25,11 @@ export default class BranchPickerModal {
     loadedTags: boolean = false;
     loadedBranches: boolean = false;
 
-    dataLoaded: boolean = false;
-    error = {flag:false, status:null, message:null};
-    spinner = {flag:false, message:null};
-    async = {cnt:2, completed:0}; // Number of async calls to load the view
+    constructor(private nav: NavController, private viewCtrl: ViewController, navParams: NavParams, private httpService: HttpService) {
+        super();
+        console.log('\n\n| >>> | <<< +++++++++++++ BranchPickerModal.constructor +++++++++++++++');
+        console.log(navParams);
 
-    constructor(private viewCtrl: ViewController, navParams: NavParams, private httpService: HttpService) {
-        //console.log('\n\n| >>> +++++++++++++ BranchPickerModal.constructor +++++++++++++++');
         this.searchBranches = '';
         this.searchTags = '';
         this.segmentPane = 'branches';
@@ -38,6 +38,8 @@ export default class BranchPickerModal {
         this.user = navParams.get('user');
         this.urlTags = 'https://api.github.com/repos/'+this.repo.owner.login+'/'+this.repo.name+'/tags';
         this.urlBranches = 'https://api.github.com/repos/'+this.repo.owner.login+'/'+this.repo.name+'/branches';
+
+        this.startAsyncController(2, null);
         this.loadTags();
         this.loadBranches();
     }
@@ -69,7 +71,6 @@ export default class BranchPickerModal {
 
 
     getBranchItems(searchbar) {
-        //console.log(searchbar)
         // Reset items back to all of the items
         this.branchItems = this.branches;
 
@@ -117,18 +118,4 @@ export default class BranchPickerModal {
        this.viewCtrl.dismiss(data);
     }
 
-    asyncController(success, error){
-        if(this.error.flag) return; // Onec async call has already failed so ignore the rest
-        if(error){
-            this.error = {flag:true, status:error.status, message:error.message};
-            this.spinner.flag = false;
-        }
-        else{
-            this.async.completed++;
-            if(this.async.cnt == this.async.completed){
-                this.spinner.flag = false;
-                this.dataLoaded = true;
-            }
-        }
-    }
 }

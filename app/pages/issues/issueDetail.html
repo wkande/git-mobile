@@ -1,9 +1,11 @@
-<ion-navbar *navbar primary>
-  <button menuToggle>
-    <ion-icon name="menu"></ion-icon>
-  </button>
-  <ion-title>Issue</ion-title>
-</ion-navbar>
+<ion-header>
+  <ion-navbar primary>
+    <button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Issue</ion-title>
+  </ion-navbar>
+</ion-header>
 
 <ion-content>
 <gm-error [error]="error"></gm-error>
@@ -26,7 +28,7 @@
                 <ion-item class="_font-small _gray" *ngIf="issue.labels.length > 0">
                     <span item-left class="octicon octicon-tag" style="font-size:12pt;width:7px;"></span>
                     <div style="margin-bottom:4px;">Labels: {{issue.labels.length}}</div>
-                    <div *ngFor="#label of issue.labels;" style="margin-left:10px;">
+                    <div *ngFor="let label of issue.labels;" style="margin-left:10px;">
                       <span
                           [ngStyle]="{'background-color':label.color, 'color':label.textColor,
                           'padding-left':'7px', 'padding-right':'7px',
@@ -100,3 +102,6 @@
 
 </div>
 </ion-content>
+
+<ion-footer>
+</ion-footer>

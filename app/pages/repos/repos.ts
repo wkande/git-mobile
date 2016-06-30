@@ -1,24 +1,27 @@
-import {Page, Modal, NavController, NavParams, ActionSheet} from 'ionic-angular';
+import {Modal, NavController, NavParams, ActionSheet} from 'ionic-angular';
+import {Component} from '@angular/core';
 import {HttpService} from '../../providers/httpService.ts';
 import {ProfileService} from '../../providers/profileService.ts';
 import {Utils} from '../../providers/utils.ts';
 import {RepoDetailPage} from './repoDetail';
+import {SearchPage} from '../search/search';
 import {GmError} from '../../components/gm-error';
 import {GmSpinner} from '../../components/gm-spinner';
+import {PageClass} from '../../extendables/page';
 
 
-@Page({
+@Component({
   templateUrl: 'build/pages/repos/repos.html',
   providers: [HttpService, ProfileService, Utils],
   directives: [GmError, GmSpinner]
 })
-export class ReposPage {
 
+
+export class ReposPage  extends PageClass{
   // PARAMS
   trigger: string;
   user:any;
   username:string;
-
   // DATA
   data = {total_count:null, items:null, gm_pagination:null}; // TMP decalrations prevent compile warnings
   profileServiceData:any;
@@ -29,19 +32,13 @@ export class ReposPage {
 
   description:string;
   foundExcess:string;
-
   // URLS
   url: string;
 
-  // LOADER
-  dataLoaded: boolean = false;
-  error = {flag:false, status:null, message:null};
-  spinner = {flag:true, message:null};
-  async = {cnt:1, completed:0}; // Number of async calls to load the view
 
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService,
           private profileService: ProfileService, private utils: Utils) {
-
+      super();
       console.log('\n\n| >>> +++++++++++++ ReposPage.constructor +++++++++++++++');
       console.log(navParams)
       this.user = navParams.get('user');
@@ -75,11 +72,11 @@ export class ReposPage {
           this.url = 'https://api.github.com/users/'+this.username+'/starred';
       }
       else if(this.trigger == 'watching-me'){ // Current user watching repos
-        this.description = "I\'m Watching";
+          this.description = "I\'m Watching";
           this.url = 'https://api.github.com/user/subscriptions';
       }
       else if(this.trigger == 'user'){ // Current user watching repos
-        this.description = "Repositories for: "+this.username;
+          this.description = "Repositories for: "+this.username;
           this.url = 'https://api.github.com/users/'+this.username+'/repos';
       }
       else if(this.trigger == 'search'){
@@ -89,23 +86,18 @@ export class ReposPage {
 
   }
 
+
   load(){
       var self = this;
-      this.dataLoaded = false;
-      this.async = {cnt:1, completed:0};
-      this.error = {flag:false, status:null, message:null};
-      this.spinner = {flag:true, message:null};
-
+      this.startAsyncController(1, null);
       var url = this.url;
       if(this.trigger == 'affiliations-me-all' && this.type != 'all' && this.url.indexOf('?') > -1)
           url = url+'&type='+this.type;
       else if(this.trigger == 'affiliations-me-all' && this.type != 'all')
           url = url+'?type='+this.type;
-      //console.log("| >>> ReposPage.load: ", url);
 
       this.httpService.load(url, this.user)
       .then((data:any) => {
-          //console.log('REPO DATA', data)
           this.pagination = this.utils.formatPagination(data.gm_pagination);
           this.lastPage = (this.pagination.lastPageNumber == null) ? this.lastPage : this.pagination.lastPageNumber;
           this.data.gm_pagination = data.gm_pagination;
@@ -132,21 +124,6 @@ export class ReposPage {
   }
 
 
-  asyncController(success, error){
-      if(this.error.flag) return; // Once async call has already failed so ignore the rest
-      if(error){
-          this.error = {flag:true, status:error.status, message:error.message};
-          this.spinner.flag = false;
-      }
-      else{
-          this.async.completed++;
-          if(this.async.cnt == this.async.completed){
-              this.spinner.flag = false;
-              this.dataLoaded = true;
-          }
-      }
-  }
-
 
   // Load for pagination
   paginationLoad(url){
@@ -156,9 +133,8 @@ export class ReposPage {
 
 
   presentActionSheet() {
-      var self = this;
       let actionSheet = ActionSheet.create({
-        title: 'Filter Repositories',
+        title: 'Repositories',
         buttons: [
           {
             text: 'Owned',
@@ -180,11 +156,16 @@ export class ReposPage {
               this.setURL();
               this.load();}
           },{
-            text: 'Watching',
+            text: "Watching",
             handler: () => {
               this.trigger = 'watching-me';
               this.setURL();
               this.load();}
+          },{
+            text: 'Search',
+            handler: () => {
+              this.nav.push(SearchPage, {triggered_for:'repos2', user:this.user});
+            }
           },{
             text: 'Cancel',
             style: 'cancel',
@@ -196,8 +177,8 @@ export class ReposPage {
   }
 
 
-
   itemTapped(event, item) {
       this.nav.push(RepoDetailPage, {repo:item, user:this.user});
   }
+
 }

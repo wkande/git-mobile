@@ -1,9 +1,11 @@
-<ion-navbar *navbar primary>
-  <button menuToggle>
-    <ion-icon name="menu"></ion-icon>
-  </button>
-  <ion-title>Gist Comments</ion-title>
-</ion-navbar>
+<ion-header>
+  <ion-navbar primary>
+    <button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Gist Comments</ion-title>
+  </ion-navbar>
+</ion-header>
 
 <ion-content>
 
@@ -14,7 +16,7 @@
   <div class="_description">{{description}}</div>
   <div class="_description" *ngIf="items.length == 0" style="margin-top:50px;">No Comments</div>
 
-      <ion-card *ngFor="#item of items">
+      <ion-card *ngFor="let item of items">
         <ion-item>
           <ion-avatar item-left>
             <img src="{{item.user.avatar_url}}">
@@ -32,3 +34,6 @@
 
 </div>
 </ion-content>
+
+<ion-footer>
+</ion-footer>

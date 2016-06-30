@@ -1,4 +1,5 @@
-import {Page, NavController, NavParams, Storage, LocalStorage} from 'ionic-angular';
+import {NavController, NavParams, Storage, LocalStorage} from 'ionic-angular';
+import {Component} from '@angular/core';
 import {HttpService} from '../../providers/httpService.ts';
 import {Utils} from '../../providers/utils.ts';
 import {CodeBrowserPage} from '../../pages/code/codeBrowser';
@@ -9,6 +10,8 @@ import {FileViewerPage} from '../../pages/files/fileViewer';
 import {UsersPage} from '../profile/users';
 import {GmError} from '../../components/gm-error';
 import {GmSpinner} from '../../components/gm-spinner';
+import {PageClass} from '../../extendables/page';
+
 
 /**
  * Display details of a single repo. This page accepts a full repo object and
@@ -19,13 +22,14 @@ import {GmSpinner} from '../../components/gm-spinner';
  * stack. Changes to the current branch are saved while the codeBrowser page
  * is on top of the nav stack should the user interact with branches.
  */
-@Page({
+@Component({
   templateUrl: 'build/pages/repos/repoDetail.html',
   providers: [HttpService, Utils],
   directives: [GmError, GmSpinner]
 })
-export class RepoDetailPage {
 
+
+export class RepoDetailPage extends PageClass{
   // PARAMS
   repo: any;
   user:any;
@@ -35,14 +39,10 @@ export class RepoDetailPage {
   items: Array<any>;
   readme:string;
 
-  // LOADER
-  dataLoaded: boolean = false;
-  error = {flag:false, status:null, message:null};
-  spinner = {flag:true, message:null};
-  async = {cnt:2, completed:0}; // Number of async calls to load the view
 
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService,
         private utils: Utils) {
+      super();
       new Storage(LocalStorage).set('lastBranchTag', 'master');
       this.user = navParams.get('user');
       this.repo = navParams.get('repo');
@@ -62,6 +62,7 @@ export class RepoDetailPage {
   }
 
   ngOnInit() {
+      this.startAsyncController(2, null);
       this.loadProfile();
       this.loadReadme();
   }
@@ -87,20 +88,6 @@ export class RepoDetailPage {
       });
   }
 
-  asyncController(success, error){
-      if(this.error.flag) return;
-      if(error){
-          this.error = {flag:true, status:error.status, message:error.message};
-          this.spinner.flag = false;
-      }
-      else{
-          this.async.completed++;
-          if(this.async.cnt == this.async.completed){
-              this.spinner.flag = false;
-              this.dataLoaded = true;
-          }
-      }
-  }
 
   itemTapped(event, item) {
       if(item.title == "Code"){
@@ -125,4 +112,5 @@ export class RepoDetailPage {
             this.nav.push(FileViewerPage, {trigger:'readme', user:this.user, repo: this.repo});
       }
   }
+  
 }

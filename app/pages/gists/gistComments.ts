@@ -1,27 +1,24 @@
-import {Page, NavController, NavParams} from 'ionic-angular';
+import {NavController, NavParams} from 'ionic-angular';
+import {Component} from '@angular/core';
 import {HttpService} from '../../providers/httpService.ts';
 import {Utils} from '../../providers/utils.ts';
 import {GmError} from '../../components/gm-error';
 import {GmSpinner} from '../../components/gm-spinner';
+import {PageClass} from '../../extendables/page';
 
-@Page({
+@Component({
   templateUrl: 'build/pages/gists/gistComments.html',
   providers: [HttpService, Utils],
   directives: [GmError, GmSpinner]
 })
-export class GistCommentsPage {
+export class GistCommentsPage extends PageClass{
   user:any;
   items: any;
   url: string;
   description: string;
 
-  // LOADER
-  dataLoaded: boolean = false;
-  error = {flag:false, status:null, message:null};
-  spinner = {flag:true, message:null};
-  async = {cnt:1, completed:0}; // Number of async calls to load the view
-
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService, private utils: Utils) {
+      super();
       console.log('GistCommentsPage.constructor ++++++++++++++++++++++++++++++++++++++++');
       console.log(navParams);
       this.user = navParams.get('user');
@@ -31,8 +28,8 @@ export class GistCommentsPage {
   }
 
   load() {
-      //console.log("GistCommentsPage.load");
       var self = this;
+      this.startAsyncController(1, null);
       this.httpService.load(this.url, this.user)
       .then((data:any) => {
           this.items = data;
@@ -46,26 +43,11 @@ export class GistCommentsPage {
                   console.log('gistComment', item.body );
               });
           })
-          //console.log('GistCommentsPage.load.DATA-------------', data);
           this.asyncController(true, null);
       }).catch(error => {
           this.asyncController(null, error);
       });
   }
 
-  asyncController(success, error){
-      if(this.error.flag) return; // Onec async call has already failed so ignore the rest
-      if(error){
-          this.error = {flag:true, status:error.status, message:error.message};
-          this.spinner.flag = false;
-      }
-      else{
-          this.async.completed++;
-          if(this.async.cnt == this.async.completed){
-              this.spinner.flag = false;
-              this.dataLoaded = true;
-          }
-      }
-  }
 
 }

@@ -1,10 +1,10 @@
-import {Component, Input} from 'angular2/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
     selector: 'gm-spinner',
     template: `
     <div class="_center-text" style="margin-top:50px;" *ngIf="spinner.flag === true">
-      <img src="img/spiffygif_42x42.gif">
+      <img src="img/spiffygif_42x42.gif"><div style="margin-top:-31px;margin-left:120px;">{{spinner.message}}</div>
     </div>`,
     directives: [],
     inputs:['spinner']

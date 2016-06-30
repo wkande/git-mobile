@@ -1,4 +1,5 @@
-import {Page, NavController, NavParams} from 'ionic-angular';
+import {NavController, NavParams} from 'ionic-angular';
+import {Component} from '@angular/core';
 import {HttpService} from '../../providers/httpService.ts';
 import {Utils} from '../../providers/utils.ts';
 import {ReposPage} from '../repos/repos';
@@ -6,14 +7,15 @@ import {UsersPage} from '../profile/users';
 import {GistsPage} from '../gists/gists';
 import {GmError} from '../../components/gm-error';
 import {GmSpinner} from '../../components/gm-spinner';
+import {PageClass} from '../../extendables/page';
 
 
-@Page({
+@Component({
     templateUrl: 'build/pages/profile/profile.html',
     providers: [HttpService, Utils],
     directives: [GmError, GmSpinner]
 })
-export class ProfilePage {
+export class ProfilePage extends PageClass{
 
   // PARAMS > DATA
   user:any;
@@ -28,21 +30,15 @@ export class ProfilePage {
   // URLS
   url:string;
 
-  // LOADER
-  dataLoaded: boolean = false;
-  error = {flag:false, status:null, message:null};
-  spinner = {flag:true, message:null};
-  async = {cnt:3, completed:0}; // Number of async calls to load the view
-
 
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService,
               private utils: Utils) {
-
+        super();
         this.user = navParams.get('user');
         var username = navParams.get('username');
         this.trigger = navParams.get('trigger');
 
-        console.log('\n\n| >>> +++++++++++++ ProfilePage.constructor +++++++++++++++');
+        console.log('\n\n| >>> | <<< +++++++++++++ ProfilePage.constructor +++++++++++++++');
         console.log(navParams);
 
         if(this.trigger == 'me'){
@@ -57,10 +53,9 @@ export class ProfilePage {
   }
 
   loadProfile(){
-      //console.log('| >>> ProfilePage.loadProfile', this.url)
+      this.startAsyncController(1, null);
       this.httpService.load(this.url, this.user)
       .then((data: any) => {
-          //console.log(data)
           this.profile = data;
           this.profile.timeAgo = this.utils.timeAgo(this.profile.created_at);
           this.profile.since = this.utils.formatDate(this.profile.created_at);
@@ -71,24 +66,7 @@ export class ProfilePage {
   }
 
 
-  asyncController(success, error){
-      if(this.error.flag) return; // Once async call has already failed so ignore the rest
-      if(error){
-          this.error = {flag:true, status:error.status, message:error.message};
-          this.spinner.flag = false;
-      }
-      else{
-          this.async.completed++;
-          if(this.async.cnt == this.async.completed){
-              this.spinner.flag = false;
-              this.dataLoaded = true;
-          }
-      }
-  }
-
   itemTapped(event, item) {
-      //console.log('profilePage.itemTapped +++++++++++', item);
-      //console.log(this.user.login, this.profile.login)
 
       if(item.clicked == 'repos'){
           var trigger = (this.user.login == this.profile.login) ? 'owned-me' : 'owned-user';

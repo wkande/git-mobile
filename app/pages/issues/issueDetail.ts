@@ -1,4 +1,5 @@
-import {Page, NavController, NavParams} from 'ionic-angular';
+import {NavController, NavParams} from 'ionic-angular';
+import {Component} from '@angular/core';
 import {HttpService} from '../../providers/httpService.ts';
 import {Utils} from '../../providers/utils.ts';
 import {RepoDetailPage} from '../../pages/repos/repoDetail';
@@ -7,13 +8,14 @@ import {IssueCommentsPage} from '../issues/issueComments';
 import {UsersPage} from '../profile/users';
 import {GmError} from '../../components/gm-error';
 import {GmSpinner} from '../../components/gm-spinner';
+import {PageClass} from '../../extendables/page';
 
-@Page({
+@Component({
   templateUrl: 'build/pages/issues/issueDetail.html',
   providers: [HttpService, Utils],
   directives: [GmError, GmSpinner]
 })
-export class IssueDetailPage {
+export class IssueDetailPage extends PageClass{
 
   // PARAMS
   user: any;
@@ -27,27 +29,22 @@ export class IssueDetailPage {
   // URLS
   url: string;
 
-  // LOADER
-  dataLoaded: boolean = false;
-  error = {flag:false, status:null, message:null};
-  spinner = {flag:true, message:null};
-  async = {cnt:2, completed:0}; // Number of async calls to load the view
 
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService,
         private utils: Utils) {
+      super();
       console.log('\n\n| >>> +++++++++++++ IssueDetailPage.constructor +++++++++++++++');
       console.log(navParams)
       this.user = navParams.get('user');
+      this.startAsyncController(2, null);
       this.loadRepo(navParams.get('repoURL'));
       this.loadIssue(navParams.get('issueURL'));
   }
 
   loadRepo(url){
       var self = this;
-      //console.log("| >>> IssueDetailPage.loadRepo: ", url);
       this.httpService.load(url, this.user)
       .then((data:any) => {
-          //console.log('REPO', data)
           this.repo = data;
           this.repo.created_at = this.utils.formatDate(this.repo.created_at);
           this.repo.updated_at = this.utils.formatDate(this.repo.updated_at);
@@ -62,10 +59,8 @@ export class IssueDetailPage {
 
   loadIssue(url){
       var self = this;
-      //console.log("| >>> IssueDetailPage.loadIssue: ", url);
       this.httpService.load(url, this.user)
       .then((data:any) => {
-          //console.log('ISSUE', data)
           this.issue = data;
           this.convertMarkdown(this.issue.body);
           this.issue.timeAgo = this.utils.timeAgo(this.issue.created_at);
@@ -114,20 +109,6 @@ export class IssueDetailPage {
           return 'black';
   }
 
-  asyncController(success, error){
-      if(this.error.flag) return;
-      if(error){
-          this.error = {flag:true, status:error.status, message:error.message};
-          this.spinner.flag = false;
-      }
-      else{
-          this.async.completed++;
-          if(this.async.cnt == this.async.completed){
-              this.spinner.flag = false;
-              this.dataLoaded = true;
-          }
-      }
-  }
 
   itemTapped(event, item, commentUser) {
       if(item == "repo")

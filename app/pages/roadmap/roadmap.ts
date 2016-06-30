@@ -1,16 +1,20 @@
-import {Page} from 'ionic-angular';
+import {Component} from '@angular/core';
+import *  as appConfig from '../../../appConfig.ts';
 
 
-
-@Page({
+@Component({
     templateUrl: 'build/pages/roadmap/roadmap.html',
     providers: [],
     directives: []
 })
+
+
 export class RoadmapPage {
 
-  constructor() {
-  }
+  version:string;
 
+  constructor() {
+    this.version = appConfig.data['version'];
+  }
 
 }
