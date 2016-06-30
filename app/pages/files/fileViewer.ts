@@ -5,11 +5,14 @@ import {GmError} from '../../components/gm-error';
 import {GmSpinner} from '../../components/gm-spinner';
 import {PageClass} from '../../extendables/page';
 
+
 @Component({
   templateUrl: 'build/pages/files/fileViewer.html',
   providers: [HttpService],
   directives: [GmError, GmSpinner]
 })
+
+
 export class FileViewerPage extends PageClass{
 
   // PARAMS
@@ -30,10 +33,12 @@ export class FileViewerPage extends PageClass{
   url: string;
 
 
+
+
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService) {
       super();
       console.log('\n\n| >>> +++++++++++++ FileViewerPage.constructor +++++++++++++++');
-      console.log(navParams);
+      //console.log(navParams);
       this.trigger = navParams.get('trigger');
       this.path = navParams.get('path');
       this.repo = navParams.get('repo')
@@ -65,20 +70,37 @@ export class FileViewerPage extends PageClass{
       this.startAsyncController(1, null);
       this.httpService.load(this.url, this.user)
       .then((data: any) => {
-
+        console.log("------------------- load --------------------", JSON.stringify(data))
           this.file = data;
           this.description = '/'+data.path;
-          //this.file.content = new Buffer(this.file.content, 'base64').toString();
-          this.file.content = atob(this.file.content);
 
+          //this.file.content = new Buffer(this.file.content, 'base64').toString();
+
+          // Safari does not like the \n that may be at teh end of the file,
+          // need to end with =
+          this.file.content = this.file.content.replace(/\n/g, '')
+
+          console.log('+++++++++++++++++++++++++++++++++++')
+          //console.log(JSON.stringify(this.b64DecodeUnicode(this.file.content)))
+console.log('ready to convert atob')
+          this.file.content = atob(this.file.content).toString();
+
+
+
+
+console.log('ready to check file type')
           if(this.isText(this.file.content)){ // IS TEXT
+              console.log(">>>>>>>>>>>>>>>>>>>>>>>>> TEXT")
+              console.log(JSON.stringify(this.file.content))
               this.fileType = 0;
               self.content = this.prepContent(this.file.content);
           }
           else if (this.isImage(this.file.content)){ // IS IMAGE
+            console.log(">>>>>>>>>>>>>>>>>>>>>>>>> IMAGE")
               this.fileType = 1;
           }
           else{ // IS BINARY
+            console.log(">>>>>>>>>>>>>>>>>>>>>>>>> BINARY")
               this.fileType = 2;
           }
           this.asyncController(true, null);
@@ -87,12 +109,15 @@ export class FileViewerPage extends PageClass{
       });
   }
 
-
+  reverse(str) {
+    return Array.from(str).reverse().join("")
+  }
 
   loadMD(){
       this.startAsyncController(1, null);
       this.httpService.loadMediaHtml(this.url, this.user)
       .then((data: any) => {
+        console.log("------------------- loadMD --------------------", data)
           this.content = data;
           this.description = 'Default Repo README';
           this.asyncController(true, null);
@@ -106,6 +131,7 @@ export class FileViewerPage extends PageClass{
   }
 
   isText(content){
+    console.log('checking if text')
       for (var x = 0; x < content.length; x++)
       {
           var c = content.charCodeAt(x);
@@ -140,6 +166,7 @@ export class FileViewerPage extends PageClass{
               spaces = '&nbsp;&nbsp;'+numb+'&nbsp;';
           else if(numb < 1000)
               spaces = '&nbsp;'+numb+'&nbsp;';
+
           spaces = '<span style="border-left: 1px solid #387ef5;border-right: 1px solid gray;">'+spaces+'</span>&nbsp;';
 
           var newLine = spaces + line.replace(/\t/g, '&nbsp;').replace(/\ /g, '&nbsp;').replace(/\</g, '&lt') +'<br/>';
@@ -152,5 +179,12 @@ export class FileViewerPage extends PageClass{
       return c;
   }
 
+
+  // https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding
+  b64DecodeUnicode(str) {
+      return decodeURIComponent(Array.prototype.map.call(atob(str), function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+  }
 
 }
