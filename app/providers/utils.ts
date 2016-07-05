@@ -11,8 +11,6 @@ export class Utils {
     formatPagination = function(value){
         var pagination = {next:null,first:null,last:null,prev:null,currPageNumber:null, lastPageNumber:null};
         var curr = 0;
-        //console.log('++++++++++++++++++++++++START++++++++++++++++++++++++++')
-        //console.log(value)
         if (value != null){
             var arr = value.split(",");
             for(var i=0; i<arr.length; i++){
@@ -44,9 +42,23 @@ export class Utils {
                 }
             }
         }
-        //console.log(pagination)
-        //console.log('++++++++++++++++++++++++END++++++++++++++++++++++++++')
         return pagination;
+    }
+
+    lastPageNumber(value){
+      var pagination = {last:null};
+      var lastPage = 0;
+      if (value != null){
+          var arr = value.split(",");
+          for(var i=0; i<arr.length; i++){
+              if(arr[i].indexOf('rel="last"') > -1){
+                  pagination.last = arr[i].split(";")[0].replace('>','').replace('<','');
+                  var arr2 = pagination.last.split('=');
+                  lastPage = parseInt(arr2[arr2.length-1]);
+              }
+          }
+      }
+      return lastPage;
     }
 
     formatDate = function(dateString){

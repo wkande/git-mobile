@@ -25,6 +25,7 @@
               <span class="_font-small _gray">{{item.owner.login}}</span>
               <ion-avatar item-left>
                   <img src="{{item.owner.avatar_url}}">
+                  <span class="_font-small _gray" style="margin-top:-50px;float:left;">{{item.row+1}}</span>
               </ion-avatar>
 
               <div *ngIf="trigger == 'recent'" class="_gray _font-small">{{item.timeAgo}}</div>
@@ -32,12 +33,17 @@
               <span [hidden]="item.public" class="octicon octicon-gist-secret _gray" style="font-size:x-large;" item-right></span>
           </button>
       </ion-list>
+      <!-- Scroll controller -->
+      <ion-infinite-scroll (ionInfinite)="loadScrolling($event)" threshold="100px">
+        <ion-infinite-scroll-content>
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
 
 </div>
 </ion-content>
 
 <ion-footer>
-  <ion-toolbar position="bottom" *ngIf="dataLoaded && data.gm_pagination != null">
+  <!--ion-toolbar position="bottom" *ngIf="dataLoaded && data.gm_pagination != null">
       <ion-buttons start>
           <button [disabled]="!pagination.first" [class._lightgray]="!pagination.first"
             (click)="paginationLoad(pagination.first)"
@@ -63,5 +69,5 @@
             <ion-icon name="ios-arrow-forward-outline" style="font-size:22pt"></ion-icon><ion-icon name="ios-arrow-forward-outline" style="font-size:22pt"></ion-icon>
           </button>
       </ion-buttons>
-  </ion-toolbar>
+  </ion-toolbar-->
 </ion-footer>

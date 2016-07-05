@@ -11,9 +11,9 @@ export class PageClass {
     constructor(){
     }
 
-    startAsyncController(cnt, message){
+    startAsyncController(cnt, message, dataLoaded:boolean = false){
         this.async = {cnt:cnt, completed:0};
-        this.dataLoaded = false;
+        this.dataLoaded = dataLoaded;
         this.spinner = {flag:true, message:message};
         this.error = {flag:false, status:null, message:null};
     }

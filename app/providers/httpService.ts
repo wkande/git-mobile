@@ -65,6 +65,7 @@ export class HttpService {
             self.http.get('https://api.github.com/users/'+username, {headers:self.header})
             .subscribe(res => {
                 var data = res.json();
+                console.log(data)
                 var create = new Date(data.created_at);
                 var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
                 data.since = months[create.getMonth()]+"-"+create.getDate()+"-"+create.getFullYear();

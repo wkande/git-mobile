@@ -23,7 +23,7 @@
       <div class="_description">{{description}} <small *ngIf="trigger=='search'">({{data.total_count}})</small></div>
 
 
-      <ion-segment *ngIf="trigger == 'affiliations-me-all'" padding [(ngModel)]="type" (ionChange)="load($event)" style="margin-top:-15px;">
+      <ion-segment *ngIf="trigger == 'affiliations-me-all'" padding [(ngModel)]="type" (ionChange)="loadScrolling(null)" style="margin-top:-15px;">
           <ion-segment-button value="public">
             Public
           </ion-segment-button>
@@ -46,7 +46,9 @@
 
               <ion-avatar item-left>
                   <img src="{{item.owner.avatar_url}}">
+                  <span class="_font-small _gray" style="margin-top:-50px;float:left;">{{item.row+1}}</span>
               </ion-avatar>
+
               <div class="_gray _font-x-small" style="float:left;">
                   <div class="octicon octicon-issue-opened" style="transform: scale(.8);"></div>
                   <div class="octicon octicon-git-pull-request" style="transform: scale(.8);"></div>
@@ -61,14 +63,21 @@
                   &nbsp;{{item.forks_count}}
 
                   <span [hidden]="!item.private" class="octicon octicon-lock _gray item-right" style="margin-left:30px;font-size:medium;" item-right></span>
+
               </div>
+
           </button>
       </ion-list>
+    <!-- Scroll controller -->
+    <ion-infinite-scroll (ionInfinite)="loadScrolling($event)" threshold="100px">
+      <ion-infinite-scroll-content>
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
 </div>
 </ion-content>
 
 <ion-footer>
-<ion-toolbar position="bottom" *ngIf="dataLoaded && data.gm_pagination != null">
+<!--ion-toolbar position="bottom" *ngIf="dataLoaded && data.gm_pagination != null">
     <ion-buttons start>
         <button [disabled]="!pagination.first" [class._lightgray]="!pagination.first"
           (click)="paginationLoad(pagination.first)"
@@ -94,5 +103,5 @@
           <ion-icon name="ios-arrow-forward-outline" style="font-size:22pt"></ion-icon><ion-icon name="ios-arrow-forward-outline" style="font-size:22pt"></ion-icon>
         </button>
     </ion-buttons>
-</ion-toolbar>
+</ion-toolbar-->
 </ion-footer>

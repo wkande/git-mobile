@@ -23,7 +23,7 @@ export class ReposPage  extends PageClass{
   user:any;
   username:string;
   // DATA
-  data = {total_count:null, items:null, gm_pagination:null}; // TMP decalrations prevent compile warnings
+  data = {row:null, total_count:null, items:[], gm_pagination:null, next:null}; // TMP decalrations prevent compile warnings
   profileServiceData:any;
   pagination:any;
   lastPage = 0;
@@ -46,7 +46,7 @@ export class ReposPage  extends PageClass{
       this.searchValue = navParams.get('searchValue');
       this.trigger = (navParams.get('trigger') == null) ? 'affiliations-me-all': navParams.get('trigger');
       this.setURL();
-      this.load();
+      this.loadScrolling(null);
   }
 
 
@@ -86,8 +86,81 @@ export class ReposPage  extends PageClass{
 
   }
 
+  loadScrolling(infiniteScroll){
+    console.log('START loadScrolling >>>', event, this.data)
 
-  load(){
+      // Disable inifiniteScroll if no more data
+      if(infiniteScroll != null && this.data.next == null){
+          infiniteScroll.complete();
+          return;
+      }
+
+      var self = this;
+      var url = this.url;
+
+      // New load
+      if(infiniteScroll == null){
+          this.data.items = [];
+          this.startAsyncController(1, null, false);
+          if(this.trigger == 'affiliations-me-all' && this.type != 'all' && this.url.indexOf('?') > -1)
+              url = url+'&type='+this.type;
+          else if(this.trigger == 'affiliations-me-all' && this.type != 'all')
+              url = url+'?type='+this.type;
+      }
+      // Infinite scroll load
+      else{
+          this.startAsyncController(1, null, true);
+          url = this.data.next;
+      }
+
+
+      this.httpService.load(url, this.user)
+      .then((data:any) => {
+
+          // Pagination, need last page number
+          this.pagination = this.utils.formatPagination(data.gm_pagination);
+          this.data.next = this.pagination.next;
+          this.lastPage = (this.pagination.lastPageNumber == null) ? this.lastPage : this.pagination.lastPageNumber;
+
+          // Populate items
+          var row = this.data.items.length;
+          if(this.trigger == 'search'){
+              for(var i=0; i< data.items.length; i++){
+                  data.items[i].row = row++;
+                  this.data.items.push(data.items[i]);
+              }
+              this.data.total_count = data.total_count;
+          }
+          else{
+              for(var i=0; i< data.length; i++){
+                  data[i].row = row++;
+                  this.data.items.push(data[i]);
+              }
+              this.data.total_count = 0;
+          }
+
+          // Calc total found and total viewble
+          if(this.data.total_count <= (30 * this.lastPage) )
+              this.foundExcess = null;
+          else
+              this.foundExcess = 'Found '+this.data.total_count.toLocaleString('en')+'; Viewable '+(30 * this.lastPage).toLocaleString('en')+'; Please narrow the search.';
+          // Must follow above calcs or the math will fail
+          this.data.total_count = this.data.total_count.toLocaleString('en');
+
+          if(infiniteScroll != null){
+              infiniteScroll.complete();
+          }
+          this.asyncController(true, null);
+
+      }).catch(error => {
+          if(infiniteScroll != null){
+              infiniteScroll.complete();
+          }
+          this.asyncController(null, error);
+      });
+  }
+
+  /*loadxxxxxxxxx(){
       var self = this;
       this.startAsyncController(1, null);
       var url = this.url;
@@ -121,15 +194,15 @@ export class ReposPage  extends PageClass{
       }).catch(error => {
           this.asyncController(null, error);
       });
-  }
+  }*/
 
 
 
   // Load for pagination
-  paginationLoad(url){
+  /*paginationLoad(url){
       this.url = url;
       this.load();
-  }
+  }*/
 
 
   presentActionSheet() {
@@ -141,26 +214,26 @@ export class ReposPage  extends PageClass{
             handler: () => {
               this.trigger = 'owned-me';
               this.setURL();
-              this.load();}
+              this.loadScrolling(null);}
           },
           {
             text: 'Affiliations',
             handler: () => {
               this.trigger = 'affiliations-me-all';
               this.setURL();
-              this.load();}
+              this.loadScrolling(null);}
           },{
             text: 'Starred',
             handler: () => {
               this.trigger = 'starred-me';
               this.setURL();
-              this.load();}
+              this.loadScrolling(null);}
           },{
             text: "Watching",
             handler: () => {
               this.trigger = 'watching-me';
               this.setURL();
-              this.load();}
+              this.loadScrolling(null);}
           },{
             text: 'Search',
             handler: () => {

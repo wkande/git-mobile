@@ -21,8 +21,10 @@
             </ion-avatar>
             <h2>{{gist.description}}</h2>
             <p>Created: {{gist.created_at}} - {{gist.timeAgo}}</p>
+
         </ion-item>
 
+        <div class="_font-small _gray" style="margin-left:7px;margin-right:7px;">{{gist.description}}</div><br/>
         <ion-list>
 
             <button *ngIf="gist.owner" ion-item (click)="itemTapped($event, {view:'profile', username:gist.owner.login})" style="background-color:#f1f1f1;">
@@ -46,16 +48,21 @@
 
 
     <ion-list>
-      <button ion-item (click)="itemTapped($event, 'comments')">
-          Comments
-              <ion-badge class="_badge_lighter" style="float:right;">{{gist.comments}}</ion-badge>
-      </button>
+        <button ion-item (click)="itemTapped($event, 'comments')">
+            Comments
+                <ion-badge class="_badge_lighter" style="float:right;">{{gist.comments}}</ion-badge>
+        </button>
+    </ion-list>
 
-
+    <div style="width:100%;font-size: 12px;background-color: white;padding: 0 10px;text-align: center;">
+      Files
+    </div>
+    <ion-list style="margin-top:10px;">
         <button ion-item hef="#" *ngFor="let item of files" (click)="itemTapped($event, item)">
             {{item.name}}
         </button>
     </ion-list>
+
 </div>
 
 </ion-content>

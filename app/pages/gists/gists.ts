@@ -38,7 +38,7 @@ export class GistsPage extends PageClass{
       this.username = navParams.get('username');
       this.trigger = (navParams.get('trigger') == null) ? 'mine': navParams.get('trigger');
       this.setURL();
-      this.load();
+      this.loadScrolling(null);
   }
 
   setURL(){
@@ -61,7 +61,72 @@ export class GistsPage extends PageClass{
       }
   }
 
-  load(){
+
+  loadScrolling(infiniteScroll){
+
+      // Disable inifiniteScroll if no more data
+      if(infiniteScroll != null && this.data.next == null){
+          infiniteScroll.complete();
+          return;
+      }
+
+      var self = this;
+
+      // New load
+      if(infiniteScroll == null){
+          this.data = {}; // Jumps the view to the top
+          this.data.items = [];
+          this.startAsyncController(1, null, false);
+      }
+
+      else{ // Infinite scroll load
+          this.startAsyncController(1, null, true);
+          this.url = this.data.next;
+      }
+
+
+      //this.startAsyncController(1, null);
+      this.httpService.load(this.url, this.user)
+      .then((data:any) => {
+
+          this.pagination = self.utils.formatPagination(data.gm_pagination);
+          this.data.next = this.pagination.next;
+          this.lastPage = (this.pagination.lastPageNumber != null) ? this.pagination.lastPageNumber: this.lastPage;
+          this.data.gm_pagination = data.gm_pagination;
+
+          // Set data
+          var lastRow:number = this.data.items.length; // Last row in old data set
+          var row = this.data.items.length;
+          for(var i=0; i< data.length; i++){
+              data[i].row = row++;
+              this.data.items.push(data[i]);
+          }
+
+          console.log('this.data', this.data, lastRow, this.data.items.length)
+          for(var i=lastRow; i < this.data.items.length; i++){
+              console.log('this.data.items[i]', this.data.items[i])
+              this.data.items[i].timeAgo = self.utils.timeAgo(this.data.items[i].created_at);
+              if(!this.data.items[i].owner){ // Some gists do not have owner, /gists/public
+                  this.data.items[i].owner = {};
+                  this.data.items[i].owner.login = 'User unknown';
+                  this.data.items[i].owner.avatar_url = 'img/blank_avatar.png';
+              }
+
+          }
+
+          if(infiniteScroll != null){
+              infiniteScroll.complete();
+          }
+          this.asyncController(true, null);
+      }).catch(error => {
+          if(infiniteScroll != null){
+              infiniteScroll.complete();
+          }
+          this.asyncController(null, error);
+      });
+  }
+
+  /*loadxxxxxxx(){
       var self = this;
       this.data = {}; // Jumps the view to the top
       this.startAsyncController(1, null);
@@ -72,7 +137,8 @@ export class GistsPage extends PageClass{
           this.lastPage = (this.pagination.lastPageNumber != null) ? this.pagination.lastPageNumber: this.lastPage;
           this.data.gm_pagination = data.gm_pagination;
 
-          this.data.items = data;
+
+
           this.data.items.forEach(function(item){
               item.timeAgo = self.utils.timeAgo(item.created_at);
               if(!item.owner){ // Some gist do not have owner, /gists/public
@@ -85,17 +151,21 @@ export class GistsPage extends PageClass{
                 item.description = first;
               }
           })
+
+
+
+
           this.asyncController(true, null);
       }).catch(error => {
           this.asyncController(null, error);
       });
-  }
+  }*/
 
   // Load for pagination
-  paginationLoad(url){
+  /*paginationLoad(url){
       this.url = url;//.split('github.com')[1];
       this.load();
-  }
+  }*/
 
 
   presentActionSheet() {
@@ -107,19 +177,19 @@ export class GistsPage extends PageClass{
             handler: () => {
               this.trigger = 'mine';
               this.setURL();
-              this.load();}
+              this.loadScrolling(null);}
           },{
             text: 'Starred',
             handler: () => {
               this.trigger = 'starred-me';
               this.setURL();
-              this.load();}
+              this.loadScrolling(null);}
           },{
             text: 'Recent',
             handler: () => {
               this.trigger = 'recent';
               this.setURL();
-              this.load();}
+              this.loadScrolling(null);}
           },{
             text: 'Cancel',
             style: 'cancel',
