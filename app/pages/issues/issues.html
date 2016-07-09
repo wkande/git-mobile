@@ -43,6 +43,7 @@
 
               <ion-avatar item-left>
                   <img src="{{item.user.avatar_url}}">
+                  <span class="_font-small _gray" style="float:left;">{{item.row+1}}</span>
               </ion-avatar>
               <div class="_font-small  _gray">Creator: {{item.user.login}}</div>
               <div class="_font-small  _gray" *ngIf="item.assignee">Assignee: {{item.assignee.login}}</div>
@@ -51,10 +52,16 @@
               <div class="_font-small  _gray">Last: {{item.updated_at}}</div>
           </button>
       </ion-list>
+
+      <!-- Scroll controller -->
+      <ion-infinite-scroll (ionInfinite)="loadScrolling($event)" threshold="100px">
+        <ion-infinite-scroll-content>
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
 </div>
 </ion-content>
 
-<ion-footer>
+<!--ion-footer>
   <ion-toolbar position="bottom" *ngIf="dataLoaded && data.gm_pagination != null">
       <ion-buttons start>
           <button [disabled]="!pagination.first" [class._lightgray]="!pagination.first"
@@ -82,4 +89,4 @@
           </button>
       </ion-buttons>
   </ion-toolbar>
-</ion-footer>
+</ion-footer-->

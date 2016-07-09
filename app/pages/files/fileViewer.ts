@@ -28,10 +28,11 @@ export class FileViewerPage extends PageClass{
   content:any;
   description:string;
   fileType:number;// 0=text, 1=image, 2=binary
+  lastCommitted:string;
+  commitMsg:string;
 
   // URLS
   url: string;
-
 
 
 
@@ -44,13 +45,17 @@ export class FileViewerPage extends PageClass{
       this.repo = navParams.get('repo')
       this.branchTagName = (navParams.get('branchTagName') == null) ? 'origin': navParams.get('branchTagName');
       this.user = navParams.get('user');
+      this.lastCommitted = navParams.get('lastCommitted');
+      this.commitMsg = navParams.get('commitMsg');
 
-      if(this.trigger == 'readme'){
+
+      /*if(this.trigger == 'readme'){
           this.description = '';
           this.url = 'https://api.github.com/repos/'+this.repo.owner.login+'/'+this.repo.name+'/readme';
           this.loadMD();
       }
-      else if(this.trigger == 'gist-file'){
+      else */
+      if(this.trigger == 'gist-file'){
           this.description = navParams.get('gistFileName');
           this.gistName = navParams.get('gistName');
           this.content = this.prepContent(navParams.get('content'));
@@ -70,39 +75,30 @@ export class FileViewerPage extends PageClass{
       this.startAsyncController(1, null);
       this.httpService.load(this.url, this.user)
       .then((data: any) => {
-        console.log("------------------- load --------------------", JSON.stringify(data))
           this.file = data;
           this.description = '/'+data.path;
 
           //this.file.content = new Buffer(this.file.content, 'base64').toString();
 
-          // Safari does not like the \n that may be at teh end of the file,
+          // Safari does not like the \n that may be at the end of the file,
           // need to end with =
           this.file.content = this.file.content.replace(/\n/g, '')
 
-          console.log('+++++++++++++++++++++++++++++++++++')
-          //console.log(JSON.stringify(this.b64DecodeUnicode(this.file.content)))
-console.log('ready to convert atob')
           this.file.content = atob(this.file.content).toString();
 
 
-
-
-console.log('ready to check file type')
           if(this.isText(this.file.content)){ // IS TEXT
-              console.log(">>>>>>>>>>>>>>>>>>>>>>>>> TEXT")
               console.log(JSON.stringify(this.file.content))
               this.fileType = 0;
               self.content = this.prepContent(this.file.content);
           }
-          else if (this.isImage(this.file.content)){ // IS IMAGE
-            console.log(">>>>>>>>>>>>>>>>>>>>>>>>> IMAGE")
+          else if (this.isImage(this.file.path)){ // IS IMAGE
               this.fileType = 1;
           }
           else{ // IS BINARY
-            console.log(">>>>>>>>>>>>>>>>>>>>>>>>> BINARY")
               this.fileType = 2;
           }
+
           this.asyncController(true, null);
       }).catch(error => {
           this.asyncController(null, error);
@@ -113,7 +109,7 @@ console.log('ready to check file type')
     return Array.from(str).reverse().join("")
   }
 
-  loadMD(){
+  /*loadMD(){
       this.startAsyncController(1, null);
       this.httpService.loadMediaHtml(this.url, this.user)
       .then((data: any) => {
@@ -124,11 +120,11 @@ console.log('ready to check file type')
       }).catch(error => {
           this.asyncController(null, error);
       });
-  }
+  }*/
 
-  hexToBase64(str) {
+  /*hexToBase64(str) {
       return btoa(String.fromCharCode.apply(null, str.replace(/\r|\n/g, "").replace(/([\da-fA-F]{2}) ?/g, "0x$1 ").replace(/ +$/, "").split(" ")));
-  }
+  }*/
 
   isText(content){
     console.log('checking if text')
@@ -142,12 +138,24 @@ console.log('ready to check file type')
       return true;
   }
 
-  isImage(content){
-    var str = content.substr(0,30).toLowerCase();
-      if( str.indexOf('png') > -1 ||
-          str.indexOf('gif') > -1 ||
-          str.indexOf('jpeg') > -1 ||
-          str.indexOf('jpg') > -1){
+  /*isMD(path){
+      // Split out the path for the file extension
+      var arr = path.split('/');
+      var last = arr[arr.length-1];
+      if( last.toLowerCase().indexOf('md') > -1){
+          return true;
+      }
+      return false;
+  }*/
+
+  isImage(path){
+      // Split out the path for the file extension
+      var arr = path.split('/');
+      var last = arr[arr.length-1];
+      if( last.toLowerCase().indexOf('png') > -1 ||
+          last.toLowerCase().indexOf('gif') > -1 ||
+          last.toLowerCase().indexOf('jpeg') > -1 ||
+          last.toLowerCase().indexOf('jpg') > -1){
           return true;
       }
       return false;
@@ -181,10 +189,10 @@ console.log('ready to check file type')
 
 
   // https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding
-  b64DecodeUnicode(str) {
+  /*b64DecodeUnicode(str) {
       return decodeURIComponent(Array.prototype.map.call(atob(str), function(c) {
           return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
       }).join(''));
-  }
+  }*/
 
 }

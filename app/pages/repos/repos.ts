@@ -87,9 +87,8 @@ export class ReposPage  extends PageClass{
   }
 
   loadScrolling(infiniteScroll){
-    console.log('START loadScrolling >>>', event, this.data)
 
-      // Disable inifiniteScroll if no more data
+      // Disable infiniteScroll if no more data
       if(infiniteScroll != null && this.data.next == null){
           infiniteScroll.complete();
           return;

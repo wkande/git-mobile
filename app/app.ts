@@ -120,7 +120,7 @@ class MyApp {
       else if(page == 'gists')
           this.nav.setRoot(GistsPage, {user:this.user});
       else if(page == 'roadmap')
-          this.nav.setRoot(RoadmapPage);
+          this.nav.setRoot(RoadmapPage, {user:this.user});
       //else
           //nav.setRoot(page.component, {title:page.title, action:page.action, user:this.user});
   }

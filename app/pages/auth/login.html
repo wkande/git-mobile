@@ -2,24 +2,55 @@
 <ion-content>
   <br/><br/>
 
-  <p class="_gray" style="width:100%;margin:0px auto;text-align:center;">
+  <!--p class="_gray" style="width:100%;margin:0px auto;text-align:center;">
     <img src="img/icon-50.png">
 
     <br/>
     Welcome to Git Mobile<br/>the mobile GitHub client.</p>
-  <br/><br/>
+  <br/><br/-->
+
+
+  <ion-list>
+    <ion-item>
+      <ion-avatar item-left>
+        <img src="img/icon-50.png">
+      </ion-avatar>
+      <div>
+          Git Mobile
+          <div class="_gray _font-small">A mobile GitHub client<br/>
+          by Wyoming Software.</div>
+      </div>
+      <a class="_font-small" clear item-right href="http://www.wyomingsoftware.com">Visit Website</a>
+    </ion-item>
+
+    <ion-item>
+      <ion-avatar item-left>
+        <span class="octicon octicon-mark-github item-left" style="font-size:28pt;"></span>
+      </ion-avatar>
+      <div>
+        GitHub
+        <div class="_gray _font-small">Online project hosting using Git.</div>
+
+
+          <!--Learn more about GitHub at<br/> their website.-->
+      </div>
+      <a class="_font-small" clear item-right href="https://www.github.com">Visit Website</a>
+    </ion-item>
+  </ion-list>
+
+
   <ion-list>
 
-    <div style="width:300px;margin:0px auto;text-align:center;">
-      <span class="octicon octicon-mark-github item-left" style="font-size:12pt;"></span>
-
-      Login to get started
+    <div class="_gray _font-large" style="width:300px;margin:90px auto;text-align:center;">
+      <!--span class="octicon octicon-mark-github item-left" style="font-size:12pt;"></span-->
+      Login to get started.
     </div>
   </ion-list>
 
+
 <!-- http://www.gajotres.net/ionic-2-how-o-create-and-validate-forms/2/ -->
 <!-- https://github.com/Gajotres/Ionic2FormValidation/blob/master/app/pages/form/form.js -->
-<form [ngFormModel]="authForm" (ngSubmit)="onSubmit(authForm.value)" novalidate>
+<form [ngFormModel]="authForm" (ngSubmit)="onSubmit(authForm.value)" novalidate style="margin-top:-90px;">
         <ion-item [class.error]="!username.valid && username.touched">
             <ion-label floating>Username</ion-label>
             <ion-input type="email"  value="" [ngFormControl]="username"></ion-input>

@@ -21,7 +21,7 @@ export class IssuesPage extends PageClass{
   repo:any;
 
   // DATA
-  data: any;
+  data = {row:null, total_count:null, items:[], gm_pagination:null, next:null}; // TMP declarations prevent compile warnings
   pagination:any;
   lastPage = 0;
   state = 'open';
@@ -44,7 +44,7 @@ export class IssuesPage extends PageClass{
       this.repo = navParams.get('repo');
       this.searchValue = navParams.get('searchValue');
       this.setURL();
-      this.load();
+      this.loadScrolling(null);
   }
 
 
@@ -77,9 +77,86 @@ export class IssuesPage extends PageClass{
           // looks in all three stated fields.
           this.url = '/search/issues?q='+this.searchValue+" type:issue";
       }
+      this.url = 'https://api.github.com'+this.url;
   }
 
-  load(){
+
+  loadScrolling(infiniteScroll){
+      // Disable infiniteScroll if no more data
+      if(infiniteScroll != null && this.data.next == null){
+        console.log('setting scroll to complete')
+          infiniteScroll.complete();
+          return;
+      }
+
+      var self = this;
+      var url = this.url;
+
+      // New load
+      if(infiniteScroll == null){
+          this.data.items = [];
+          if(this.state != 'all'){
+              url = url.replace('+state:___', '+state:'+this.state);
+          }
+          else{
+              url = url.replace('+state:___', '');
+          }
+          this.startAsyncController(1, null, false);
+      }
+      // InfiniteScroll load
+      else{
+          this.startAsyncController(1, null, true);
+          url = this.data.next;
+      }
+
+      this.httpService.load(url, this.user)
+      .then((data:any) => {
+          //console.log(data)
+
+          // Pagination, need last page number
+          this.pagination = this.utils.formatPagination(data.gm_pagination);
+          this.data.next = this.pagination.next;
+          this.lastPage = (this.pagination.lastPageNumber == null) ? this.lastPage : this.pagination.lastPageNumber;
+
+          //// Populate items
+          var row = this.data.items.length;
+          for(var i=0; i< data.items.length; i++){
+              data.items[i].row = row++;
+              this.data.items.push(data.items[i]);
+          }
+          this.data.total_count = data.total_count;
+
+          if(this.data.total_count <= (30 * this.lastPage) || this.lastPage == 0)
+              this.foundExcess = null;
+          else
+              this.foundExcess = 'Found '+this.data.total_count.toLocaleString('en')+'; Viewable '+(30 * this.lastPage).toLocaleString('en')+'; Please narrow the search.';
+          // Must follow above calcs or the math will fail
+          this.data.total_count = this.data.total_count.toLocaleString('en');
+
+          // Parse out repo name
+          this.data.items.forEach(function(item){
+              var arr = item.repository_url.split('/');
+              item.repository = {};
+              item.repository.name = arr[arr.length-1];
+              item.created_at = self.utils.formatDate(item.created_at);
+              item.updated_at = self.utils.formatDate(item.updated_at);
+          });
+
+          if(infiniteScroll != null){
+              infiniteScroll.complete();
+          }
+
+          this.asyncController(true, null);
+      }).catch(error => {
+          if(infiniteScroll != null){
+              infiniteScroll.complete();
+          }
+          this.asyncController(null, error);
+      });
+  }
+
+
+  loadxxxxxxxxxx(){
       var self = this;
       this.startAsyncController(1, null);
 
@@ -126,14 +203,14 @@ export class IssuesPage extends PageClass{
   // Open, Closed, All
   tabLoad(){
       this.setURL();
-      this.load();
+      this.loadScrolling(null);
   }
 
   // Load for pagination
-  paginationLoad(url){
+  /*paginationLoad(url){
       this.url = url.split('github.com')[1];
       this.load();
-  }
+  }*/
 
 
   presentActionSheet() {
@@ -144,22 +221,22 @@ export class IssuesPage extends PageClass{
             text: 'Assigned',
             handler: () => {
               this.trigger = 'assigned-me';
-              this.setURL(); this.load();}
+              this.setURL(); this.loadScrolling(null);}
           },{
             text: 'Created',
             handler: () => {
               this.trigger = 'created-me';
-              this.setURL(); this.load();}
+              this.setURL(); this.loadScrolling(null);}
           },{
             text: 'Mentioned',
             handler: () => {
               this.trigger = 'mentioned-me';
-              this.setURL(); this.load();}
+              this.setURL(); this.loadScrolling(null);}
           },{
             text: 'Commented',
             handler: () => {
               this.trigger = 'commented-me';
-              this.setURL(); this.load();}
+              this.setURL(); this.loadScrolling(null);}
           },{
             text: 'Search',
             handler: () => {

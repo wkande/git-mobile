@@ -11,11 +11,14 @@
 
       <div class="octicon octicon-versions _center-text" style="font-size:64pt;margin:auto;width:100%;"></div>
 
-          <h3 class="_center-text">{{version}}</h3>
+          <h3 class="_center-text">{{version}}-beta</h3>
           <br/>
           <p class="_gray _font-small _left-text">
             We have a long list
-            of functionality to roll into our release schedule. If you would like to comment or make a suggestion
+            of functionality to roll into our release schedule. The plan is to have a continuous 45 day release
+            cycle and add something from the functionality list shown below.
+
+            <br/><br/>If you would like to comment or make a suggestion
             head over to GitHub <a href="https://github.com/WyomingSoftware/git-mobile-for-github">
               wyomingsoftware/git-mobile-for-github</a> where you can submit a GitHub Issue.
           </p>
@@ -31,8 +34,15 @@
                   <li class="_gray _font-small _left-text">Code (view)</li>
                   <li class="_gray _font-small _left-text">Gists (view, recent)</li>
               </ul>
+
               <br/>
-              <li class="_font-small _left-text">In Development</li>
+              <li class="_font-small _left-text">Next Release</li>
+              <ul>
+                  <li class="_gray _font-small _left-text">Pull Requests (view)</li>
+              </ul>
+
+              <br/>
+              <li class="_font-small _left-text">Roadmap</li>
               <ul>
                   <li class="_gray _font-small _left-text">Issues (create, edit)</li>
                   <li class="_gray _font-small _left-text">Events (view)</li>
@@ -52,6 +62,12 @@
           <p class="_gray _font-small _left-text">Everything in version 1x is read only. Look to version 2x to implement
             write capabilities such as "create issues" and more.</p>
           <br/>
+
+          <ion-list>
+              <button ion-item (click)="itemTapped($event)" style="height:60px;">
+                  Wyoming Software Team Members
+              </button>
+          </ion-list>
 
 </ion-content>
 

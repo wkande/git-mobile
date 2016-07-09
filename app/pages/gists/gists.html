@@ -25,7 +25,7 @@
               <span class="_font-small _gray">{{item.owner.login}}</span>
               <ion-avatar item-left>
                   <img src="{{item.owner.avatar_url}}">
-                  <span class="_font-small _gray" style="margin-top:-50px;float:left;">{{item.row+1}}</span>
+                  <span class="_font-small _gray" style="float:left;">{{item.row+1}}</span>
               </ion-avatar>
 
               <div *ngIf="trigger == 'recent'" class="_gray _font-small">{{item.timeAgo}}</div>
@@ -33,6 +33,7 @@
               <span [hidden]="item.public" class="octicon octicon-gist-secret _gray" style="font-size:x-large;" item-right></span>
           </button>
       </ion-list>
+
       <!-- Scroll controller -->
       <ion-infinite-scroll (ionInfinite)="loadScrolling($event)" threshold="100px">
         <ion-infinite-scroll-content>

@@ -64,7 +64,7 @@ export class GistsPage extends PageClass{
 
   loadScrolling(infiniteScroll){
 
-      // Disable inifiniteScroll if no more data
+      // Disable infiniteScroll if no more data
       if(infiniteScroll != null && this.data.next == null){
           infiniteScroll.complete();
           return;

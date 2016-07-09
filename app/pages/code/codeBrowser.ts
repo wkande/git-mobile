@@ -142,7 +142,14 @@ export class CodeBrowserPage extends PageClass{
           this.load(this.branchTagName, item.path);
       }
       else{
-          this.nav.push(FileViewerPage, {user:this.user, repo: this.repo, path:item.path, branchTagName:this.branchTagName});
+          this.nav.push(FileViewerPage,
+            {user:this.user,
+            repo: this.repo,
+            path:item.path,
+            lastCommitted:item.lastCommitted,
+            commitMsg:item.commitMsg,
+            branchTagName:this.branchTagName}
+          );
       }
   }
 

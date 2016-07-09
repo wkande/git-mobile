@@ -23,7 +23,7 @@ export class UsersPage extends PageClass{
   description: string;
 
   // DATA
-  data: any;
+  data = {row:null, total_count:null, items:[], gm_pagination:null, next:null}; // TMP declarations prevent compile warnings
   pagination:any;
   lastPage = 0;
   foundExcess:string;
@@ -44,11 +44,15 @@ export class UsersPage extends PageClass{
       this.repo = navParams.get('repo');
       this.searchValue = navParams.get('searchValue');
       this.setUrl();
-      this.load();
+      this.loadScrolling(null);
   }
 
   setUrl(){
-      if(this.trigger == 'followers'){
+      if(this.trigger == 'wyosoft-members'){ //called by the roadmap page
+          this.description = 'Wyoming Software Team Members:';
+          this.url = 'https://api.github.com/orgs/WyomingSoftware/members';
+      }
+      else if(this.trigger == 'followers'){
           this.description = 'Followers of: '+ this.username ;
           this.url = 'https://api.github.com/users/'+this.username+'/followers';
       }
@@ -88,7 +92,7 @@ export class UsersPage extends PageClass{
           this.description = 'Search: '+this.searchValue;
           // ISSUE
           // Adding the fields for email,fullname,login seems to limit the search,
-          // fullname is not alsway serached
+          // fullname is not allwas serached
           //
           // +" in:email,fullname,login"
           // adam location:cheyenne
@@ -98,7 +102,78 @@ export class UsersPage extends PageClass{
   }
 
 
-  load(){
+  loadScrolling(infiniteScroll){
+      // Disable infiniteScroll if no more data
+      if(infiniteScroll != null && this.data.next == null){
+          infiniteScroll.complete();
+          return;
+      }
+
+      var self = this;
+
+      // New load
+      if(infiniteScroll == null){
+          this.data.items = [];
+          this.startAsyncController(1, null, false);
+      }
+      // Infinite scroll load
+      else{
+          this.startAsyncController(1, null, true);
+          this.url = this.data.next;
+      }
+
+      this.httpService.load(this.url, this.user)
+      .then((data:any) => {
+          this.pagination = this.utils.formatPagination(data.gm_pagination);
+          this.data.next = this.pagination.next;
+          this.lastPage = (this.pagination.lastPageNumber == null) ? this.lastPage : this.pagination.lastPageNumber;
+
+          this.data.gm_pagination = data.gm_pagination;
+
+          // Populate items
+          var row = this.data.items.length;
+          if(this.trigger == 'search') {
+              for(var i=0; i< data.items.length; i++){
+                  data.items[i].row = row++;
+                  this.data.items.push(data.items[i]);
+              }
+              this.data.total_count = data.total_count;
+          }
+          else {
+              for(var i=0; i< data.length; i++){
+                  data[i].row = row++;
+                  this.data.items.push(data[i]);
+              }
+              this.data.total_count = 0; // outside of a search we do not have the total_count
+              if(this.trigger == 'orgs' || this.trigger == 'orgs-me' ){
+                  this.data.items.forEach(function(entry) {
+                      entry.type = 'Organization';
+                  });
+              }
+          }
+
+          if(this.data.total_count <= (30 * this.lastPage)  || this.lastPage == 0)
+              this.foundExcess = null;
+          else
+              this.foundExcess = 'Found '+this.data.total_count.toLocaleString('en')+'; Viewable '+(30 * this.lastPage).toLocaleString('en')+'; Please narrow the search.';
+          // Must follow above calcs or the math will fail
+          this.data.total_count = this.data.total_count.toLocaleString('en');
+
+          if(infiniteScroll != null){
+              infiniteScroll.complete();
+          }
+
+          this.asyncController(true, null);
+      }).catch(error => {
+          if(infiniteScroll != null){
+              infiniteScroll.complete();
+          }
+          this.asyncController(null, error);
+      });
+  }
+
+
+  /*loadxxxx(){
       var self = this;
       this.startAsyncController(1, null);
       this.httpService.load(this.url, this.user)
@@ -133,14 +208,14 @@ export class UsersPage extends PageClass{
       }).catch(error => {
           this.asyncController(null, error);
       });
-  }
+  }*/
 
 
   // Load for pagination
-  paginationLoad(url){
+  /*paginationLoad(url){
       this.url = url;
       this.load();
-  }
+  }*/
 
 
   presentActionSheet() {
@@ -152,20 +227,20 @@ export class UsersPage extends PageClass{
               handler: () => {
                 this.trigger = "following-me";
                 this.setUrl();
-                this.load();}
+                this.loadScrolling(null);}
             },{
               text: 'Followers',
               handler: () => {
                 this.trigger = "followers-me";
                 this.setUrl();
-                this.load();}
+                this.loadScrolling(null);}
             },{
               text: 'Organizations',
               handler: () => {
                 this.trigger = "orgs-me";
                 this.username = this.user.login;
                 this.setUrl();
-                this.load();}
+                this.loadScrolling(null);}
             },{
               text: 'Search',
               handler: () => {

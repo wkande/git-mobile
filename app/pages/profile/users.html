@@ -20,19 +20,26 @@
       <div class="_description" padding>{{description}} <small *ngIf="trigger=='search'">({{data.total_count}})</small></div>
       <div class="_description" padding item-wrap *ngIf="foundExcess != null"><small>{{foundExcess}}</small></div>
       <ion-list>
-          <button ion-item *ngFor="let item of data.items" (click)="itemTapped($event, item)">
+          <button ion-item *ngFor="let item of data.items" (click)="itemTapped($event, item)" style="height:60px;">
               {{item.login}}
               <br/>
               <ion-avatar item-left>
                   <img src="{{item.avatar_url}}">
+                  <span class="_font-small _gray" style="float:left;">{{item.row+1}}</span>
               </ion-avatar>
               <p item-right>{{item.type}}</p>
           </button>
       </ion-list>
+
+      <!-- Scroll controller -->
+      <ion-infinite-scroll (ionInfinite)="loadScrolling($event)" threshold="100px">
+        <ion-infinite-scroll-content>
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
 </div>
 </ion-content>
 
-<ion-footer>
+<!--ion-footer>
   <ion-toolbar position="bottom" *ngIf="dataLoaded && data.gm_pagination != null">
       <ion-buttons start>
           <button [disabled]="!pagination.first" [class._lightgray]="!pagination.first"
@@ -61,4 +68,4 @@
           </button>
       </ion-buttons>
   </ion-toolbar>
-</ion-footer>
+</ion-footer-->

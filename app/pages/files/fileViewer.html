@@ -11,16 +11,22 @@
     <gm-error [error]="error"></gm-error>
     <gm-spinner [spinner]="spinner"></gm-spinner>
     <div  *ngIf="dataLoaded">
-      <div class="_description">{{description}}</div>
+      <div class="_center-text">{{description}}</div>
 
       <div *ngIf="repo != null" class="_font-small _bold _center-text _gray">{{repo.name}}</div>
       <div *ngIf="repo != null" class="_font-small _bold _center-text _gray">{{branchTagName}}</div>
       <div *ngIf="gistName != null" class="_font-small _bold _center-text _gray">{{gistName}}</div>
 
+      <span *ngIf="repo != null">
+        <hr/> <div class="_center-text">Last commit</div>
+        <div *ngIf="lastCommitted != null" class="_font-small _bold _center-text _gray">{{lastCommitted}}</div>
+        <div *ngIf="commitMsg != null" class="_font-small _bold _center-text _gray">{{commitMsg}}</div>
+      </span>
+
     <hr/>
 
-    <div *ngIf="trigger == 'readme'" padding [innerHTML]="content">
-    </div>
+    <!--div *ngIf="trigger == 'readme'" padding [innerHTML]="content">
+    </div-->
 
     <ion-scroll *ngIf="fileType==0" scrollX="true" style="font-family:monospace;font-size:medium;color:gray;
         overflow-x: auto;
@@ -33,9 +39,9 @@
 
     <div *ngIf="fileType==2" class="_center-text">
       <br/><br/>
-      <span class="octicon octicon-file-binary item-left" style="font-size:32pt;"></span>
+      <span class="octicon octicon-file-binary item-left" style="font-size:52pt;"></span>
       <br/>
-      This file is binary and cannot be displayed inline.
+      <span class="_gray">This file is binary and cannot be displayed inline.</span>
     </div>
 
     <hr/>

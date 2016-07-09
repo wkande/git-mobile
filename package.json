@@ -27,7 +27,7 @@
     "run-sequence": "1.1.5"
   },
   "name": "Git-Mobile",
-  "description": "A mobile GitHub client.",
+  "description": "A GitHub mobile client.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/WyomingSoftware/git-mobile-for-github"
