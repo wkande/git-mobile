@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.wyomingsoftware.git-mobile" version="0.9.1" ios-CFBundleVersion="0.9.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.wyomingsoftware.gitmobile" android-packageName="com.wyomingsoftware.gitmobile" ios-CFBundleIdentifier="com.wyomingsoftware.git-mobile" version="0.9.2" ios-CFBundleVersion="0.9.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>Git-Mobile</name>
   <description>A mobile GitHub client.</description>
   <author email="supportme@wyomingsoftware.com" href="http://www.wyomingsoftware.com/">Wyoming Software</author>
@@ -68,7 +68,10 @@
   <preference name="android-minSdkVersion" value="16"/>
   <preference name="BackupWebStorage" value="none"/>
   <preference name="SplashScreen" value="screen"/>
-  <preference name="SplashScreenDelay" value="3000"/>
+  <!--preference name="SplashScreenDelay" value="3000"/-->
+  <!--preference name="SplashScreenDelay" value="500"/>
+  <preference name="FadeSplashScreenDuration" value="2000"/-->
+
   <feature name="StatusBar">
     <param name="ios-package" onload="true" value="CDVStatusBar"/>
   </feature>
@@ -76,7 +79,7 @@
   <plugin name="cordova-plugin-device" spec="~1.1.2"/>
   <plugin name="cordova-plugin-console" spec="~1.0.3"/>
   <plugin name="cordova-plugin-whitelist" spec="~1.2.2"/>
-  <plugin name="cordova-plugin-splashscreen" spec="~3.1.0"/>
+  <plugin name="cordova-plugin-splashscreen" spec="~4.0.0"/>
   <plugin name="cordova-plugin-statusbar" spec="~2.1.3"/>
   <plugin name="ionic-plugin-keyboard" spec="~2.2.1"/>
 </widget>
