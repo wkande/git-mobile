@@ -37,8 +37,8 @@
 
 
     <div [ngSwitch]="segmentPane" *ngIf="loadedTags && loadedBranches">
-        <div *ngSwitchWhen="'branches'">
-          <ion-searchbar [(ngModel)]="searchBranches" (input)="getBranchItems($event)"></ion-searchbar>
+        <div *ngSwitchCase="'branches'">
+          <ion-searchbar [(ngModel)]="searchBranches" (ionInput)="getBranchItems($event)"></ion-searchbar>
 
             <ion-list >
                 <a ion-item *ngFor="let item of branchItems" href="#" (click)="itemSelected(item)">
@@ -47,8 +47,8 @@
             </ion-list>
         </div>
 
-        <ion-list *ngSwitchWhen="'tags'">
-          <ion-searchbar [(ngModel)]="searchTags" (input)="getTagItems($event)"></ion-searchbar>
+        <ion-list *ngSwitchCase="'tags'">
+          <ion-searchbar [(ngModel)]="searchTags" (ionInput)="getTagItems($event)"></ion-searchbar>
             <a ion-item *ngFor="let item of tagItems" href="#" (click)="itemSelected(item)">
               {{item.name}}
             </a>

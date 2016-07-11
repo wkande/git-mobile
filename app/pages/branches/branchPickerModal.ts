@@ -75,7 +75,7 @@ export default class BranchPickerModal extends PageClass{
         this.branchItems = this.branches;
 
         // set q to the value of the searchbar
-        var q = searchbar.value;
+        var q = searchbar.target.value;
 
         // if the value is an empty string don't filter the items
         if (q.trim() == '') {
@@ -95,7 +95,7 @@ export default class BranchPickerModal extends PageClass{
         // Reset items back to all of the items
         this.tagItems = this.tags;
         // set q to the value of the searchbar
-        var q = searchbar.value;
+        var q = searchbar.target.value;
         // if the value is an empty string don't filter the items
         if (q.trim() == '') {
           return;
