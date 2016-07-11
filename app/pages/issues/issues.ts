@@ -75,7 +75,7 @@ export class IssuesPage extends PageClass{
           this.description = 'Search: '+this.searchValue;
           // NOTICE, in "in" quaifier does not see to work right, omit it and the seach still
           // looks in all three stated fields.
-          this.url = '/search/issues?q='+this.searchValue+" type:issue";
+          this.url = '/search/issues?q='+this.searchValue.toLowerCase()+" type:issue";
       }
       this.url = 'https://api.github.com'+this.url;
   }

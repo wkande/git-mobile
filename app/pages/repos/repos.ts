@@ -81,7 +81,7 @@ export class ReposPage  extends PageClass{
       }
       else if(this.trigger == 'search'){
           this.description = 'Search: '+this.searchValue;
-          this.url = 'https://api.github.com/search/repositories?q='+this.searchValue+" in:name,description,readme";
+          this.url = 'https://api.github.com/search/repositories?q='+this.searchValue.toLowerCase()+" in:name,description,readme";
       }
 
   }

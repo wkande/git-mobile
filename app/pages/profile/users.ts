@@ -97,7 +97,7 @@ export class UsersPage extends PageClass{
           // +" in:email,fullname,login"
           // adam location:cheyenne
           //
-          this.url = 'https://api.github.com/search/users?q='+this.searchValue;
+          this.url = 'https://api.github.com/search/users?q='+this.searchValue.toLowerCase();
       }
   }
 
