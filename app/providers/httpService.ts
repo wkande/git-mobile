@@ -60,6 +60,7 @@ export class HttpService {
         this.header = new Headers();
         this.header.set('Authorization', user.auth);
         this.header.set('Content-Type', 'application/json'); // Used by POSTS
+        this.header.set('Accept', 'application/vnd.github.v3+json');
 
         return new Promise(function(resolve, reject) {
             self.http.get('https://api.github.com/users/'+username, {headers:self.header})
@@ -116,6 +117,7 @@ export class HttpService {
         this.header = new Headers();
         this.header.set('Authorization', user.auth);
         this.header.set('Content-Type', 'application/json'); // Used by POSTS
+        this.header.set('Accept', 'application/vnd.github.v3+json');
         return new Promise(function(resolve, reject) {
             self.http.post('https://api.github.com/markdown', JSON.stringify(body), {headers:self.header})
             .subscribe(res => {
