@@ -38,6 +38,7 @@ export class HttpService {
                   data.gm_contentType = res.headers.get('Content-Type');
                   resolve(data);
               }, error => {
+                console.log("ERR",error)
                   reject( buildError(error) );
               }, () => {
                 ;
@@ -152,6 +153,14 @@ function buildError(error){
         err.status = 400;
         err.message = `Network timeout or bad request. Most likely
         the internet is not accessable. Please try again later.`;
+    }
+    else if(error.status == 422){ // Some searches require exact qualifiers with permissions
+        err.status = error.status;
+        err.message = error.statusText;
+        if(err.message = "Unprocessable entity"){
+            err.message += ": Try fixing the qualifier string if this is a search. The requested resource"+
+            "may not exist or you may not have permission to view them.";
+        }
     }
     else{
         err.status = error.status;
