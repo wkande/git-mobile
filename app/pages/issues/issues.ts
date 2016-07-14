@@ -214,41 +214,89 @@ export class IssuesPage extends PageClass{
 
 
   presentActionSheet() {
-      let actionSheet = ActionSheet.create({
-        title: 'Issues',
-        buttons: [
-          {
-            text: 'Assigned',
-            handler: () => {
-              this.trigger = 'assigned-me';
-              this.setURL(); this.loadScrolling(null);}
-          },{
-            text: 'Created',
-            handler: () => {
-              this.trigger = 'created-me';
-              this.setURL(); this.loadScrolling(null);}
-          },{
-            text: 'Mentioned',
-            handler: () => {
-              this.trigger = 'mentioned-me';
-              this.setURL(); this.loadScrolling(null);}
-          },{
-            text: 'Commented',
-            handler: () => {
-              this.trigger = 'commented-me';
-              this.setURL(); this.loadScrolling(null);}
-          },{
-            text: 'Search',
-            handler: () => {
-              this.nav.push(SearchPage, {triggered_for:'issues2', user:this.user});
-            }
-          },{
-            text: 'Cancel',
-            style: 'cancel',
-            handler: () => {;}
-          }
-        ]
-      });
+
+      let actionSheet:any;
+      if(this.repo){
+            actionSheet = ActionSheet.create({
+              title: 'Issues',
+              buttons: [
+                {
+                  text: this.repo.name,
+                  handler: () => {
+                    this.trigger = 'repo';
+                    this.setURL(); this.loadScrolling(null);}
+                },
+                {
+                  text: 'Assigned',
+                  handler: () => {
+                    this.trigger = 'assigned-me';
+                    this.setURL(); this.loadScrolling(null);}
+                },{
+                  text: 'Created',
+                  handler: () => {
+                    this.trigger = 'created-me';
+                    this.setURL(); this.loadScrolling(null);}
+                },{
+                  text: 'Mentioned',
+                  handler: () => {
+                    this.trigger = 'mentioned-me';
+                    this.setURL(); this.loadScrolling(null);}
+                },{
+                  text: 'Commented',
+                  handler: () => {
+                    this.trigger = 'commented-me';
+                    this.setURL(); this.loadScrolling(null);}
+                },{
+                  text: 'Search',
+                  handler: () => {
+                    this.nav.push(SearchPage, {triggered_for:'issues2', user:this.user});
+                  }
+                },{
+                  text: 'Cancel',
+                  style: 'cancel',
+                  handler: () => {;}
+                }
+              ]
+            });
+      }
+      else{
+            actionSheet = ActionSheet.create({
+              title: 'Issues',
+              buttons: [
+                {
+                  text: 'Assigned',
+                  handler: () => {
+                    this.trigger = 'assigned-me';
+                    this.setURL(); this.loadScrolling(null);}
+                },{
+                  text: 'Created',
+                  handler: () => {
+                    this.trigger = 'created-me';
+                    this.setURL(); this.loadScrolling(null);}
+                },{
+                  text: 'Mentioned',
+                  handler: () => {
+                    this.trigger = 'mentioned-me';
+                    this.setURL(); this.loadScrolling(null);}
+                },{
+                  text: 'Commented',
+                  handler: () => {
+                    this.trigger = 'commented-me';
+                    this.setURL(); this.loadScrolling(null);}
+                },{
+                  text: 'Search',
+                  handler: () => {
+                    this.nav.push(SearchPage, {triggered_for:'issues2', user:this.user});
+                  }
+                },{
+                  text: 'Cancel',
+                  style: 'cancel',
+                  handler: () => {;}
+                }
+              ]
+            });
+
+      }
       this.nav.present(actionSheet);
   }
 
