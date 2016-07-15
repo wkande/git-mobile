@@ -20,7 +20,7 @@ export class IssueCommentsPage extends PageClass{
   comments:any;
   events:any;
   issue:any;
-  
+
 
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService, private utils: Utils) {
       super();
@@ -35,10 +35,8 @@ export class IssueCommentsPage extends PageClass{
   }
 
   loadComments(){
-      console.log("| >>> IssueCommentsPage.loadComments: ", this.issue.comments_url);
       this.httpService.load(this.issue.comments_url, this.user)
       .then((data:any) => {
-          console.log('COMMENTS', data)
           this.comments = data;
           this.asyncController(true, null);
       }).catch(error => {
@@ -47,10 +45,8 @@ export class IssueCommentsPage extends PageClass{
   }
 
   loadEvents(){
-      console.log("| >>> IssueCommentsPage.loadEvents: ", this.issue.events_url);
       this.httpService.load(this.issue.events_url, this.user)
       .then((data:any) => {
-          console.log('EVENTS', data)
           this.events = data;
           this.asyncController(true, null);
       }).catch(error => {
@@ -114,7 +110,6 @@ export class IssueCommentsPage extends PageClass{
                     e.icon = 'octicon-person';
                 }
                 else if(event.event == 'assigned'){
-                  console.log('+++++++++++++++++++++++++++++++++++++++++++++')
                     e.icon = 'octicon-person';
                     e.event = 'assigned to '+event.assignee.login;
                 }
@@ -161,7 +156,6 @@ export class IssueCommentsPage extends PageClass{
 
             this.spinner.flag = false;
             this.dataLoaded = true;
-            console.log('ITEMS', this.items)
         }
     }
   }

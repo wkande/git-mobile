@@ -51,7 +51,6 @@ export class CodeBrowserPage extends PageClass{
   load(ref, path){
       if (ref != 'canceled'){ // Modal may send canceled
           this.branchTagName = ref;
-          console.log(path)
           this.path = path;
           this.local.set('lastBranchTag', ref);
           if(path == null)

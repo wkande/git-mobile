@@ -45,7 +45,6 @@ export class LoginPage extends PageClass{
             this.httpService.load('https://api.github.com/user', user)
             .then((data:any) => {
                   var profile = this.profileService.set(value.username, value.password, data.name, data.avatar_url, data.url);
-                  console.log('DATA', data)
                   this.nav.setRoot(ReposPage, {user:profile});
                   this.events.publish('user:connected', {});
               }).catch(error => {

@@ -102,9 +102,7 @@ export class GistsPage extends PageClass{
               this.data.items.push(data[i]);
           }
 
-          console.log('this.data', this.data, lastRow, this.data.items.length)
           for(var i=lastRow; i < this.data.items.length; i++){
-              console.log('this.data.items[i]', this.data.items[i])
               this.data.items[i].timeAgo = self.utils.timeAgo(this.data.items[i].created_at);
               if(!this.data.items[i].owner){ // Some gists do not have owner, /gists/public
                   this.data.items[i].owner = {};

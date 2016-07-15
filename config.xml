@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.wyomingsoftware.gitmobile" android-packageName="com.wyomingsoftware.gitmobile" ios-CFBundleIdentifier="com.wyomingsoftware.git-mobile" version="0.9.3" ios-CFBundleVersion="0.9.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.wyomingsoftware.gitmobile" android-packageName="com.wyomingsoftware.gitmobile" ios-CFBundleIdentifier="com.wyomingsoftware.git-mobile" version="1.0.0" ios-CFBundleVersion="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>Git-Mobile</name>
   <description>A mobile GitHub client.</description>
   <author email="supportme@wyomingsoftware.com" href="http://www.wyomingsoftware.com/">Wyoming Software</author>

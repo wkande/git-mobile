@@ -88,7 +88,6 @@ export class FileViewerPage extends PageClass{
 
 
           if(this.isText(this.file.content)){ // IS TEXT
-              console.log(JSON.stringify(this.file.content))
               this.fileType = 0;
               self.content = this.prepContent(this.file.content);
           }
@@ -127,7 +126,6 @@ export class FileViewerPage extends PageClass{
   }*/
 
   isText(content){
-    console.log('checking if text')
       for (var x = 0; x < content.length; x++)
       {
           var c = content.charCodeAt(x);
