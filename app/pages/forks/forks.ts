@@ -2,7 +2,7 @@ import {NavController, NavParams} from 'ionic-angular';
 import {Component} from '@angular/core';
 import {HttpService} from '../../providers/httpService.ts';
 import {Utils} from '../../providers/utils.ts';
-import {ReposPage} from '../repos/repos';
+import {RepoDetailPage} from '../repos/repoDetail';
 import {GmError} from '../../components/gm-error';
 import {GmSpinner} from '../../components/gm-spinner';
 import {PageClass} from '../../extendables/page';
@@ -97,8 +97,8 @@ export class ForksPage extends PageClass{
 
 
   itemTapped(event, item) {
-    this.nav.push(ReposPage, {user:this.user,
-      repo: this.repo
+    this.nav.push(RepoDetailPage, {user:this.user,
+      repo: item
     });
   }
 }

@@ -37,12 +37,12 @@
 
       <ion-list>
           <button ion-item *ngFor="let item of data.items" (click)="itemTapped($event, item)">
-              <h4>{{item.name}}</h4>
+              <h3>{{item.owner.login}}</h3>
               <ion-avatar item-left>
                   <img src="{{item.owner.avatar_url}}">
                   <span class="_font-small _gray" style="float:left;">{{item.row+1}}</span>
               </ion-avatar>
-              <span class="_font-medium _gray">{{item.owner.login}}</span>
+              <span class="_font-medium _gray">{{item.name}}</span>
 
               <div style="margin-top:5px;">
 
