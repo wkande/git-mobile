@@ -23,7 +23,7 @@ export class ReleasesPage extends PageClass{
   username:string;
   repo:any;
   // DATA
-  data: any;
+  data = {row:null, items:[], gm_pagination:null, next:null, published:null}; // TMP declarations prevent compile warnings
   pagination:any;
   lastPage = 0;
   description:string;
@@ -34,13 +34,11 @@ export class ReleasesPage extends PageClass{
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService,
          private utils: Utils) {
       super();
-      console.log('\n\n| >>> +++++++++++++ ReleaasesPage.constructor +++++++++++++++');
-      console.log(navParams)
       this.user = navParams.get('user');
       this.repo = navParams.get('repo');
       this.trigger = (navParams.get('trigger') == null) ? 'repo': navParams.get('trigger');
       this.setURL();
-      this.load();
+      this.loadScrolling(null);
   }
 
 
@@ -53,31 +51,55 @@ export class ReleasesPage extends PageClass{
   }
 
 
-  load(){
+  loadScrolling(infiniteScroll){
+      // Disable infiniteScroll if no more data
+      if(infiniteScroll != null && this.data.next == null){
+        console.log('setting scroll to complete')
+          infiniteScroll.complete();
+          return;
+      }
       var self = this;
-      this.startAsyncController(1, null);
-      this.data = {}; // Jumps the view to the top
+
+      // New load
+      if(infiniteScroll == null){
+          //this.data = {}; // Jumps the view to the top
+          this.startAsyncController(1, null, false);
+      }
+      // InfiniteScroll load
+      else{
+          this.startAsyncController(1, null, true);
+          this.url = this.data.next;
+      }
+
       this.httpService.load(this.url, this.user)
       .then((data:any) => {
-          this.pagination = self.utils.formatPagination(data.gm_pagination);
-          this.lastPage = (this.pagination.lastPageNumber != null) ? this.pagination.lastPageNumber: this.lastPage;
+          // Pagination, need last page number
+          this.pagination = this.utils.formatPagination(data.gm_pagination);
+          this.data.next = this.pagination.next;
+          this.lastPage = (this.pagination.lastPageNumber == null) ? this.lastPage : this.pagination.lastPageNumber;
           this.data.gm_pagination = data.gm_pagination;
 
-          this.data.items = data;
-          this.data.items.forEach(function(item){
-            item.published = (item.published_at == null) ? null : self.utils.formatDate(item.published_at);
-          })
+          //this.data.items = data;
+
+          // Populate items
+          var row = this.data.items.length;
+          for(var i=0; i< data.length; i++){
+              data[i].row = row++;
+              data[i].published = (data[i].published_at == null) ? null : self.utils.formatDate(data[i].published_at);
+              this.data.items.push(data[i]);
+          }
+
+          if(infiniteScroll != null){
+              infiniteScroll.complete();
+          }
+
           this.asyncController(true, null);
       }).catch(error => {
+          if(infiniteScroll != null){
+              infiniteScroll.complete();
+          }
           this.asyncController(null, error);
       });
-  }
-
-
-  // Load for pagination
-  paginationLoad(url){
-      this.url = url;//.split('github.com')[1];
-      this.load();
   }
 
 
