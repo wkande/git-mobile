@@ -43,7 +43,7 @@ export class RepoDetailPage extends PageClass{
 
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService,
         private utils: Utils) {
-      super();console.log(navParams)
+      super();
       new Storage(LocalStorage).set('lastBranchTag', 'master');
       this.user = navParams.get('user');
       this.repo = navParams.get('repo');
@@ -63,11 +63,13 @@ export class RepoDetailPage extends PageClass{
       this.items.push({title: 'Watchers', note: null, icon: null, badgeWatchers:true});
   }
 
+
   ngOnInit() {
       this.startAsyncController(2, null);
       this.loadProfile();
       this.loadReadme();
   }
+
 
   loadProfile(){
       this.httpService.getProfile(this.repo.owner.login, this.user)

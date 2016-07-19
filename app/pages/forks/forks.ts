@@ -32,7 +32,6 @@ export class ForksPage extends PageClass{
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService,
          private utils: Utils) {
       super();
-      console.log(navParams)
       this.user = navParams.get('user');
       this.repo = navParams.get('repo');
       this.setURL();
