@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-navbar primary>
+    <button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Forks</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+<gm-error [error]="error"></gm-error>
+<gm-spinner [spinner]="spinner"></gm-spinner>
+<div *ngIf="dataLoaded">
+
+      <ion-card>
+          <ion-item>
+              <ion-avatar item-left>
+                <span class="octicon octicon-repo-forked item-left" style="font-size:32pt;"></span>
+              </ion-avatar>
+              <h2>{{repo.full_name}}</h2>
+              <p>Total forks: {{repo.forks_count}}</p>
+          </ion-item>
+      </ion-card>
+
+      <div padding *ngIf="data.items.length == 0">
+      <ion-card class="_center-text">
+          <ion-card-content>
+          There are no forks.
+          </ion-card-content>
+      </ion-card>
+      </div>
+
+
+
+
+
+      <ion-list>
+          <button ion-item *ngFor="let item of data.items" (click)="itemTapped($event, item)">
+              <h4>{{item.name}}</h4>
+              <ion-avatar item-left>
+                  <img src="{{item.owner.avatar_url}}">
+                  <span class="_font-small _gray" style="float:left;">{{item.row+1}}</span>
+              </ion-avatar>
+              <span class="_font-medium _gray">{{item.owner.login}}</span>
+
+              <div style="margin-top:5px;">
+
+                  <div class="_gray _font-x-small" style="float:left;">
+                      {{item.created}}
+                      <span [hidden]="!item.private" class="octicon octicon-lock _gray item-right" style="margin-left:30px;font-size:medium;" item-right></span>
+                  </div>
+              </div>
+
+          </button>
+      </ion-list>
+
+      <!-- Scroll controller -->
+      <ion-infinite-scroll (ionInfinite)="loadScrolling($event)" threshold="100px">
+        <ion-infinite-scroll-content>
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+
+</div>
+</ion-content>
