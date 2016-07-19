@@ -26,9 +26,6 @@
           <ion-segment-button value="closed">
             Closed
           </ion-segment-button>
-          <!--ion-segment-button value="all">
-            All
-          </ion-segment-button-->
       </ion-segment>
       <div class="_description" item-wrap *ngIf="foundExcess != null"><small>{{foundExcess}}</small></div>
 
@@ -60,33 +57,3 @@
       </ion-infinite-scroll>
 </div>
 </ion-content>
-
-<!--ion-footer>
-  <ion-toolbar position="bottom" *ngIf="dataLoaded && data.gm_pagination != null">
-      <ion-buttons start>
-          <button [disabled]="!pagination.first" [class._lightgray]="!pagination.first"
-            (click)="paginationLoad(pagination.first)"
-            style="width:46px;">
-            <ion-icon name="ios-arrow-back-outline" style="font-size:22pt"></ion-icon><ion-icon name="ios-arrow-back-outline" style="font-size:22pt"></ion-icon>
-          </button>
-          <button [disabled]="!pagination.prev" [class._lightgray]="!pagination.prev"
-            (click)="paginationLoad(pagination.prev)"
-            style="width:46px;">
-            <ion-icon name="ios-arrow-back-outline"></ion-icon>
-          </button>
-      </ion-buttons>
-      <ion-title>{{pagination.currPageNumber}} of {{lastPage}}</ion-title>
-      <ion-buttons end>
-          <button [disabled]="!pagination.next" [class._lightgray]="!pagination.next"
-            (click)="paginationLoad(pagination.next)"
-            style="width:46px;">
-            <ion-icon name="ios-arrow-forward-outline"></ion-icon>
-          </button>
-          <button [disabled]="!pagination.last" [class._lightgray]="!pagination.last"
-            (click)="paginationLoad(pagination.last)"
-            style="width:46px;">
-            <ion-icon name="ios-arrow-forward-outline" style="font-size:22pt"></ion-icon><ion-icon name="ios-arrow-forward-outline" style="font-size:22pt"></ion-icon>
-          </button>
-      </ion-buttons>
-  </ion-toolbar>
-</ion-footer-->

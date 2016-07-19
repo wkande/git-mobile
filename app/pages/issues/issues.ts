@@ -8,13 +8,15 @@ import {PageClass} from '../../extendables/page';
 import {IssueDetailPage} from './issueDetail';
 import {SearchPage} from '../search/search';
 
+
 @Component({
   templateUrl: 'build/pages/issues/issues.html',
   providers: [HttpService, Utils],
   directives: [GmError, GmSpinner]
 })
-export class IssuesPage extends PageClass{
 
+
+export class IssuesPage extends PageClass{
   // PARAMS > DATA
   user:any;
   trigger:string;
@@ -37,8 +39,6 @@ export class IssuesPage extends PageClass{
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService,
           private utils: Utils) {
       super();
-      console.log('\n\n| >>> +++++++++++++ IssuesPage.constructor +++++++++++++++');
-      console.log(navParams);
       this.user = navParams.get('user');
       this.trigger = (navParams.get('trigger') == null) ? 'assigned-me': navParams.get('trigger');
       this.repo = navParams.get('repo');
@@ -49,7 +49,6 @@ export class IssuesPage extends PageClass{
 
 
   setURL(){
-      //console.log('setURL', this.trigger)
       if (this.trigger == 'created-me' ){
           this.description = "Created by Me";
           this.url = '/search/issues?q=+type:issue+state:___+author:'+this.user.login;
@@ -84,7 +83,6 @@ export class IssuesPage extends PageClass{
   loadScrolling(infiniteScroll){
       // Disable infiniteScroll if no more data
       if(infiniteScroll != null && this.data.next == null){
-        console.log('setting scroll to complete')
           infiniteScroll.complete();
           return;
       }
@@ -111,14 +109,12 @@ export class IssuesPage extends PageClass{
 
       this.httpService.load(url, this.user)
       .then((data:any) => {
-          //console.log(data)
-
           // Pagination, need last page number
           this.pagination = this.utils.formatPagination(data.gm_pagination);
           this.data.next = this.pagination.next;
           this.lastPage = (this.pagination.lastPageNumber == null) ? this.lastPage : this.pagination.lastPageNumber;
 
-          //// Populate items
+          // Populate items
           var row = this.data.items.length;
           for(var i=0; i< data.items.length; i++){
               data.items[i].row = row++;
@@ -156,65 +152,14 @@ export class IssuesPage extends PageClass{
   }
 
 
-  loadxxxxxxxxxx(){
-      var self = this;
-      this.startAsyncController(1, null);
-
-      var url = this.url;
-      if(this.state != 'all'){
-          url = url.replace('+state:___', '+state:'+this.state);
-      }
-      else{
-          url = url.replace('+state:___', '');
-      }
-      //console.log("| >>> IssuesPage.load: ", url);
-
-      this.httpService.load('https://api.github.com'+url, this.user)
-      .then((data:any) => {
-          //console.log(data)
-          this.pagination = this.utils.formatPagination(data.gm_pagination);
-          this.lastPage = (this.pagination.lastPageNumber == null) ? this.lastPage : this.pagination.lastPageNumber;
-          this.data = data;
-
-          if(this.data.total_count <= (30 * this.lastPage) || this.lastPage == 0)
-              this.foundExcess = null;
-          else
-              this.foundExcess = 'Found '+this.data.total_count.toLocaleString('en')+'; Viewable '+(30 * this.lastPage).toLocaleString('en')+'; Please narrow the search.';
-          // Must follow above calcs or the math will fail
-          this.data.total_count = this.data.total_count.toLocaleString('en');
-
-          // Parse out repo name
-          this.data.items.forEach(function(item){
-              var arr = item.repository_url.split('/');
-              item.repository = {};
-              item.repository.name = arr[arr.length-1];
-              item.created_at = self.utils.formatDate(item.created_at);
-              item.updated_at = self.utils.formatDate(item.updated_at);
-          });
-          //console.log(this.pagination)
-          this.asyncController(true, null);
-      }).catch(error => {
-          this.asyncController(null, error);
-      });
-  }
-
-
-
   // Open, Closed, All
   tabLoad(){
       this.setURL();
       this.loadScrolling(null);
   }
 
-  // Load for pagination
-  /*paginationLoad(url){
-      this.url = url.split('github.com')[1];
-      this.load();
-  }*/
-
 
   presentActionSheet() {
-
       let actionSheet:any;
       if(this.repo){
             actionSheet = ActionSheet.create({
