@@ -33,7 +33,7 @@ export class HttpService {
             self.http.get(url, {headers:self.header})
             .timeout(5000, new Error('The server did not respond in a timely manner.'))
             .subscribe(res => {
-                  console.log(res);
+                  //console.log(res);
                   var data = res.json();
                   console.log(data);
                   data.gm_pagination = res.headers.get('Link');
