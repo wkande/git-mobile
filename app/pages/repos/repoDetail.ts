@@ -6,6 +6,7 @@ import {CodeBrowserPage} from '../../pages/code/codeBrowser';
 import {ProfilePage} from '../profile/profile';
 import {IssuesPage} from '../issues/issues';
 import {ReleasesPage} from '../releases/releases';
+import {ForksPage} from '../forks/forks';
 import {FileViewerPage} from '../../pages/files/fileViewer';
 import {UsersPage} from '../profile/users';
 import {GmError} from '../../components/gm-error';
@@ -42,7 +43,7 @@ export class RepoDetailPage extends PageClass{
 
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService,
         private utils: Utils) {
-      super();
+      super();console.log(navParams)
       new Storage(LocalStorage).set('lastBranchTag', 'master');
       this.user = navParams.get('user');
       this.repo = navParams.get('repo');
@@ -57,6 +58,7 @@ export class RepoDetailPage extends PageClass{
       this.items.push({title: 'Code', note: null, icon: null});
       this.items.push({title: 'Issues', note: null, icon: null, badgeIssues:true});
       this.items.push({title: 'Releases', note: null, icon: null});
+      this.items.push({title: 'Forks', note: null, icon: null, badgeForks:true});
       this.items.push({title: 'Stargazers', note: null, icon: null, badgeStargazers:true});
       this.items.push({title: 'Watchers', note: null, icon: null, badgeWatchers:true});
   }
@@ -102,6 +104,9 @@ export class RepoDetailPage extends PageClass{
       else if(item.title == "Releases"){
           this.nav.push(ReleasesPage, {trigger:'repo', user:this.user, repo:this.repo}  );
       }
+      else if(item.title == "Forks"){
+          this.nav.push(ForksPage, {user:this.user, repo:this.repo}  );
+      }
       else if(item.title == 'Stargazers'){
           this.nav.push(UsersPage, {trigger:'stargazers', user:this.user, repo: this.repo});
       }
@@ -112,5 +117,5 @@ export class RepoDetailPage extends PageClass{
             this.nav.push(FileViewerPage, {trigger:'readme', user:this.user, repo: this.repo});
       }
   }
-  
+
 }

@@ -17,7 +17,16 @@
 <gm-spinner [spinner]="spinner"></gm-spinner>
 <div *ngIf="dataLoaded">
 
-      <div class="_description" padding>{{description}} <small *ngIf="trigger=='search'">({{data.total_count}})</small></div>
+    <ion-card>
+        <ion-item>
+            <ion-avatar item-left>
+              <span class="octicon octicon-organization item-left" style="font-size:32pt;"></span>
+            </ion-avatar>
+            <h2>{{description}}</h2>
+        </ion-item>
+    </ion-card>
+
+      <!--div class="_description" padding>{{description}} <small *ngIf="trigger=='search'">({{data.total_count}})</small></div-->
       <div class="_description" padding item-wrap *ngIf="foundExcess != null"><small>{{foundExcess}}</small></div>
       <ion-list>
           <button ion-item *ngFor="let item of data.items" (click)="itemTapped($event, item)" style="height:60px;">

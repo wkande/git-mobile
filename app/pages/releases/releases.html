@@ -13,13 +13,21 @@
 <gm-spinner [spinner]="spinner"></gm-spinner>
 <div *ngIf="dataLoaded">
 
-      <div class="_description" padding>{{description}}</div>
-      <div padding>
-      <ion-card *ngIf="data.items.length == 0" class="_center-text">
-          <ion-card-content>
-          There are no releases.
-          </ion-card-content>
+      <ion-card>
+          <ion-item>
+              <ion-avatar item-left>
+                <span class="octicon octicon-tag item-left" style="font-size:32pt;"></span>
+              </ion-avatar>
+              <h2>{{repo.full_name}}</h2>
+          </ion-item>
       </ion-card>
+
+      <div padding *ngIf="data.items.length == 0">
+        <ion-card class="_center-text">
+            <ion-card-content>
+            There are no releases.
+            </ion-card-content>
+        </ion-card>
       </div>
 
       <ion-list>

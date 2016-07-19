@@ -1,6 +1,5 @@
-import {Modal, NavController, NavParams, ActionSheet} from 'ionic-angular';
+import {NavController, NavParams} from 'ionic-angular';
 import {Component} from '@angular/core';
-import {OnInit} from '@angular/core';
 import {HttpService} from '../../providers/httpService.ts';
 import {Utils} from '../../providers/utils.ts';
 import {ReleaseDetailPage} from './releaseDetail';
@@ -43,7 +42,6 @@ export class ReleasesPage extends PageClass{
 
 
   setURL(){
-      //console.log('setURL', this.trigger)
       if (this.trigger == 'repo' ){
           this.description = this.repo.name;
           this.url = 'https://api.github.com/repos/'+this.repo.owner.login+'/'+this.repo.name+'/releases';

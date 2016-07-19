@@ -23,7 +23,23 @@
 <gm-spinner [spinner]="spinner"></gm-spinner>
 <div *ngIf="dataLoaded">
 
-      <div class="_font-medium _center-text _gray">{{repo.name}}</div>
+      <ion-card>
+          <ion-item>
+              <ion-avatar item-left>
+                <span class="octicon octicon-code item-left" style="font-size:32pt;"></span>
+              </ion-avatar>
+              <h2>{{repo.full_name}}</h2>
+
+
+              <div class="_font-medium _gray" >
+                <button small *ngIf="history.length > 1" (click)="goBack($event)" style="margin-top:0px;width:35px;">
+                <ion-icon name="arrow-back"></ion-icon>
+              </button>
+              {{branchTagName}}/{{path}}</div>
+          </ion-item>
+      </ion-card>
+
+      <!--div class="_font-medium _center-text _gray">{{repo.name}}</div>
 
       <div class="_font-medium _center-text _gray" style="margin-bottom:7px;">{{branchTagName}}</div>
 
@@ -31,7 +47,7 @@
         <button small *ngIf="history.length > 1" (click)="goBack($event)" style="margin-top:-7px;">
         <ion-icon name="arrow-back"></ion-icon>
       </button>
-      /{{path}}</div>
+      /{{path}}</div-->
 
 
       <ion-list>

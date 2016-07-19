@@ -45,11 +45,15 @@
       <ion-list>
           <a ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
             {{item.title}}
-            <span *ngIf="item.badgeIssues" class="_gray"style="float:right;font-size:small;">open
+            <!-- Right now this count includes pull requests -->
+            <!--span *ngIf="item.badgeIssues" class="_gray"style="float:right;font-size:small;">open
               <ion-badge class="_badge_lighter">
                   {{repo.open_issues_count}}
               </ion-badge>
-            </span>
+            </span-->
+            <ion-badge *ngIf="item.badgeForks" class="_badge_lighter"style="float:right;">
+                  {{repo.forks_count}}
+            </ion-badge>
             <ion-badge *ngIf="item.badgeWatchers" class="_badge_lighter" style="float:right;">
                   {{repo.watchers_count}}
             </ion-badge>

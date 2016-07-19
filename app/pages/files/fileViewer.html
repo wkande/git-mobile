@@ -11,14 +11,30 @@
     <gm-error [error]="error"></gm-error>
     <gm-spinner [spinner]="spinner"></gm-spinner>
     <div  *ngIf="dataLoaded">
-      <div class="_center-text">{{description}}</div>
 
-      <div *ngIf="repo != null" class="_font-small _bold _center-text _gray">{{repo.name}}</div>
-      <div *ngIf="repo != null" class="_font-small _bold _center-text _gray">{{branchTagName}}</div>
-      <div *ngIf="gistName != null" class="_font-small _bold _center-text _gray">{{gistName}}</div>
+      <ion-card *ngIf="repo != null">
+          <ion-item>
+              <ion-avatar item-left>
+                <span *ngIf="fileType==0"  class="octicon octicon-file-text item-left" style="font-size:32pt;"></span>
+                <span *ngIf="fileType!=0"  class="octicon octicon-file-binary item-left" style="font-size:32pt;"></span>
+              </ion-avatar>
+              <h2 >{{repo.full_name}}</h2>
+              <div class="_font-medium _gray">{{branchTagName}}/{{path}}</div>
+          </ion-item>
+      </ion-card>
+
+      <ion-card *ngIf="gistName != null">
+          <ion-item>
+              <ion-avatar item-left>
+                <span class="octicon octicon-file-text item-left" style="font-size:32pt;"></span>
+              </ion-avatar>
+              <h2>{{gistName}}</h2>
+              <div class="_font-medium _gray">{{description}}</div>
+          </ion-item>
+      </ion-card>
 
       <span *ngIf="repo != null">
-        <hr/> <div class="_center-text">Last commit</div>
+        <div class="_center-text">Last commit</div>
         <div *ngIf="lastCommitted != null" class="_font-small _bold _center-text _gray">{{lastCommitted}}</div>
         <div *ngIf="commitMsg != null" class="_font-small _bold _center-text _gray">{{commitMsg}}</div>
       </span>
