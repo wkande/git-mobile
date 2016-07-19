@@ -39,8 +39,6 @@ export class ReposPage  extends PageClass{
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService,
           private profileService: ProfileService, private utils: Utils) {
       super();
-      console.log('\n\n| >>> +++++++++++++ ReposPage.constructor +++++++++++++++');
-      console.log(navParams)
       this.user = navParams.get('user');
       this.username = navParams.get('username');
       this.searchValue = navParams.get('searchValue');
@@ -158,50 +156,6 @@ export class ReposPage  extends PageClass{
           this.asyncController(null, error);
       });
   }
-
-  /*loadxxxxxxxxx(){
-      var self = this;
-      this.startAsyncController(1, null);
-      var url = this.url;
-      if(this.trigger == 'affiliations-me-all' && this.type != 'all' && this.url.indexOf('?') > -1)
-          url = url+'&type='+this.type;
-      else if(this.trigger == 'affiliations-me-all' && this.type != 'all')
-          url = url+'?type='+this.type;
-
-      this.httpService.load(url, this.user)
-      .then((data:any) => {
-          this.pagination = this.utils.formatPagination(data.gm_pagination);
-          this.lastPage = (this.pagination.lastPageNumber == null) ? this.lastPage : this.pagination.lastPageNumber;
-          this.data.gm_pagination = data.gm_pagination;
-          if(this.trigger == 'search'){
-              this.data.items = data.items;
-              this.data.total_count = data.total_count;
-          }
-          else{
-              this.data.items = data;
-              this.data.total_count = 0;
-          }
-
-          if(this.data.total_count <= (30 * this.lastPage) )
-              this.foundExcess = null;
-          else
-              this.foundExcess = 'Found '+this.data.total_count.toLocaleString('en')+'; Viewable '+(30 * this.lastPage).toLocaleString('en')+'; Please narrow the search.';
-          // Must follow above calcs or the math will fail
-          this.data.total_count = this.data.total_count.toLocaleString('en');
-
-          this.asyncController(true, null);
-      }).catch(error => {
-          this.asyncController(null, error);
-      });
-  }*/
-
-
-
-  // Load for pagination
-  /*paginationLoad(url){
-      this.url = url;
-      this.load();
-  }*/
 
 
   presentActionSheet() {
