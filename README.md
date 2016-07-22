@@ -1,8 +1,23 @@
-### Git  Mobile Private Repo
+<div style="float:left;margin-right:15px;margin-top:15px;">![](images/icon.png)</div>
 
-A mobile GitHub client.
+# Git Mobile
+#### <span style="color:gray;">A GitHub client build by Wyoming Software.</span>
 
-### Copyright
 
-&#169; Copyright 2016 Wyoming Software, Inc.
-All Rights Reserved
+
+
+<br/>
+## Ionic Framework
+
+Git-Mobile is built using the Ionic framework (version 2).
+
+http://www.ionicframework.com
+
+
+
+## Documentation
+
+Documentation is maintained using gh-pages, a branch of this repository.
+
+[](http://wkande.github.io/git-mobile/)
+http://wkande.github.io/git-mobile/
