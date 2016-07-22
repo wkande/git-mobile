@@ -1,6 +1,6 @@
 
 ![](https://github.com/wkande/git-mobile/raw/master/images/icon.png)
-# Git Mobile
+# Git-Mobile
 A GitHub mobile client build by Wyoming Software using the Ionic Framework (version 2).
 
 
