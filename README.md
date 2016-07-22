@@ -1,17 +1,9 @@
 
-<img style="float:left;margin-right:15px;" src="https://github.com/wkande/git-mobile/raw/master/images/icon.png">
+![](https://github.com/wkande/git-mobile/raw/master/images/icon.png)
 # Git Mobile
-#### <span style="color:gray;">A GitHub client build by Wyoming Software.</span>
+A GitHub mobile client build by Wyoming Software using the Ionic Framework (version 2).
 
 
-
-
-<br/>
-## Ionic Framework
-
-Git-Mobile is built using the Ionic framework (version 2).
-
-http://www.ionicframework.com
 
 
 
@@ -27,4 +19,4 @@ http://wkande.github.io/git-mobile/
 
 Let us know what you think supportme@wyosoft.com. Please report issues and enhancement
 requests using this repository's Issue Tracker. And visit us on the web at
-http://www.wyomingsoftware,com.
+http://www.wyomingsoftware.com.
