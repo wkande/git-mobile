@@ -1,8 +1,6 @@
 /**
- * Copyright 2016 Wyoming Software, Inc.
- * All Rights Reserved
- *
- * If you have gotten this far you've gone to far.
+ * Author: Warren Anderson
+ * Company: Wyoming Software, Inc.
  */
 
 import {ionicBootstrap, App, MenuController, Platform, Events, Nav} from 'ionic-angular';
@@ -20,12 +18,12 @@ import {ProfileService} from './providers/profileService.ts';
 import {Component, Type, ViewChild, enableProdMode} from '@angular/core';
 
 
-
-
 @Component({
   templateUrl: 'build/app.html',
   providers: [ProfileService]
 })
+
+
 class MyApp {
 
   @ViewChild(Nav) nav: Nav;
@@ -33,6 +31,16 @@ class MyApp {
   user: any;
   rootPage: any;
 
+
+  /**
+   * Class constructor.
+   * @param  {App}            app            - Ionic App, this app
+   * @param  {Platform}       platform       - Ionic Platorm provider
+   * @param  {ProfileService} profileService - Git-Mobile Profile provider
+   * @param  {Events}         events         - ionic events provider
+   * @param  {MenuController} menu           - Ionic menu controller
+   * @return nothing
+   */
   constructor(
     private app: App,
     private platform: Platform,
@@ -48,12 +56,16 @@ class MyApp {
       });
   }
 
+  /**
+   * Init app. If the user is not logged in the login page is presented. Otherwise
+   * the user is taken to their list of repositories. The user:connected event is
+   * subscribed to, this drives whether the side menu is available or not.
+   * @return {none}
+   */
   initializeApp() {
       this.platform.ready().then(() => {
-          //let nav = this.app.getComponent('nav');
-
           // IMPORTANT *** IMPORTANT
-          // For some reason if there is no console output here the emualtor and ios
+          // For some reason if there is no console output here the emulator and ios
           // device hangs with a white screen
           console.log('DO NOT REMOVE THIS MESSAGE >>> STARTUP');
           if (this.user == null){
@@ -81,31 +93,39 @@ class MyApp {
           // First, let's hide the keyboard accessory bar (only works natively) since
           // that's a better default:
           //
-          //Keyboard.setAccessoryBarVisible(false);
+          // Keyboard.setAccessoryBarVisible(false);
           //
           // For example, we might change the StatusBar color. This one below is
           // good for dark backgrounds and light text:
-          //StatusBar.styleDefault();
-          //StatusBar.setStyle(StatusBar.LIGHT_CONTENT)
+          // StatusBar.styleDefault();
+          // StatusBar.setStyle(StatusBar.LIGHT_CONTENT)
       });
 
   }
 
-
+  /**
+   * Responds to the logout selection in the side menu. Moves the users to the
+   * login page. The side menu becomes inactive until the user logs in.
+   * @return nothing
+   */
   logOut(){
-      this.menu.close(); //.app.getComponent('leftMenu').close();
+      this.menu.close();
       this.connected = false;
       this.profileService.remove();
       this.user = null;
-      //let nav = this.app.getComponent('nav');
       this.nav.setRoot(LoginPage);
   }
 
+
+  /**
+   * Responds to items tapped in the side menu.
+   * @param  {string} page - Name of the page to navigate to
+   * @return nothing
+   */
   openPage(page) {
-      // close the menu when clicking a link from the menu
-      this.menu.close(); //.app.getComponent('leftMenu').close();
-      // navigate to the new page if it is not the current page
-      //let nav = this.app.getComponent('nav');
+      // Close the menu when clicking a link from the menu
+      this.menu.close();
+      // Navigate to the new page if it is not the current page
       if(page == 'profile')
           this.nav.setRoot(ProfilePage, {trigger:'me', user:this.user, username:this.user.login} );
       else if(page == 'search')
@@ -120,9 +140,20 @@ class MyApp {
           this.nav.setRoot(GistsPage, {user:this.user});
       else if(page == 'roadmap')
           this.nav.setRoot(RoadmapPage, {user:this.user});
-      //else
-          //nav.setRoot(page.component, {title:page.title, action:page.action, user:this.user});
   }
 }
+
+
+/**
+ * Enable angular production mode.
+ * @return nothing
+ */
 enableProdMode();
+
+
+/**
+ * Bootstrap the app.
+ * @param  {App} MyApp - This Ionic app.
+ * @return nothing
+ */
 ionicBootstrap(MyApp);

@@ -15,3 +15,14 @@ PHONE MOCKUPS
 mockuphone.com
 
 //-------------------------------
+ios-deploy may fail to install on El Capitan.
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!! WARNING: You are on OS X 10.11 El Capitan, you may need to add the
+!!!! WARNING:   `--unsafe-perm=true` flag when running `npm install`
+!!!! WARNING:   or else it will fail.
+!!!! WARNING: link:
+!!!! WARNING:   https://github.com/phonegap/ios-deploy#os-x-1011-el-capitan
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+sudo npm install -g ios-deploy --unsafe-perm=true

@@ -1,3 +1,8 @@
+/**
+ * Author: Warren Anderson
+ * Compnay: Wyoming Software, Inc.
+ */
+
 import {Injectable} from '@angular/core';
 import {Http, Headers} from '@angular/http';
 import {Utils} from './utils.ts';
@@ -5,12 +10,20 @@ import 'rxjs/add/operator/timeout';
 
 /**
  * Injectable to fire GitHub APIs
- * @return {Object} exported clas
+ * @return {Object} exported class
  */
 @Injectable()
 export class HttpService {
 
+    baseURL:string = 'https://api.github.com';
+
+
     constructor(private http: Http) {
+    }
+
+
+    getBaseURL = function(){
+        return this.baseURL;
     }
 
 
@@ -108,8 +121,8 @@ export class HttpService {
      * Calls the MD to HTML convertor @GitHub. Returns the HTML of the MD file
      * as a JSON object.
      *
-     * @param  {string} md md contents
-     * @return {JSON}    the data or error object
+     * @param  {string}   - md md contents
+     * @return {JSON}     - The data or error object
      */
     mdToHtml = function(md:string, user:any) {
         var self = this;
@@ -119,7 +132,7 @@ export class HttpService {
         this.header.set('Content-Type', 'application/json'); // Used by POSTS
         this.header.set('Accept', 'application/vnd.github.v3+json');
         return new Promise(function(resolve, reject) {
-            self.http.post('https://api.github.com/markdown', JSON.stringify(body), {headers:self.header})
+            self.http.post(this.baseURL+'/markdown', JSON.stringify(body), {headers:self.header})
             .subscribe(res => {
                 resolve(res);
               }, error => {
@@ -135,8 +148,8 @@ export class HttpService {
 /**
  * Creates astandard error object that is returned to errored call of the
  * HttpService class.
- * @param  {[type]} error     the error from a failed promise
- * @return {[type]}           an error object
+ * @param  {object} error     - The error from a failed promise
+ * @return {object}           - An error object
  */
 function buildError(error){
     if(!error.json){ // No json() function

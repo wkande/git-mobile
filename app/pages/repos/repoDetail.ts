@@ -1,3 +1,8 @@
+/**
+ * Author: Warren Anderson
+ * Compnay: Wyoming Software, Inc.
+ */
+
 import {NavController, NavParams, Storage, LocalStorage} from 'ionic-angular';
 import {Component} from '@angular/core';
 import {HttpService} from '../../providers/httpService.ts';
@@ -39,6 +44,7 @@ export class RepoDetailPage extends PageClass{
   ownerProfile:any;
   items: Array<any>;
   readme:string;
+  baseURL:string = this.httpService.getBaseURL();
 
 
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService,
@@ -82,7 +88,7 @@ export class RepoDetailPage extends PageClass{
   }
 
   loadReadme(){
-      this.httpService.loadMediaHtml('https://api.github.com/repos/'+this.repo.owner.login+'/'+this.repo.name+'/readme', this.user)
+      this.httpService.loadMediaHtml(this.baseURL+'/repos/'+this.repo.owner.login+'/'+this.repo.name+'/readme', this.user)
       .then((data:any) => {
           this.readme = data;
           this.asyncController(true, null);

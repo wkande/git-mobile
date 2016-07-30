@@ -1,3 +1,8 @@
+/**
+ * Author: Warren Anderson
+ * Compnay: Wyoming Software, Inc.
+ */
+
 import {Modal, NavController, NavParams, ActionSheet} from 'ionic-angular';
 import {Component} from '@angular/core';
 import {HttpService} from '../../providers/httpService.ts';
@@ -29,11 +34,11 @@ export class ReposPage  extends PageClass{
   lastPage = 0;
   type = 'public';
   searchValue:string;
-
   description:string;
   foundExcess:string;
   // URLS
   url: string;
+  baseURL:string = this.httpService.getBaseURL();
 
 
   constructor(private nav: NavController, navParams: NavParams, private httpService: HttpService,
@@ -48,38 +53,42 @@ export class ReposPage  extends PageClass{
   }
 
 
+  /**
+   * Creates the URL
+   * nothing
+   */
   setURL(){
       if(this.trigger == 'owned-me'){
           this.description = "Owned by Me";
-          this.url = 'https://api.github.com/user/repos?type=owner';
+          this.url = this.baseURL+'/user/repos?type=owner';
       }
       else if(this.trigger == 'owned-user'){
           this.description = "Owned by: "+this.username;
-          this.url = 'https://api.github.com/users/'+this.username+'/repos?type=owner';
+          this.url = this.baseURL+'/users/'+this.username+'/repos?type=owner';
       }
       else if(this.trigger == 'affiliations-me-all'){
           this.description = "My Affiliations";
-          this.url = 'https://api.github.com/user/repos';
+          this.url = this.baseURL+'/user/repos';
       }
       else if(this.trigger == 'starred-me'){
           this.description = "Starred by Me";
-          this.url = 'https://api.github.com/user/starred';
+          this.url = this.baseURL+'/user/starred';
       }
       else if(this.trigger == 'starred-user'){
           this.description = "Starred by: "+this.username;
-          this.url = 'https://api.github.com/users/'+this.username+'/starred';
+          this.url = this.baseURL+'/users/'+this.username+'/starred';
       }
       else if(this.trigger == 'watching-me'){ // Current user watching repos
           this.description = "I\'m Watching";
-          this.url = 'https://api.github.com/user/subscriptions';
+          this.url = this.baseURL+'/user/subscriptions';
       }
       else if(this.trigger == 'user'){ // Current user watching repos
           this.description = "Repositories for: "+this.username;
-          this.url = 'https://api.github.com/users/'+this.username+'/repos';
+          this.url = this.baseURL+'/users/'+this.username+'/repos';
       }
       else if(this.trigger == 'search'){
           this.description = 'Search: '+this.searchValue;
-          this.url = 'https://api.github.com/search/repositories?q='+this.searchValue.toLowerCase()+" in:name,description,readme";
+          this.url = this.baseURL+'/search/repositories?q='+this.searchValue.toLowerCase()+" in:name,description,readme";
       }
 
   }
