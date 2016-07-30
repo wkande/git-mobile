@@ -44,7 +44,7 @@ export class HttpService {
         this.header.set('Accept', 'application/vnd.github.v3+json');
         return new Promise(function(resolve, reject) {
             self.http.get(url, {headers:self.header})
-            .timeout(5000, new Error('The server did not respond in a timely manner.'))
+            .timeout(7000, new Error('The server did not respond in a timely manner.'))
             .subscribe(res => {
                   var data = res.json();
                   data.gm_pagination = res.headers.get('Link');
