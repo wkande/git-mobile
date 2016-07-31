@@ -56,6 +56,7 @@ class MyApp {
       });
   }
 
+
   /**
    * Init app. If the user is not logged in the login page is presented. Otherwise
    * the user is taken to their list of repositories. The user:connected event is
@@ -100,8 +101,8 @@ class MyApp {
           // StatusBar.styleDefault();
           // StatusBar.setStyle(StatusBar.LIGHT_CONTENT)
       });
-
   }
+
 
   /**
    * Responds to the logout selection in the side menu. Moves the users to the
