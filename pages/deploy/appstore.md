@@ -92,7 +92,7 @@ Create a new Archive, then validate it, and lastly upload it to the App Store.
 
 ***
 #### Error: CFBundleIconFile invalid path
-/platforms/ios/Git-Mobile/Git-Mobile-Info.plist file has a key for a CFBundleIconFile.  It may generate an error while the IPA uploads to the App Store and not during the building of the Archive.  Removing it seems to work OK.  
+/platforms/ios/Git-Mobile/Git-Mobile-Info.plist file has a key for a CFBundleIconFile.  It may generate an error while the IPA uploads to the App Store and not during the building of the Archive.  Remove it.  
 
 See the following internet reference:
 
@@ -109,7 +109,8 @@ http://stackoverflow.com/questions/28165916/error-itms-90032invalid-image-path-n
 ***
 #### Itunes
 Go to
-[itunesconnect](https://itunesconnect.apple.com) to manage the archive uploaded by Xcode.
+[itunesconnect](https://itunesconnect.apple.com) to manage the archive uploaded by Xcode. Use Safari
+for the best experience.
 
 
 
