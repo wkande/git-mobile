@@ -35,7 +35,7 @@ for more details.
 <div style="margin:0 auto;text-align:center;margin-bottom:40px;">
 ![alt text](img/icon-60@2x.png)
 <div style="font-size:38pt;">Git-Mobile</div>
-![alt text](img/ionic.png)
+![alt text](img/ionic2.png)
 ![alt text](img/github3.png)
 
 </div>
