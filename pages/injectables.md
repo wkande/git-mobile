@@ -2,8 +2,6 @@
   <h1  id="page-title">Injectables</h1>
 </div>
 
-The page.ts extendable is extended by all components of type __page__. The class provide
-commonly used functions and processes used by components.
 
 ___
 #### gm-errors.ts
